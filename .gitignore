@@ -1,0 +1,12 @@
+log
+*.zip
+*.tgz
+*.sqlite
+coverage
+.DS_Store
+*build.js
+.cjsescache
+chrome-profile
+node_modules/
+svelte/build
+svelte/.svelte-kit

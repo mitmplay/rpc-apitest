@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head id='head'>
+    <meta charset="utf-8" />
+    <script>
+    window.RPC = {
+      _broadcast_: {
+        _any_: {}
+      }
+    }
+    </script>
+    <meta id='vport' name="viewport" content="width=device-width" />
+    %sveltekit.head%
+    <!-- <script src="/js/client.js"></script>
+    <script src="/js/isomorphics.js"></script> -->
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <script>
+      const ports = {
+        '3002': `https://${location.hostname}:3002/js`,
+        '3001':  `http://${location.hostname}:3001/js`,
+        '5173':  `http://${location.hostname}:3001/js`
+      }
+
+      const src1 = document.createElement('script')
+      const src2 = document.createElement('script')
+
+      const path = ports[location.port]
+      src1.src = `${path}/client.js`
+      src2.src = `${path}/isomorphics.js`
+
+      const head  = document.getElementById('head')
+      const vport = document.getElementById('vport')
+
+      head.insertBefore(src1, vport)
+      head.insertBefore(src2, vport)
+      // document.body.appendChild(src1)
+      // setTimeout(()=>head.insertBefore(src2, vport), 100)
+    </script>
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>
