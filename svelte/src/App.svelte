@@ -1,19 +1,15 @@
 <script>
-  // import Counter from './Counter.svelte';
-  // import welcome from '$lib/images/svelte-welcome.webp';
-  // import welcome_fallback from '$lib/images/svelte-welcome.png';
   import { onMount, afterUpdate} from 'svelte';
 
   let rows = []
 
   onMount(() => {
-    const {_broadcast_, api_log} = window.RPC
-    _broadcast_._any_.homepage = async data => {
+    window.RPC._broadcast_._any_.homepage = async data => {
       const {broadcast, result} = data
       console.log({broadcast})
       rows = result
     }
-    setTimeout(async ()=>{await api_log.peek('*')},500)
+    setTimeout(async ()=>{await window.RPC.api_log.peek('*')},500)
   })
 
   function no1({id}, ln=3) {
@@ -43,7 +39,7 @@
 </script>
 
 <svelte:head>
-  <title>Home</title>
+  <title>RPC Apitest</title>
   <meta name="description" content="Svelte demo app" />
 </svelte:head>
 

@@ -8,6 +8,3 @@ coverage
 .cjsescache
 chrome-profile
 node_modules/
-svelte/.svelte-kit
-svelte/build/client
-svelte/node_modules/
