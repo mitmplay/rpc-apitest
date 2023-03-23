@@ -10,5 +10,4 @@ chrome-profile
 node_modules/
 svelte/.svelte-kit
 svelte/build/client
-svelte/build/server
 svelte/node_modules/
