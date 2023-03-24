@@ -17,7 +17,7 @@ await RPC.apidemo.add()       //# no broadcast
 await RPC.apidemo.api_yesno() //# triggering broadcast
 ```
 
-All api call start with : `'api_'` will be triggering a broadcast call to clients, and on namespace of `api` will getting auto trigger broadcast  
+All api inside namespace: `'api.'` will trigger broadcast message
 ```js
 await RPC.apidemo.api_yesno()   
 await RPC.apidemo.api_u_agent() 
@@ -34,7 +34,7 @@ await RPC.api.fetch(...)
 ```js
 const fn = x => x
 RPC._broadcast_._any_.fn = fn
-RPC.['apidemo.yesno'] = fn
+RPC.['apidemo.api_yesno'] = fn
 ```
 #### Public API
 * https://apis.guru/
@@ -43,4 +43,4 @@ RPC.['apidemo.yesno'] = fn
 <br/>
 <hr/>
 
-*Enjoy this tool, `wh`!* 
+*`wh`!* 
