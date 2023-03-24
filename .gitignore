@@ -6,5 +6,5 @@ coverage
 .DS_Store
 *build.js
 .cjsescache
-chrome-profile
-node_modules/
+node_modules
+svelte/node_modules

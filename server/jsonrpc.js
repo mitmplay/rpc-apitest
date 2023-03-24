@@ -22,7 +22,25 @@ async function executeRpcMethod({id, method, params}) {
   }
 }
 
-async function handleRequest(payload, ws) {
+async function _broadcast(payload, broadcast, result) {
+  if (broadcast) {
+    const {method} = payload
+    if (method!=='api.peek') {
+      result = success(result.id, await RPC.api.peek())
+    }
+    const rtn = {
+      broadcast: method,
+      ...result
+    }
+    wss.clients.forEach(function each (client) {
+      if (client.readyState === global.Websocket.OPEN) {
+        client.send(JSON.stringify(rtn))
+      }
+    })
+  }
+}
+
+async function handleRequest({payload, broadcast}, ws) {
   let result = executeRpcMethod(payload)
   if (native.test('' + result.then)) {
     try {
@@ -33,21 +51,10 @@ async function handleRequest(payload, ws) {
   }
   console.log('Result:', result)
   ws.send(JSON.stringify(result))
-  if (payload.id.includes('*')) {
-    const {method:broadcast} = payload
-    if (broadcast!=='api_log.peek') {
-      result = success(result.id, await RPC.api_log.peek())
-    }
-    const rtn = {broadcast, ...result}
-    wss.clients.forEach(function each (client) {
-      if (client.readyState === global.Websocket.OPEN) {
-        client.send(JSON.stringify(rtn))
-      }
-    })
-  }
+  _broadcast(payload, broadcast, result)
 }
 
-async function handleBatchRequest(requests, ws) {
+async function handleBatchRequest({requests, broadcast}, ws) {
   const results = requests.map(async ({ id, method, params }) => {
     let result = executeRpcMethod(payload)
     if (native.test('' + result.then)) {
@@ -62,16 +69,21 @@ async function handleBatchRequest(requests, ws) {
 
   const response = stringify(results)
   ws.send(response)
+  _broadcast(requests, broadcast, results)
 }
 
 function jsonrpc(ws) {
   ws.on('message', async data => {
     const message = `${data}`
     const parsed = parse(message)
+    const {broadcast} = JSON.parse(message)
+    if (broadcast) {
+      parsed.broadcast = true
+    }
     if (parsed.type === 'request') {
-      await handleRequest(parsed.payload, ws)
+      await handleRequest(parsed, ws)
     } else if (parsed.type === 'batch') {
-      await handleBatchRequest(parsed.payload, ws)
+      await handleBatchRequest(parsed, ws)
     }
   })
 }

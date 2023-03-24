@@ -1,9 +1,4 @@
-global.sql = require('knex')(
-{
-  client: 'sqlite3',
-  useNullAsDefault: true,
-  connection: {filename: `./logs.sqlite`},
-});
+const knex = require('knex')
 
 function apilog(t) {
   t.increments('id').primary()
@@ -20,6 +15,28 @@ function apilog(t) {
 }
 
 module.exports = async () => {
+  const {
+    _obj_: {HOME},
+    _lib_: {fs,c},
+  } = global.RPC
+
+  const home = `${HOME}/user-rpc`
+  const filename = `${home}/logs.sqlite`
+
+  try {
+    await fs.ensureDir(home)
+    console.log(c.yellow(`User-rpc Path: ${home}!`))
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
+
+  global.sql = knex({
+    client: 'sqlite3',
+    useNullAsDefault: true,
+    connection: {filename},
+  });
+
   const t = 'api_log'
   const exists = await sql.schema.hasTable(t)
   !exists  && await sql.schema.createTable(t, apilog)
@@ -41,6 +58,5 @@ module.exports = async () => {
     })
     rows = await sql(t).select('*')
   }
-  const {c} = global.RPC._lib_
-  console.log(c.yellow(`api_log Rows: ${rows.length}\n`))
+  console.log(c.yellow(`logs row: ${rows.length}\n`))
 }

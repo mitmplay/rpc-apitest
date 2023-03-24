@@ -12,12 +12,16 @@ function onopen(ws) {
   // Helper function to send a JSON-RPC request over the WebSocket
   function sendRequest(method, params) {
     let id = generateRequestId()
-    const ar = params.slice(-1)
-    if (ar.length && ar[0]==='*') {
-      id += '*' // broadcast call
+    const arr = params.slice(-1)
+    const req = rpc.request(id, method, params)
+    if (/^(api|fetch$|peek$)/.test(method)) {
+      if (arr[0]==='-') {
+        params.pop()
+      } else {
+        req.broadcast = true // broadcast call
+      }
     }
-    const requestObj = rpc.request(id, method, params)
-    ws.send(JSON.stringify(requestObj))
+    ws.send(JSON.stringify(req))
     return new Promise((resolve, reject) => {
       // Store the request ID and resolve/reject functions in the pending requests Map
       pendingRequests.set(id, { resolve, reject })

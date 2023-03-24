@@ -1,11 +1,11 @@
-const api_log = require('./api_log')
+const api     = require('./api')
 const apidemo = require('./apidemo')
 const process = require('./process')
 
 function RPC() {
   global.RPC = {
     ...global.RPC,
-    api_log,
+    api,
     apidemo,
     process,
   }  

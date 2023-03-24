@@ -26,7 +26,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -41,10 +40,7 @@ h1 {
 }
 
 #app {
-  /* max-width: 1280px;
-  margin: 0 auto; */
   padding: 0 1rem;
-  /* text-align: center; */
 }
 
 button {
@@ -77,4 +73,20 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+summary{
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: monospace;
+  white-space: pre;
+}
+summary:hover {
+  background-color: yellow;
+}
+pre {
+  font-size: 11px;
+  margin-top: 0;
+  margin-bottom: 6px;
 }

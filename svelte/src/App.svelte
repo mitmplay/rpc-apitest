@@ -1,5 +1,6 @@
 <script>
   import { onMount, afterUpdate} from 'svelte';
+  import {no1, date, meth, resp, trunc} from './App';
 
   let rows = []
 
@@ -9,33 +10,8 @@
       console.log({broadcast})
       rows = result
     }
-    setTimeout(async ()=>{await window.RPC.api_log.peek('*')},500)
+    setTimeout(async ()=>{await window.RPC.api.peek()}, 500)
   })
-
-  function no1({id}, ln=3) {
-    id = ''+ id 
-    return id.padStart(ln, ' ')
-  }
-
-  function date({created,elapsed}, ln=3) {
-    const dt = (new Date(created)).toISOString().replace(/\..+/,'')
-    const str = ''+ Number(elapsed/1000).toFixed(2).padStart(ln, ' ')
-    return `${dt.replace(/.{5}/,'').replace('T','|')}|${str}`
-  }
-
-  function resp({resp_hdr}) {
-    if (resp_hdr) {
-      const json = JSON.parse(resp_hdr)
-      const arr = ['report-to', 'nel']
-      arr.forEach(el => {
-        const data = json[el]
-        if (data) {
-          json[el] = JSON.parse(data)
-        }
-      });
-      return JSON.stringify(json, null, 2)        
-    }
-  }
 </script>
 
 <svelte:head>
@@ -43,11 +19,11 @@
   <meta name="description" content="Svelte demo app" />
 </svelte:head>
 
+<h1>(R)emote (P)rocedure (C)all Apitest</h1>
 <section>
-  API(s):
   {#each rows as row}
     <details>
-      <summary>{no1(row)}.[{date(row)}]{row.api}~>({row.rspcode})</summary>
+      <summary>{no1(row)}.[{date(row)}][{meth(row)}]{row.api}~>({row.rspcode})</summary>
       <div class="main-content">
         <details>
           <summary>Response headers</summary>
@@ -57,31 +33,19 @@
           </div>
         </details>
         <div class="sub-content">
-          <div class="title"><b>Response Body:</b></div>
-          <pre>{row.response}</pre>
-          <div class="title"><b>Request:</b></div>
-          <pre>{row.request}</pre>  
+          <div class="title aliceblue"><b>Response Body: {'{'}</b></div>
+          <pre class="aliceblue">{trunc(row.response)}</pre>
+          <div class="title azure"><b>Request: {'{'}</b></div>
+          <pre class="azure">{trunc(row.request)}</pre>  
         </div>
       </div>
   </details>
   {/each}
 </section>
 
-<style>
-  summary{
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
-    font-family: monospace;
-    white-space: pre;
-  }
-  summary:hover {
-    background-color: yellow;
-  }
-  pre {
-    font-size: 11px;
-    margin-top: 0;
-    margin-bottom: 6px;
+<style lang="scss">
+  h1 {
+    font-size: small;
   }
   .title>b {
     color: blue;
@@ -101,5 +65,11 @@
   }
   .resp-content pre {
     margin: 0;
+  }
+  .azure {
+    background-color: azure;
+  }
+  .aliceblue {
+    background-color: aliceblue;
   }
 </style>

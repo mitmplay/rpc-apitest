@@ -1,11 +1,29 @@
 module.exports = async () => {
+  const {
+    _db_,
+    _obj_: {HOME},
+    _lib_: {fs,c},
+  } = global.RPC
+
+  const home = `${HOME}/user-rpc`
+  const filename = `${home}/logs.sqlite`
+
+  try {
+    await fs.ensureDir(home)
+    console.log(c.yellow(`User-rpc Path: ${home}`))
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
+
   global.sql = global.knex(
   {
     client: 'sqlite3',
     useNullAsDefault: true,
-    connection: {filename: `./logs.sqlite`},
+    connection: {filename},
   });
-  global.RPC._db_.logs = sql
+
+  _db_.logs = sql
   const t = 'api_log'
 
   function apilog(t) {
@@ -43,6 +61,5 @@ module.exports = async () => {
     })
     rows = await sql(t).select('*')
   }
-  const {c} = global.RPC._lib_
-  console.log(c.yellow(`api_log Rows: ${rows.length}\n`))
+  console.log(c.yellow(`logs row: ${rows.length}\n`))
 }

@@ -4,6 +4,8 @@ const req = function(request, opt={}) {
   return new Promise(resolve => {
     if (request.body && ['delete','get'].includes(request.method)) {
       delete request.body
+    } else if (typeof request.body!=='string') {
+      request.body = JSON.stringify(request.body)
     }
     const ts = Date.now()
     _request(request, (error, response) => {
