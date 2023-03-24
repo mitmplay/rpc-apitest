@@ -14,7 +14,7 @@ function onopen(ws) {
     let id = generateRequestId()
     const arr = params.slice(-1)
     const req = rpc.request(id, method, params)
-    if (/^(api|fetch$|peek$)/.test(method)) {
+    if (/^api\./.test(method)) {
       if (arr[0]==='-') {
         params.pop()
       } else {

@@ -13,18 +13,21 @@ rpc-apitest -os // open browser to https://localhost:3002
 
 #### RPC call
 ```js
-await RPC.apidemo.yesno() //# withour triggering broadcast
+await RPC.apidemo.add()       //# no broadcast 
+await RPC.apidemo.api_yesno() //# triggering broadcast
 ```
-#### RPC call w. `broadcast event`
-Add last param with: `'*'` to trigger broadcast call to clients
-```js
-await RPC.apidemo.yesno(..., '*') //# triggering broadcast
 
-//# i.e.:
-await RPC.apidemo.yesno('*')
-await RPC.apidemo.u_agent('*')
+All api call start with : `'api_'` will be triggering a broadcast call to clients, and on namespace of `api` will getting auto trigger broadcast  
+```js
+await RPC.apidemo.api_yesno()   
+await RPC.apidemo.api_u_agent() 
+
 const ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0"
-await RPC.apidemo.u_agent({body:{ua}},'*')
+await RPC.apidemo.api_u_agent({body:{ua}})
+
+// special namespace: api...
+await RPC.api.peek()
+await RPC.api.fetch(...)
 ```
 
 #### Registering `broadcast event`: 
