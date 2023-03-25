@@ -1,7 +1,8 @@
 console.log('Start:')
-const fs = require('fs-extra')
-const fg = require('fast-glob')
-const c  = require('ansi-colors')
+const YAML= require('yaml')
+const fs  = require('fs-extra')
+const fg  = require('fast-glob')
+const c   = require('ansi-colors')
 const chokidar = require('chokidar')
 const dir = __dirname.replace(/\\/g, '/').split('/')
 global.__app = dir.slice(0, -1).join('/')
@@ -15,6 +16,7 @@ function init_lib() {
   _lib_.c  = c
   _lib_.fs = fs
   _lib_.fg = fg
+  _lib_.YAML = YAML
   _lib_.chokidar = chokidar
   import('open').then(async m => {
     _lib_.open = m.default
