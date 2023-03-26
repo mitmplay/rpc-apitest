@@ -23,7 +23,9 @@ const req = function(request, opt={}) {
         global.data = body
         let resp = {}
         if (body) {
-          body = JSON.parse(body)
+          if (Math.round(statusCode/100)===2) {
+            body = JSON.parse(body)
+          }
           resp = body
         } else {
           resp[`[${statusCode}]`] = 'No response payload!'

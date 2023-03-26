@@ -22,21 +22,30 @@ All api inside namespace: `'api.'` will trigger broadcast message
 await RPC.apidemo.api_yesno()   
 await RPC.apidemo.api_u_agent() 
 
-const ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0"
+var ua= 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0'
 await RPC.apidemo.api_u_agent({body:{ua}})
 
 // special namespace: api...
 await RPC.api.peek()
 await RPC.api.fetch({
-  "url": "https://api.apicagent.com/",
-  "method": "post",
-  "headers": {
+  url: "https://api.apicagent.com/",
+  method: "post",
+  headers: {
     "Content-Type": "application/json"
   },
-  "body": {
-    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0"
+  body: {ua}
+})
+
+// https://petstore.swagger.io/v2/store/inventory
+await RPC.api.fetch({
+  url: "https://petstore.swagger.io/api/pets",
+  method: "get",
+  headers: {
+    "Content-Type": "application/json",
+    api_key: "123"
   }
 })
+
 ```
 
 #### Registering `broadcast event`: 
