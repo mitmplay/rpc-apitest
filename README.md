@@ -35,25 +35,29 @@ await RPC.api.fetch({
   },
   body: {ua}
 })
+```
 
-// https://petstore.swagger.io/v2/store/inventory
+#### Test with mock server
+```js
+npm install -g @stoplight/prism-cli
+prism mock https://raw.githack.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore-expanded.yaml
+
 await RPC.api.fetch({
-  url: "https://petstore.swagger.io/api/pets",
+  url: "http://127.0.0.1:4010/pets",
   method: "get",
   headers: {
     "Content-Type": "application/json",
     api_key: "123"
   }
 })
-
 ```
-
 #### Registering `broadcast event`: 
 ```js
 const fn = x => x
 RPC._broadcast_._any_.fn = fn
 RPC.['apidemo.api_yesno'] = fn
 ```
+
 #### Public API
 * https://apis.guru/
 * https://www.apicagent.com/ 
