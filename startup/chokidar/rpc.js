@@ -35,6 +35,8 @@ function rpc() {
 
   function updateJS (path, msg) {
     loadJS(path, msg, broadcast)
+    timeout = setTimeout(initEnd, 1000)
+    initToggle = 1
   }
 
   function remove (path, msg) {

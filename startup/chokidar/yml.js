@@ -36,6 +36,8 @@ function yml() {
 
   function update(path, msg) {
     loadYAML(path, msg, broadcast)
+    timeout = setTimeout(initEnd, 1000)
+    initToggle = 1
   }
 
   function remove (path, msg) {
