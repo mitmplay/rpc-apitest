@@ -1,3 +1,5 @@
+const swgtorequest = require('./swgtorequest')
+
 let initToggle = 1
 
 function yml() {
@@ -14,6 +16,7 @@ function yml() {
     if (initToggle) {
       console.log(c.magentaBright(`>>> YAML watcher OK`))
       initToggle = 0
+      swgtorequest()
     }
   }
   function loadYAML(path, msg) {

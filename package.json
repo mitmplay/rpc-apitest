@@ -1,6 +1,6 @@
 {
   "name": "rpc-apitest",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "RPC Apitest - Test API isomorphic way from terminal of nodejs or browser",
   "main": "rpc-apitest.js",
   "bin": {
@@ -16,7 +16,7 @@
     "url": "git+https://github.com/mitmplay/rpc-apitest.git"
   },
   "keywords": [
-    "Remote-procedure-call Api-test Web-socket"
+    "Remote-Procedure-Call Api-Test Swagger OpenAPI"
   ],
   "author": "Widi Harsojo",
   "license": "AGPL-3.0",
