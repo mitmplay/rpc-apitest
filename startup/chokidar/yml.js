@@ -25,6 +25,7 @@ function yml() {
 
     if (!global.RPC[app]._YAML_) {
       global.RPC[app]._YAML_ = {}
+      global.RPC[app]._request_ = {}
     }
 
     const str = fs.readFileSync(path, 'utf8')

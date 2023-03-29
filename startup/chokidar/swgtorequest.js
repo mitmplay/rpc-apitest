@@ -1,36 +1,65 @@
 const query_strings = require('./mocksgen/query_strings')
-const requestBody = require('./mocksgen/request_body')
+const _requestBody = require('./mocksgen/request_body')
 const headers = {"Content-Type": "application/json"}
 
 function swgtorequest() {
   function constructRequerst({swagger, nmspace, api}) {
-    const apis = {}
-    let id = 1
-    
-    function generateRequest(method, urls) {
-      for (const url of urls) {
-        apis[`${api}_${id}`] =  {url, method, headers}
-        id++  
+    const {_request_} = global.RPC[nmspace]
+    if (!_request_[api]) {
+      _request_[api] = {}
+    }
+
+    function generateGetRequest(_urls, method) {
+      const apis = _request_[api]
+      for (const endpoint in _urls) {
+        const urls = _urls[endpoint][method]
+        if (!apis[endpoint]) {
+          apis[endpoint] = {}
+        }
+        apis[endpoint][method] = []
+        let id = 1
+        for (const url of urls) {
+          apis[endpoint][method].push({url, method, headers})
+          id++  
+        }  
       }
     }
 
-    for (const baseUrl in swagger.paths) {
-      const methods = swagger.paths[baseUrl] 
+    function generatePostRequest(_urls, method, schema) {
+      const apis = _request_[api]
+      for (const endpoint in _urls) {
+        const urls = _urls[endpoint][method]
+        if (!apis[endpoint]) {
+          apis[endpoint] = {}
+        }
+        apis[endpoint][method] = []
+        let id = 1
+        for (const url of urls) {
+          apis[endpoint][method].push({url, method, headers, schema})
+          id++  
+        }  
+      }
+    }
+
+    for (const endpoint in swagger.paths) {
+      const methods = swagger.paths[endpoint] 
       for (const method in methods) {
-        const {parameters=[]} = methods[method]
-        if (method==='get') {
-          const urls = query_strings(baseUrl, parameters)
-          generateRequest(method, urls)
+        const {requestBody, parameters=[]} = methods[method]
+        const {content} = requestBody || {}
+        let urls
+        if (['get', 'delete'].includes(method)) {
+          urls = query_strings(endpoint, method, parameters)
+          generateGetRequest(urls, method)
         } else if (['post', 'put'].includes(method)) {
-          console.log('POST & PUT', method)
-          requestBody()
+          urls = query_strings(endpoint, method, parameters)
+          _requestBody(swagger, endpoint, method, schema => {
+            generatePostRequest(urls, method, schema)
+          })
         } else {
           console.log('Others', method)
         }
       }
     }
-    global.RPC[nmspace]._request_ = apis
-    // console.log(nmspace, JSON.stringify(apis, null, 2))
   }
 
   for (const nmspace in global.RPC) {
