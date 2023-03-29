@@ -1,24 +1,27 @@
 const $RefParser = require('json-schema-ref-parser');
-const jsf = require('json-schema-faker');
 
 function requestBody(spec, endpoint, method, fn) {
-  const content = spec.paths[endpoint][method]?.requestBody?.content || {}
-  const schemaRef = content['application/json']?.schema?.$ref
-
-  if (!schemaRef) {
-    console.error('Support only json/schema-ref')
-    return
+  const specmth = spec.paths[endpoint][method]
+  if (specmth?.requestBody) {
+    const content = specmth.requestBody?.content || {}
+    const contentTypes = Object.keys(content)
+    if (contentTypes.length) {
+      const schema = content[contentTypes[0]].schema
+      if (!schema?.$ref) {
+        fn(schema)
+        return
+      }
+      $RefParser.dereference(spec, (err, spec2) => {
+        const schema = spec2.paths[endpoint][method].requestBody.content['application/json'].schema;
+        fn(schema)
+      })  
+    }
   }
-
-  $RefParser.dereference(spec, (err, spec2) => {
-    const schema = spec2.paths[endpoint][method].requestBody.content['application/json'].schema;
-    fn(schema)
-  })  
 }
 module.exports = requestBody
 
 /*
-const jsf = require('json-schema-faker');
+const jsfaker = require('json-schema-faker');
 const schema = {
   "type": "object",
   "properties": {
@@ -68,7 +71,7 @@ const generatePermutations = async (n) => {
   let permutations = [];
 
   for (let i = 0; i < n; i++) {
-    const permutation = await jsf.generate(schema);
+    const permutation = await jsfaker.generate(schema);
     permutations.push(permutation);
   }
 

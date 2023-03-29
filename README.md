@@ -50,6 +50,8 @@ await RPC.api.fetch({
     api_key: "123"
   }
 })
+// use openapi mock request
+await RPC.api.fetch('apidemo~openapi[get]/pet')
 ```
 #### Registering `broadcast event`: 
 ```js

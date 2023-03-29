@@ -33,6 +33,9 @@ function generateUrls(baseUrl, queryParameters, mandatoryParameters) {
     }
   }
 
+  if (params.length && !mandatoryParameters.length) {
+    urls.push(baseUrl)
+  }
   return urls
 }
 

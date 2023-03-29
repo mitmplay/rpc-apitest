@@ -4,7 +4,7 @@ function query_strings(baseUrl, method, parameters) {
   const mandatoryParameters = []
   const queryParameters = {}
 
-  const _array   = _ => ['array1', 'array2']
+  const _array   = _ => 'array'
 
   _fn = {_array}
   const result = {}
