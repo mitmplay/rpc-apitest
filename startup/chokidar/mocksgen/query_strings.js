@@ -1,48 +1,25 @@
-function query_strings(parameters) {
-  const urls = []
+const generateUrls = require('./generate_urls')
 
-  function commonFunction(name, required) {
-    if (!required) {
-      urls.push('')
-      urls.push(`${name}=`)
-    }
-  }
+function query_strings(baseUrl, parameters) {
+  const mandatoryParameters = []
+  const queryParameters = {}
 
-  const _array = ({name, required}) => {
-    commonFunction(name, required)
-    urls.push(`${name}=array`)
-    urls.push(`${name}=array1&${name}=array2`)
-  }
-  
-  const _string = ({name, required}) => {
-    commonFunction(name, required)
-    urls.push(`${name}=string`)
-  }
-
-  const _integer = ({name, required}) => {
-    commonFunction(name, required)
-    urls.push(`${name}=integer`)
-  }
+  const _array   = _ => ['array1', 'array2']
+  const _string  = _ => 'string'
+  const _integer = _ => 'integer'
 
   _fn = {_array,_string,_integer}
 
   for (const param of parameters) {
-    const {type} = param.schema
-    const fn = _fn[`_${type}`]
+    const {schema, name, required} = param
+    const fn = _fn[`_${schema.type}`]
     if (fn) {
-      fn(param)
+      queryParameters[name] = fn()
+      required && mandatoryParameters.push(name)
     } else {
-      console.log({param})
+      console.log({schema, name, required})
     }
   }
-  return urls
+  return generateUrls(baseUrl, queryParameters, mandatoryParameters)
 }
 module.exports = query_strings
-
-    // apis[`${api}_${id}`] =  {
-    //   url: `${url}/1`,
-    //   method,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   }
-    // }

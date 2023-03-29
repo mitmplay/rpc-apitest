@@ -1,32 +1,30 @@
 const query_strings = require('./mocksgen/query_strings')
+const headers = {"Content-Type": "application/json"}
 
 function swgtorequest() {
   function constructRequerst({swagger, nmspace, api}) {
     const apis = {}
     let id = 1
-    function generateRequest(url,method,arr) {
-      for (const str of arr) {
-        apis[`${api}_${id}`] =  {
-          url: `${url}?${str}`,
-          method,
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
+    
+    function generateRequest(method, urls) {
+      for (const url of urls) {
+        apis[`${api}_${id}`] =  {url, method, headers}
         id++  
       }
     }
-    for (const url in swagger.paths) {
-      const methods = swagger.paths[url] 
+
+    for (const baseUrl in swagger.paths) {
+      const methods = swagger.paths[baseUrl] 
       for (const method in methods) {
         const {parameters} = methods[method]
         if (parameters && method==='get') {
-          const arr = query_strings(parameters)
-          generateRequest(url,method,arr)
+          const urls = query_strings(baseUrl, parameters)
+          generateRequest(method, urls)
         }
       }
     }
-    console.log(nmspace, JSON.stringify(apis, null, 2))
+    global.RPC[nmspace]._request_ = apis
+    // console.log(nmspace, JSON.stringify(apis, null, 2))
   }
 
   for (const nmspace in global.RPC) {
