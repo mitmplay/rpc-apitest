@@ -56,15 +56,3 @@ function getCombinationsWithoutRepetition(arr, len) {
   return combinations
 }
 module.exports = generateUrls
-
-// const baseUrl = "http://example.com"
-// const queryParameters = {
-//   param1: "value",
-//   param2: "value",
-//   param3: "value"
-// }
-// const mandatoryParameters = ["param3"]
-
-// const urls = generateUrls(baseUrl, queryParameters, mandatoryParameters)
-
-// console.log(urls)

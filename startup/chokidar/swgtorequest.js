@@ -1,4 +1,5 @@
 const query_strings = require('./mocksgen/query_strings')
+const requestBody = require('./mocksgen/request_body')
 const headers = {"Content-Type": "application/json"}
 
 function swgtorequest() {
@@ -16,10 +17,15 @@ function swgtorequest() {
     for (const baseUrl in swagger.paths) {
       const methods = swagger.paths[baseUrl] 
       for (const method in methods) {
-        const {parameters} = methods[method]
-        if (parameters && method==='get') {
+        const {parameters=[]} = methods[method]
+        if (method==='get') {
           const urls = query_strings(baseUrl, parameters)
           generateRequest(method, urls)
+        } else if (['post', 'put'].includes(method)) {
+          console.log('POST & PUT', method)
+          requestBody()
+        } else {
+          console.log('Others', method)
         }
       }
     }

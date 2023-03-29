@@ -5,21 +5,25 @@ function query_strings(baseUrl, parameters) {
   const queryParameters = {}
 
   const _array   = _ => ['array1', 'array2']
-  const _string  = _ => 'string'
-  const _integer = _ => 'integer'
 
-  _fn = {_array,_string,_integer}
+  _fn = {_array}
 
-  for (const param of parameters) {
-    const {schema, name, required} = param
-    const fn = _fn[`_${schema.type}`]
-    if (fn) {
-      queryParameters[name] = fn()
+  if (parameters) {
+    if (parameters.length===1 && parameters[0].in==='path') {
+      return [baseUrl]
+    } 
+    for (const param of parameters) {
+      const {schema: {type}, name, required} = param
+      if (param.in==='path') {
+        continue
+      }
+      const fn = _fn[`_${type}`]
+      queryParameters[name] = fn ? fn() : type
       required && mandatoryParameters.push(name)
-    } else {
-      console.log({schema, name, required})
     }
+    return generateUrls(baseUrl, queryParameters, mandatoryParameters)  
+  } else {
+    return [baseUrl]
   }
-  return generateUrls(baseUrl, queryParameters, mandatoryParameters)
 }
 module.exports = query_strings
