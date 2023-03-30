@@ -53,7 +53,7 @@ async function fetch(xhr, opt) {
     if (schema) {
       xhr.body = _lib_.jsfaker(schema)
     }
-    xhr.url = `${mockserver}${xhr.url}`
+    xhr.url = `${mockserver}${xhr.url.replace(/\{\w+\}/g, '123')}`
   }
   const result = await _fn_.request(xhr, opt)
   return result
