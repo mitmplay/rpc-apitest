@@ -8,6 +8,7 @@ module.exports = () => {
   RPC._obj_.argv = argv
 
   argsChg('h', 'help' )
+  argsChg('m', 'mockserver' )
   argsChg('o', 'open' )
   argsChg('s', 'https')
   argsChg('t', 'test' )
