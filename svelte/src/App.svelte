@@ -1,75 +1,54 @@
 <script>
-  import { onMount, afterUpdate} from 'svelte';
-  import {no1, date, meth, resp, trunc} from './App';
+  import {onMount} from 'svelte';
+  import {logs} from './stores/logsStore';
+  import Tab1 from "./Tab1/Tab1.svelte";
+  import Tab2 from "./Tab2/Tab2.svelte";
+  import Tabs from "./Tabs/Tabs.svelte";
 
+  let ttl = 0
   let rows = []
+  // List of tab items with labels, values and assigned components
+  let items = [
+    { label: "Logs",
+     value: 1,
+     component: Tab1,
+     props: {rows}
+    },
+    { label: "Content",
+     value: 2,
+     component: Tab2
+    },
+  ];
 
   onMount(() => {
     window.RPC._broadcast_._any_.homepage = async data => {
       const {broadcast, result} = data
       console.log({broadcast})
       rows = result
+      window.rows = rows
+      logs.update(arr => rows);
+      ttl++
     }
     setTimeout(async ()=>{await window.RPC.api.peek()}, 500)
   })
+
 </script>
-
-<svelte:head>
-  <title>RPC Apitest</title>
-  <meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<h1>(R)emote (P)rocedure (C)all Apitest</h1>
-<section>
-  {#each rows as row}
-    <details>
-      <summary>{no1(row)}.[{date(row)}][{meth(row)}]{row.api}~>({row.rspcode})</summary>
-      <div class="main-content">
-        <details>
-          <summary>Response headers</summary>
-          <div class="resp-content">
-            <pre>{row.x_tag}</pre>
-            <pre>{resp(row)}</pre>  
-          </div>
-        </details>
-        <div class="sub-content">
-          <div class="title aliceblue"><b>Response Body: {'{'}</b></div>
-          <pre class="aliceblue">{trunc(row.response)}</pre>
-          <div class="title azure"><b>Request: {'{'}</b></div>
-          <pre class="azure">{trunc(row.request)}</pre>  
-        </div>
-      </div>
-  </details>
-  {/each}
-</section>
+<h1>
+  <b>R</b>emote
+  <b>P</b>rocedure
+  <b>C</b>all
+  Apitest
+</h1>
+<div>
+  <Tabs {items} />
+  {ttl}
+</div>
 
 <style lang="scss">
   h1 {
     font-size: small;
   }
-  .title>b {
-    color: blue;
-    font-size: 12px;
-    font-weight: bold;
-    font-family: monospace;
-  }
-  .main-content {
-    padding-left: 15px;
-  }
-  .sub-content {
-    padding-left: 10px;
-  }
-  .resp-content {
-    margin-left: 10px;
-    background-color: antiquewhite;
-  }
-  .resp-content pre {
-    margin: 0;
-  }
-  .azure {
-    background-color: azure;
-  }
-  .aliceblue {
-    background-color: aliceblue;
+  b {
+    color: red;
   }
 </style>
