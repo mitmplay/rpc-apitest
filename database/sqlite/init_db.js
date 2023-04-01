@@ -24,7 +24,17 @@ module.exports = async () => {
   });
 
   _db_.logs = sql
-  const t = 'api_log'
+
+  function request(t) {
+    t.increments('id').primary()
+    t.string    ('ip',  200)
+    t.string    ('name', 200)
+    t.text      ('template' )
+    t.text      ('generate' )
+    t.text      ('notes'    )
+    t.timestamp ('created'  ).notNull()
+    t.timestamp ('updated'  ).notNull()
+  }
 
   function apilog(t) {
     t.increments('id').primary()
@@ -41,10 +51,13 @@ module.exports = async () => {
     t.integer   ('elapsed'  )
   }
 
-  const exists = await sql.schema.hasTable(t)
-  !exists  && await sql.schema.createTable(t, apilog)
+  let ok = await sql.schema.hasTable('request')
+  !ok && await sql.schema.createTable('request', request)
 
-  let rows = await sql(t).select('*')
+  ok = await sql.schema.hasTable('api_log')
+  !ok && await sql.schema.createTable('api_log', apilog)
+
+  let rows = await sql('api_log').select('*')
   if (!rows.length) {
     const ts = Date.now()
     await sql(t).insert({
