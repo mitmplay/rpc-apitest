@@ -1,6 +1,10 @@
 <script>
   import {onMount} from 'svelte';
-  import {logs} from './stores/logsStore';
+
+  import {
+    logs,
+    updateLogs
+  } from './stores/logsStore';
   import Tab1 from "./Tab1/Tab1.svelte";
   import Tab2 from "./Tab2/Tab2.svelte";
   import Tabs from "./Tabs/Tabs.svelte";
@@ -23,10 +27,9 @@
   onMount(() => {
     window.RPC._broadcast_._any_.homepage = async data => {
       const {broadcast, result} = data
+      updateLogs($logs, result)
       console.log({broadcast})
-      rows = result
-      window.rows = rows
-      logs.update(arr => rows);
+      window.logs = result
       ttl++
     }
     setTimeout(async ()=>{await window.RPC.api.peek()}, 500)

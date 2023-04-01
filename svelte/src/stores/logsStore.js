@@ -1,20 +1,25 @@
 import { writable } from 'svelte/store';
 
-export const logs = writable([]);
+export const logs = writable({});
+
+export function updateLogs(oldlogs, newLogs) {
+  const l = {}
+  logs.update(() => {
+    for (const id in newLogs) {
+      l[id] = oldlogs[id] || newLogs[id]
+    }
+    return l
+  });
+}
 
 export function clickSummary(evn) {
   const el = evn.target.parentElement
   setTimeout(_ => {
-    logs.update(arr => {
+    logs.update(l => {
       const {id,name} = el.dataset
       const open = (typeof el.getAttribute('open')==='string')
-      for (const lg of arr) {
-        if (lg.id===+id) {
-          lg[name] = open
-          break
-        }
-      }
-      return arr
+      l[id][name]= open
+      return l
     });  
   })
 }

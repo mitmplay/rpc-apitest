@@ -3,12 +3,16 @@ async function peek(limit=10) {
   if (lparams==='h') {
     return info()
   }
-  let rows = await 
-    RPC._db_.logs('api_log').
+  let rows = await RPC._db_.logs('api_log').
     select ('*').
     orderBy('id', 'desc').
     limit  (limit)
-  return rows
+    
+  const l = {}
+  for(const row of rows) {
+    l[`_${row.id}`] = row
+  }
+  return l
 }
 
 function info() {

@@ -21,8 +21,8 @@
 {/each}
 <style>
   .box {
-    margin-bottom: 10px;
-    padding: 40px;
+    margin-bottom: 5px;
+    padding: 10px;
     border: 1px solid #dee2e6;
     border-radius: 0 0 .5rem .5rem;
     border-top: 0;

@@ -1,3 +1,12 @@
+export function toArray(json) {
+  const l = []
+  for(const id in json) {
+    json[id]._id = id
+    l.push(json[id])
+  }
+  return l
+}
+
 export function no1({id}, ln=3) {
   id = ''+ id 
   return id.padStart(ln, ' ')
@@ -9,9 +18,12 @@ export function date({created,elapsed}, ln=5) {
   return `${dt.replace(/.{5}/,'').replace('T','|')}|${str}`
 }
 
-export function meth({request}) {
+export function req({request}, str) {
+  const [c, m, u] = str.split(',')
   try {
-    return JSON.parse(request).method    
+    const o   = JSON.parse(request)
+    const url = o[u].replace(/\?.+/,'...')
+    return `${o[m]}${c}${url}`     
   } catch (error) {
     return ''
   }
