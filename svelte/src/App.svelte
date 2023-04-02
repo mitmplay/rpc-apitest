@@ -27,7 +27,7 @@
   onMount(() => {
     window.RPC._broadcast_._any_.homepage = async data => {
       const {broadcast, result} = data
-      updateLogs($logs, result)
+      updateLogs(result)
       console.log({broadcast})
       window.logs = result
       ttl++
