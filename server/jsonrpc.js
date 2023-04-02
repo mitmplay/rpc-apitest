@@ -1,11 +1,12 @@
 const {parse, success, error, JsonRpcError} = require('jsonrpc-lite')
 const native = /\{\s*\[native code\]\s*\}/
 
-async function executeRpcMethod({id, method, params}) {
+async function executeRpcMethod({id, method, params}, senderIp) {
   const [k1, k2] = method.split('.')
   try {
     let result 
     const fn = global.RPC[k1][k2]
+    fn.senderIp = senderIp
     if (native.test('' + fn.then)) {
       result = await fn.apply(fn, params)
     } else {
@@ -40,8 +41,9 @@ async function _broadcast(payload, broadcast, result) {
   }
 }
 
-async function handleRequest({payload, broadcast}, ws) {
-  let result = executeRpcMethod(payload)
+async function handleRequest(parsed, ws) {
+  const {payload, broadcast, senderIp} = parsed
+  let result = executeRpcMethod(payload, senderIp)
   if (native.test('' + result.then)) {
     try {
       result = await result      
@@ -54,7 +56,8 @@ async function handleRequest({payload, broadcast}, ws) {
   _broadcast(payload, broadcast, result)
 }
 
-async function handleBatchRequest({requests, broadcast}, ws) {
+async function handleBatchRequest(parsed, ws) {
+  const {payload, broadcast, senderIp} = parsed
   const results = requests.map(async ({ id, method, params }) => {
     let result = executeRpcMethod(payload)
     if (native.test('' + result.then)) {
@@ -76,6 +79,8 @@ function jsonrpc(ws) {
   ws.on('message', async data => {
     const message = `${data}`
     const parsed = parse(message)
+    const senderIp = ws._socket.remoteAddress;
+    parsed.senderIp = senderIp
     const {broadcast} = JSON.parse(message)
     if (broadcast) {
       parsed.broadcast = true

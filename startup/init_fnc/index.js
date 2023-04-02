@@ -1,3 +1,4 @@
+const dnslookup = require('./dnslookup')
 const tildehome = require('./tildehome')
 const request   = require('./request')
 const nanoid    = require('./nanoid')
@@ -10,6 +11,7 @@ function fn() {
   global.RPC._fn_ = {
     ...global.RPC._fn_,
     ...thome,
+    dnslookup,
     request,
     nanoid,
     apilog,

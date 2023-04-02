@@ -1,4 +1,15 @@
-async function apilog(request, resp_hdr, response, {api='', act='', notes='', rspcode='', x_tag='', created=0}) {
+async function apilog(request, resp_hdr, response, opt={}) {
+  const {
+    dns='', 
+    api='', 
+    act='', 
+    notes='', 
+    x_tag='', 
+    rspcode='', 
+    senderIp='', 
+    created=0
+  } = opt
+  
   const {body, ...reqs} = request
   const ts = Date.now()
   let elapsed = 0
@@ -8,7 +19,8 @@ async function apilog(request, resp_hdr, response, {api='', act='', notes='', rs
   if (body) {
     reqs.body = JSON.parse(body)
   }
-  await sql('api_log').insert({
+  return await sql('api_log').insert({
+    dns: dns || senderIp,
     api,
     act,
     rspcode,

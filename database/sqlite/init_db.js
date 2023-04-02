@@ -27,7 +27,7 @@ module.exports = async () => {
 
   function request(t) {
     t.increments('id').primary()
-    t.string    ('ip',  200)
+    t.string    ('dns',  100)
     t.string    ('name', 200)
     t.text      ('template' )
     t.text      ('generate' )
@@ -38,6 +38,7 @@ module.exports = async () => {
 
   function apilog(t) {
     t.increments('id').primary()
+    t.string    ('dns',  100)
     t.string    ('api',  200)
     t.string    ('act',  200)
     t.string    ('rspcode',3)
@@ -60,7 +61,8 @@ module.exports = async () => {
   let rows = await sql('api_log').select('*')
   if (!rows.length) {
     const ts = Date.now()
-    await sql(t).insert({
+    await sql('api_log').insert({
+      dns:     '::1',
       api:     'greetings',
       act:     '0.hello-world!',
       rspcode: '200',
@@ -72,7 +74,7 @@ module.exports = async () => {
       updated: ts,
       elapsed: 0
     })
-    rows = await sql(t).select('*')
+    rows = await sql('api_log').select('*')
   }
   console.log(c.yellow(`logs row: ${rows.length}\n`))
 }

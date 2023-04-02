@@ -8,7 +8,7 @@ const req = function(request, opt={}) {
       request.body = JSON.stringify(request.body)
     }
     const ts = Date.now()
-    _request(request, (error, response) => {
+    _request(request, async (error, response) => {
       if (error) {
         resolve(error)
         console.error(error)
@@ -31,7 +31,6 @@ const req = function(request, opt={}) {
           resp[`[${statusCode}]`] = 'No response payload!'
         }
         console.log(JSON.stringify(resp, null, 2))
-        global.RPC._fn_.apilog(request, headers, resp, opt)
         resolve({
           request,
           response:{
@@ -41,6 +40,10 @@ const req = function(request, opt={}) {
           },
           error,
         })
+        const {apilog, dnslookup} = global.RPC._fn_
+        opt.dns = await dnslookup(opt.senderIp)
+        const row = await apilog(request, headers, resp, opt)
+        console.log(row)
       }
     })    
   })

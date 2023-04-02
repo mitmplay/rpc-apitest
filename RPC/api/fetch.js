@@ -55,6 +55,7 @@ async function fetch(xhr, opt) {
     }
     xhr.url = `${mockserver}${xhr.url.replace(/\{\w+\}/g, '123')}`
   }
+  opt.senderIp = this.senderIp
   const result = await _fn_.request(xhr, opt)
   return result
 }
