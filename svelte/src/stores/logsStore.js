@@ -33,13 +33,13 @@ export function updateLogs(newLogs) {
   });
 }
 
-export function clickSummary(evn) {
+export function clickSummary(evn, lg) {
   const el = evn.target.parentElement
   setTimeout(_ => {
     logs.update(json => {
       const {id,name} = el.dataset
       const open = (typeof el.getAttribute('open')==='string')
-      json.logs[id][name]= open
+      json[lg][id][name]= open
       return json
     });  
   })

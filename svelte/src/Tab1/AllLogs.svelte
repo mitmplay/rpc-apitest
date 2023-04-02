@@ -17,19 +17,19 @@
 </svelte:head>
 
 {#each toArray(logs) as row}
-  <details data-id={row._id} data-name=open open={row.open}>
-    <summary on:click={clickSummary}>
+  <details data-id={row._id} data-name=openLog open={row.openLog}>
+    <summary on:click={e=>clickSummary(e,'logs')}>
       {no1(row)}.[{date(row)}][{req(row,'],method,url')}~>({row.rspcode})
     </summary>
     <div class="main-content">
-      <details data-id={row._id} data-name=openrqs open={row.openrqs}>
-        <summary on:click={clickSummary}>Request</summary>
+      <details data-id={row._id} data-name=openRqs open={row.openRqs}>
+        <summary on:click={e=>clickSummary(e,'logs')}>Request</summary>
         <div class="reqs-content">
           <pre>{row.request}</pre>  
         </div>
       </details>
-      <details data-id={row._id} data-name=openhdr open={row.openhdr}>
-        <summary on:click={clickSummary}>Response headers</summary>
+      <details data-id={row._id} data-name=openHdr open={row.openHdr}>
+        <summary on:click={e=>clickSummary(e,'logs')}>Response headers</summary>
         <div class="resp-content">
           <pre>{row.x_tag}</pre>
           <pre>{resp(row)}</pre>  

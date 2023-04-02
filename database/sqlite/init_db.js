@@ -62,7 +62,7 @@ module.exports = async () => {
   if (!rows.length) {
     const ts = Date.now()
     await sql('api_log').insert({
-      dns:     '::1',
+      dns:     'LOCALHOST',
       api:     'greetings',
       act:     '0.hello-world!',
       rspcode: '200',
