@@ -1,7 +1,7 @@
 {
   "name": "rpc-apitest-ui",
   "private": true,
-  "version": "0.1.12",
+  "version": "0.1.13",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,5 +13,10 @@
     "sass": "^1.59.3",
     "svelte": "^3.55.1",
     "vite": "^4.2.0"
+  },
+  "dependencies": {
+    "@codemirror/basic-setup": "^0.20.0",
+    "@codemirror/lang-javascript": "^6.1.4",
+    "svelte-codemirror-editor": "^1.1.0"
   }
 }

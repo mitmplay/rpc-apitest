@@ -3,7 +3,7 @@ const json = {
   logs: {},
   logs2: {},
   options: {
-    dnsGrouping: true,
+    dnsGrouping: false,
   }
 }
 
@@ -42,5 +42,28 @@ export function clickSummary(evn, lg) {
       json[lg][id][name]= open
       return json
     });  
+  })
+}
+
+export function clickGroup(evn) {
+  setTimeout(_ => {
+    logs.update(json => {
+      json.options.dnsGrouping = !json.options.dnsGrouping
+      return json
+    })
+  })
+}
+
+export function clickCollapse(evn) {
+  setTimeout(_ => {
+    logs.update(json => {
+      for (const id in json.logs) {
+        const obj = json.logs[id]
+        obj.openLog = false
+        obj.openRqs = false
+        obj.openHdr = false
+      }
+      return json
+    })
   })
 }
