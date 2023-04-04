@@ -3,7 +3,7 @@ const json = {
   logs: {},
   logs2: {},
   options: {
-    dnsGrouping: false,
+    dnsGrouping: '1',
   }
 }
 
@@ -45,10 +45,10 @@ export function clickSummary(evn, lg) {
   })
 }
 
-export function clickGroup(evn) {
+export function clickGroup({target}) {
   setTimeout(_ => {
     logs.update(json => {
-      json.options.dnsGrouping = !json.options.dnsGrouping
+      json.options.dnsGrouping = target.value
       return json
     })
   })

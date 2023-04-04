@@ -44,7 +44,6 @@
 </h1>
 <div>
   <Tabs {items} />
-  {ttl}
 </div>
 
 <style lang="scss">

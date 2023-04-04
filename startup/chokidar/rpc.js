@@ -16,11 +16,13 @@ function rpc() {
       initToggle = 0
     }
   }
-  function loadJS(path, msg) {
-    let [app,rpc] = path.split('/').slice(-2)
+  function loadJS(path1, msg) {
+    const path2 = path1.replace(/\\/g, '/')
+    let [app,rpc] = path2.split('/').slice(-2)
     rpc = rpc.replace('.js', '')
 
-    const fn = require(path)
+    delete require.cache[path2];
+    const fn = require(path2)
     if (!global.RPC[app]) {
       global.RPC[app] = {}
     }

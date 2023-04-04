@@ -26,6 +26,8 @@
     border: 1px solid #dee2e6;
     border-radius: 0 0 .5rem .5rem;
     border-top: 0;
+    height: calc(100vh - 120px);
+    overflow: auto;
   }
   ul {
     display: flex;
