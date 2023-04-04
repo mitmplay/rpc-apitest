@@ -7,6 +7,7 @@ async function yesno(all={}) {
   console.log(JSON.stringify({...xhr, body}, null, 2))
   xhr.body = JSON.stringify(body)
   const result = await global.RPC._fn_.request(xhr, {
+    senderIp: this.senderIp,
     api: 'yes/no',
     act: '1.get',
     ...oth,

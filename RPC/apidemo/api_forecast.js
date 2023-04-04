@@ -7,6 +7,7 @@ async function forecast(all={}) {
   console.log(JSON.stringify({...xhr, body}, null, 2))
   xhr.body = JSON.stringify(body)
   const result = await global.RPC._fn_.request(xhr, {
+    senderIp: this.senderIp,
     api: 'forecast',
     act: '1.get',
     ...oth,
