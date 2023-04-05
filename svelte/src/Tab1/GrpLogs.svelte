@@ -20,7 +20,5 @@
 {/each}
 
 <style lang="scss">
-  details>div {
-    padding-left: 12px;
-  }
+
 </style>

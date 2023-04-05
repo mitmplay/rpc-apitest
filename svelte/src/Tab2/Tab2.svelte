@@ -43,9 +43,6 @@
   summary{
     white-space: inherit;
   }
-  details>div {
-    padding-left: 12px;
-  }
   i {
     color:crimson;
   }
