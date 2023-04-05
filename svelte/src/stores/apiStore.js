@@ -23,7 +23,10 @@ export function showCode(evn, _rpc) {
     const open = (typeof el.getAttribute('open')==='string')
     if (open && _rpc[nspace][fn]?.code==='...') {
       console.log('show code')
-      const code = await window.RPC.api.code(nspace, fn)
+      let code = window.RPC[nspace][fn]+''
+      if (code.includes('sendRequest')) {
+        code = await window.RPC.api.code(nspace, fn)
+      }
       rpc.update(json => {
         json.rpc[nspace][fn].code = code
         return json

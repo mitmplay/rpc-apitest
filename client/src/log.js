@@ -1,5 +1,5 @@
-async function log(aswait) {
-  console.log(JSON.stringify(await aswait, null,2))
+async function log(asWait) {
+  console.log(JSON.stringify(await asWait, null,2))
   return ''
 }
 module.exports = log
