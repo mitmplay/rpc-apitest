@@ -1,4 +1,4 @@
-async function peek(limit=10) {
+async function peek(limit=25) {
   const lparams = [...arguments].pop()
   if (lparams==='h') {
     return info()

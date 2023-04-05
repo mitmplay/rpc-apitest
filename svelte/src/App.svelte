@@ -18,7 +18,7 @@
      component: Tab1,
      props: {rows}
     },
-    { label: "Content",
+    { label: "API",
      value: 2,
      component: Tab2
     },

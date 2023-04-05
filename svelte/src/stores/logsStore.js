@@ -2,8 +2,9 @@ import { writable } from 'svelte/store';
 const json = {
   logs: {},
   logs2: {},
+  logs3: {},
   options: {
-    dnsGrouping: '1',
+    grouping: '1',
   }
 }
 
@@ -12,10 +13,11 @@ export const logs = writable(json);
 export function updateLogs(newLogs) {
   const _logs = {}
   const _logs2= {}
+  const _logs3= {}
   logs.update(json => {
     for (const id in newLogs) {
       _logs[id] = json.logs[id] || newLogs[id]
-
+      // group by host
       const {dns} = _logs[id]
       if (!_logs2[dns]) {
         _logs2[dns] = {
@@ -24,10 +26,20 @@ export function updateLogs(newLogs) {
         }
       }
       _logs2[dns].logs[id] = _logs[id]
+      // group by date
+      const date = (new Date(_logs[id]?.created)).toISOString().replace(/T.+/,'')
+      if (!_logs3[date]) {
+        _logs3[date] = {
+          id: date,
+          logs: {}
+        }
+      }
+      _logs3[date].logs[id] = _logs[id]
     }
 
     json.logs = _logs
     json.logs2 = _logs2
+    json.logs3 = _logs3
     window.json = json
     return json
   });
@@ -48,7 +60,7 @@ export function clickSummary(evn, lg) {
 export function clickGroup({target}) {
   setTimeout(_ => {
     logs.update(json => {
-      json.options.dnsGrouping = target.value
+      json.options.grouping = target.value
       return json
     })
   })
