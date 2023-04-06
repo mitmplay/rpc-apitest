@@ -3,6 +3,7 @@ const startup = require('./startup')
 const server  = require('./server')
 const rmtpCall= require('./RPC')
 const fn      = startup()
+global.__app  = __dirname.replace(/\\/g, '/')
 
 async function run(_fn) {
   const {c} = RPC._lib_

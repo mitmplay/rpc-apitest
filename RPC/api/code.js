@@ -1,4 +1,4 @@
-async function code(nspace, fn) {
-  return global.RPC[nspace][fn]+''
+async function code(nspace='api', fn='code') {
+  return global.RPC[nspace][fn]+'';
 }
 module.exports = code

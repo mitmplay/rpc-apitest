@@ -5,7 +5,7 @@ const json = {
 export const rpc = writable(json);
 
 export function clickSummary(evn) {
-  const el = evn.target.parentElement
+  const el = evn.currentTarget.parentElement
   setTimeout(_ => {
     rpc.update(json => {
       const {nspace,name} = el.dataset
@@ -17,7 +17,7 @@ export function clickSummary(evn) {
 }
 
 export function showCode(evn, _rpc) {
-  const el = evn.target.parentElement
+  const el = evn.currentTarget.parentElement
   const {nspace, fn} = el.dataset
   setTimeout(async _ => {
     const open = (typeof el.getAttribute('open')==='string')

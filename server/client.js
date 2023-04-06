@@ -15,6 +15,7 @@ function ism() {
     }
     msg += '}\n'
   }
+  msg += `window.RPC._obj_ = {}\n`
   return msg
 }
 

@@ -29,8 +29,16 @@
   }
 
   async function run(evn) {
+    const {RPC} = window
     const {nspace,fn} = evn.target.dataset
-    const msg = await window.RPC[nspace][fn]() 
+    console.log(`await RPC.${nspace}.${fn}()`)
+    const msg = await RPC[nspace][fn]()
+    if (typeof msg==='object' && msg!==null) {
+      console.log(JSON.stringify(msg, null, 2))
+    } else {
+      console.log(msg)
+    }
+    RPC._obj_.run = msg    
   }
 </script>
 

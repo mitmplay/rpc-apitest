@@ -46,7 +46,7 @@ export function updateLogs(newLogs) {
 }
 
 export function clickSummary(evn, lg) {
-  const el = evn.target.parentElement
+  const el = evn.currentTarget.parentElement
   setTimeout(_ => {
     logs.update(json => {
       const {id,name} = el.dataset
@@ -57,10 +57,10 @@ export function clickSummary(evn, lg) {
   })
 }
 
-export function clickGroup({target}) {
+export function clickGroup({currentTarget}) {
   setTimeout(_ => {
     logs.update(json => {
-      json.options.grouping = target.value
+      json.options.grouping = currentTarget.value
       return json
     })
   })

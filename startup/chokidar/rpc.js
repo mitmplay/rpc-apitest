@@ -21,8 +21,8 @@ function rpc() {
     let [app,rpc] = path2.split('/').slice(-2)
     rpc = rpc.replace('.js', '')
 
-    delete require.cache[path2];
-    const fn = require(path2)
+    delete require.cache[path1];
+    const fn = require(path1)
     if (!global.RPC[app]) {
       global.RPC[app] = {}
     }
@@ -46,7 +46,10 @@ function rpc() {
   }
 
   // Initialize watcher.
-  const path = `${HOME}/user-rpc/*/*.js`
+  const path = [
+    `${__app}/RPC/*/*.js`,
+    `${HOME}/user-rpc/*/*.js`
+  ]
   if (argv.test) {
     console.log(c.magentaBright(`>>> RPC loader:`), [tilde(path)])
     const arr = fg.sync([path], { dot: false })

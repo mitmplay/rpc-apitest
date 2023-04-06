@@ -39,6 +39,8 @@
   }
   li {
     margin-bottom: -1px;
+    font-size: 0.8em;
+    font-weight: 500;
   }
 
   span {
@@ -46,7 +48,7 @@
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.15rem 0.7rem;
     cursor: pointer;
   }
 

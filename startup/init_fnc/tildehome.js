@@ -11,12 +11,21 @@ if (platform === 'win32') {
 const _win32 = platform === 'win32'
 
 function tilde (path) {
-  return path.replace(new RegExp(_home, 'g'), '~')
+  if (Array.isArray(path)) {
+    return path.forEach(v=>v.replace(new RegExp(_home, 'g'), '~'))
+  } else {
+    return path.replace(new RegExp(_home, 'g'), '~')
+  }
 }
 
 function home (path) {
-  return path.replace(/^[ \t]*~/, _home)
+  if (Array.isArray(path)) {
+    return path.forEach(v=>v.replace(/^[ \t]*~/, _home))
+  } else {
+    return path.replace(/^[ \t]*~/, _home)
+  }
 }
+
 const p = _ => tilde(_.replace(/\\/g, '/'))
 
 module.exports = {
