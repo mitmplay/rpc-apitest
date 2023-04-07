@@ -2,9 +2,9 @@ const query_strings = require('./mocksgen/query_strings')
 const _requestBody = require('./mocksgen/request_body')
 const headers = {"Content-Type": "application/json"}
 
-function swgtorequest() {
+function swgtorequest(_rpc_) {
   function constructRequerst({swagger, nmspace, api}) {
-    const {_request_} = global.RPC[nmspace]
+    const {_request_} = _rpc_[nmspace]
     if (!_request_[api]) {
       _request_[api] = {}
     }
@@ -62,8 +62,8 @@ function swgtorequest() {
     }
   }
 
-  for (const nmspace in global.RPC) {
-    const _YAML_ = global.RPC[nmspace]._YAML_
+  for (const nmspace in _rpc_) {
+    const _YAML_ = _rpc_[nmspace]._YAML_
     if (_YAML_) {
       const apis = {}
       for (const api in _YAML_) {

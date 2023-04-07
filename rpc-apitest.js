@@ -1,17 +1,17 @@
-const database= require('./database')
-const startup = require('./startup')
-const server  = require('./server')
-const rmtpCall= require('./RPC')
-const fn      = startup()
+const database   = require('./database')
+const startup    = require('./startup')
+const server     = require('./server')
+const rmtpCall   = require('./RPC')
+const {_rpc_,fn} = startup()
 global.__app  = __dirname.replace(/\\/g, '/')
 
 async function run(_fn) {
-  const {c} = RPC._lib_
+  const {c} = _rpc_._lib_
   const [sc, fn] = _fn.split('.')
-  if (RPC[sc] && RPC[sc][fn]) {
+  if (_rpc_[sc] && _rpc_[sc][fn]) {
     try {
       console.log(c.magentaBright(`\nRUN! RPC.${_fn}()`))
-      await RPC[sc][fn]('*')       
+      await _rpc_[sc][fn]('*')       
       process.exit(0)
     } catch (err) {
       console.error(err)      
@@ -26,9 +26,9 @@ async function run(_fn) {
   }
 } 
 
-rmtpCall()
+rmtpCall(_rpc_)
 database(fn)
-const {test} = global.RPC._obj_.argv
+const {test} = _rpc_._obj_.argv
 if (test) { 
   // execute the test...
   run(test)

@@ -5,13 +5,9 @@ const https = require('https')
 const WebSocket = require('ws')
 const website = require('./website')
 const jsonrpc = require('./jsonrpc')
+const fn = require('../_rpc_')
 
-onconnect = ws => {
-  console.log('Client connected')
-  jsonrpc(ws)
-}
-
-function start() {
+async function start() {
   const express = website()
   const path = `${global.__app}/cert/selfsigned`
   const server1 = http.createServer({}, express)
@@ -24,7 +20,11 @@ function start() {
 
   global.Websocket = WebSocket
   global.wss = new WebSocket.Server({ noServer: true })
-  global.wss.on('connection', onconnect)
+  const jrpc = await jsonrpc(fn())
+  global.wss.on('connection', ws => {
+    console.log('Client connected')
+    jrpc(ws)
+  })
   
   function upgrade(request, socket, head) {
     const { pathname } = parse(request.url)

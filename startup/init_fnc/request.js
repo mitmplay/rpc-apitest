@@ -1,4 +1,5 @@
 const _request = require('request')
+const fn  = require('../../_rpc_')
 
 const req = function(request, opt={}) {
   return new Promise(resolve => {
@@ -40,7 +41,7 @@ const req = function(request, opt={}) {
           },
           error,
         })
-        const {apilog, dnslookup} = global.RPC._fn_
+        const {apilog, dnslookup} = fn()._fn_
         opt.dns = await dnslookup(opt.senderIp)
         const row = await apilog(request, headers, resp, opt)
         console.log(row)

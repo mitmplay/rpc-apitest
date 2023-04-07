@@ -4,12 +4,12 @@ const request   = require('./request')
 const nanoid    = require('./nanoid')
 const apilog    = require('./apilog')
 
-function fn() {
+function fn(_rpc_) {
   const {_home, _win32, ...thome} = tildehome
-  global.RPC._obj_.win32 = _win32
-  global.RPC._obj_.HOME  = _home
-  global.RPC._fn_ = {
-    ...global.RPC._fn_,
+  _rpc_._obj_.win32 = _win32
+  _rpc_._obj_.HOME  = _home
+  _rpc_._fn_ = {
+    ..._rpc_._fn_,
     ...thome,
     dnslookup,
     request,

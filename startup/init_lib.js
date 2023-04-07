@@ -9,11 +9,11 @@ const dir = __dirname.replace(/\\/g, '/').split('/')
 global.__app = dir.slice(0, -1).join('/')
 console.log(c.yellow(`App Path: ${global.__app}`))
 
-function init_lib() {
+function init_lib(_rpc_) {
   const {argv}  = process
   console.log(c.yellow(`Argv as seen from NodeJS`), argv.map(x=>x.replace(/\\/g, '/')))
 
-  const {_lib_, _obj_} = global.RPC
+  const {_lib_, _obj_} = _rpc_
   _lib_.c  = c
   _lib_.fs = fs
   _lib_.fg = fg

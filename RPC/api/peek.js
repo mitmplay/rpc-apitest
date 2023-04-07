@@ -1,9 +1,11 @@
+const fn  = require('../../_rpc_')
+
 async function peek(limit=25) {
   const lparams = [...arguments].pop()
   if (lparams==='h') {
     return info()
   }
-  let rows = await RPC._db_.logs('api_log').
+  let rows = await fn()._db_.logs('api_log').
     select ('*').
     orderBy('id', 'desc').
     limit  (limit)

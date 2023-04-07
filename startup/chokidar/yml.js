@@ -2,12 +2,12 @@ const swgtorequest = require('./swgtorequest')
 
 let initToggle = 1
 
-function yml() {
+function yml(_rpc_) {
   const {
     _fn_ : {tilde},
     _obj_: {HOME, argv},
     _lib_: {chokidar, YAML, fs, fg, c}
-  } = global.RPC
+  } = _rpc_
 
   const broadcast = () => {}
 
@@ -16,20 +16,20 @@ function yml() {
     if (initToggle) {
       console.log(c.magentaBright(`>>> YAML watcher OK`))
       initToggle = 0
-      swgtorequest()
+      swgtorequest(_rpc_)
     }
   }
   function loadYAML(path, msg) {
     let [app,yml] = path.replace(/\\/g,'/') .split('/').slice(-2)
     const name = yml.replace(/\.yaml$/, '')
 
-    if (!global.RPC[app]._YAML_) {
-      global.RPC[app]._YAML_ = {}
-      global.RPC[app]._request_ = {}
+    if (!_rpc_[app]._YAML_) {
+      _rpc_[app]._YAML_   = {}
+      _rpc_[app]._request_= {}
     }
 
     const str = fs.readFileSync(path, 'utf8')
-    global.RPC[app]._YAML_[name] = YAML.parse(str)
+    _rpc_[app]._YAML_[name] = YAML.parse(str)
 
     console.log(msg, {app,yml})
     if (!argv.test && initToggle) {
@@ -67,7 +67,7 @@ function yml() {
     .on('add',    _ => { _ = update(_, 'add') })
     .on('change', _ => { _ = update(_, 'chg') })
     .on('unlink', _ => { _ =   remove(_, 'del') })
-    global.RPC._watcher_.uYMLWatcher = uYMLWatcher
+    _rpc_._watcher_.uYMLWatcher = uYMLWatcher
   }
 }
 module.exports = yml

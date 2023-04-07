@@ -1,8 +1,8 @@
-module.exports = () => {
+module.exports = _rpc_ => {
   const {
     _version_,
     _lib_: {c},
-  } = global.RPC
+  } = _rpc_
   console.log(c.greenBright(
   `
   Usage: rpc-apitest [options]

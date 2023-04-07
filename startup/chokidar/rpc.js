@@ -1,11 +1,11 @@
 let initToggle = 1
 
-function rpc() {
+function rpc(_rpc_) {
   const {
     _fn_ : {tilde},
     _obj_: {HOME, argv},
     _lib_: {chokidar, fg, c}
-  } = global.RPC
+  } = _rpc_
 
   const broadcast = () => {}
 
@@ -23,11 +23,11 @@ function rpc() {
 
     delete require.cache[path1];
     const fn = require(path1)
-    if (!global.RPC[app]) {
-      global.RPC[app] = {}
+    if (!_rpc_[app]) {
+      _rpc_[app] = {}
     }
 
-    global.RPC[app][rpc] = fn
+    _rpc_[app][rpc] = fn
     console.log(msg, {app,rpc})
     if (!argv.test && initToggle) {
       timeout && clearTimeout(timeout)
@@ -67,7 +67,7 @@ function rpc() {
     .on('add',    _ => { _ = updateJS(_, 'add') })
     .on('change', _ => { _ = updateJS(_, 'chg') })
     .on('unlink', _ => { _ =   remove(_, 'del') })
-    global.RPC._watcher_.uRPCWatcher = uRPCWatcher
+    _rpc_._watcher_.uRPCWatcher = uRPCWatcher
   }
 }
 module.exports = rpc

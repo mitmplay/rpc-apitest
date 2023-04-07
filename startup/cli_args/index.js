@@ -1,22 +1,23 @@
 const yargs   = require('yargs-parser')
 const _home   = require('os').homedir()
-const argsChg = require('./args_chg')
 const helper  = require('./helper')
 
-module.exports = () => {
-  const argv = yargs(process.argv.slice(2))
-  RPC._obj_.argv = argv
+module.exports = (_rpc_) => {
+  const {_obj_} = _rpc_
+  _obj_.argv = yargs(process.argv.slice(2))
+  const argsChg= require('./args_chg')(_obj_)
 
-  argsChg('h', 'help' )
+  argsChg('d', 'dev-mode'   )
+  argsChg('h', 'help'       )
   argsChg('m', 'mockserver' )
-  argsChg('o', 'open' )
-  argsChg('s', 'https')
-  argsChg('t', 'test' )
-  argsChg('x', 'proxy')
+  argsChg('o', 'open'       )
+  argsChg('s', 'https'      )
+  argsChg('t', 'test'       )
+  argsChg('x', 'proxy'      )
 
-  if (argv.help) {
-    helper()
+  if (_obj_.argv.help) {
+    helper(_rpc_)
   }
 
-  console.log(RPC._obj_)
+  console.log(_obj_)
 }

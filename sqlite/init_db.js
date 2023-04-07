@@ -18,7 +18,7 @@ module.exports = async () => {
   const {
     _obj_: {HOME},
     _lib_: {fs,c},
-  } = global.RPC
+  } = _rpc_
 
   const home = `${HOME}/user-rpc`
   const filename = `${home}/logs.sqlite`

@@ -1,7 +1,8 @@
-
+const fn  = require('../../_rpc_')
 
 async function fetch(xhr, opt) {
   const defOptions = {api: 'fetch', act: 'act'}
+  const _rpc_ = fn()
   if (opt==='*') {
     opt = defOptions
   } else {
@@ -11,10 +12,10 @@ async function fetch(xhr, opt) {
     }  
   }
   if (typeof xhr==='string') {
-    xhr = await global.RPC.api.openapi(xhr, opt)
+    xhr = await _rpc_.api.openapi(xhr, opt)
   }
   opt.senderIp = this.senderIp
-  const result = await global.RPC._fn_.request(xhr, opt)
+  const result = await _rpc_._fn_.request(xhr, opt)
   return result
 }
 module.exports = fetch

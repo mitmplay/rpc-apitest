@@ -1,5 +1,7 @@
+const fn  = require('../../_rpc_')
+
 async function openapi(templateName='apidemo~openapi[post]/pet', opt={}) {
-  const {_lib_, _obj_} = global.RPC
+  const {_lib_, _obj_} = fn()
   const mockserver = _obj_.argv.mockserver || 'http://127.0.0.1:4010'
   opt.api = 'mockserver'
   opt.act = templateName
@@ -13,8 +15,8 @@ async function openapi(templateName='apidemo~openapi[post]/pet', opt={}) {
   }
   const [p0, nmspace, name, mth, epoint] = match
   let method = []
-  if (global.RPC[nmspace]) {
-    const apiname = global.RPC[nmspace]?._request_[name]
+  if (_rpc_[nmspace]) {
+    const apiname = _rpc_[nmspace]?._request_[name]
     if (apiname) {
       const endpoint = apiname[epoint]
       if (!endpoint) {

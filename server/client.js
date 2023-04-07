@@ -1,12 +1,14 @@
+const fn  = require('../_rpc_')
+
 function ism() {
   let msg = ``
-  const {RPC} = global
-  for (const k1 in RPC) {
+  const _rpc_ = fn()
+  for (const k1 in _rpc_) {
     if (/^_.+_$/.test(k1)) {
       continue
     }
     msg += `window.RPC['${k1}'] = {\n`
-    for (const k2 in RPC[k1]) {
+    for (const k2 in _rpc_[k1]) {
       msg += `  async ${k2}() {
     const args = Array.prototype.slice.call(arguments);
     return await sendRequest('${k1}.${k2}', args)
