@@ -19,11 +19,17 @@ function yml(_rpc_) {
       swgtorequest(_rpc_)
     }
   }
+
   function loadYAML(path, msg) {
     let [app,yml] = path.replace(/\\/g,'/') .split('/').slice(-2)
     const name = yml.replace(/\.yaml$/, '')
 
-    if (!_rpc_[app]._YAML_) {
+    if (!_rpc_[app]) {
+      _rpc_[app] = {
+        _YAML_   : {},
+        _request_: {},
+      }
+    } else if (!_rpc_[app]._YAML_) {
       _rpc_[app]._YAML_   = {}
       _rpc_[app]._request_= {}
     }
@@ -31,7 +37,7 @@ function yml(_rpc_) {
     const str = fs.readFileSync(path, 'utf8')
     _rpc_[app]._YAML_[name] = YAML.parse(str)
 
-    console.log(msg, {app,yml})
+    console.log(msg,  JSON.stringify({app,yml}))
     if (!argv.test && initToggle) {
       timeout && clearTimeout(timeout)
       timeout = setTimeout(initEnd, 1000)

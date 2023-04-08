@@ -28,7 +28,7 @@ function rpc(_rpc_) {
     }
 
     _rpc_[app][rpc] = fn
-    console.log(msg, {app,rpc})
+    console.log(msg, JSON.stringify({app,rpc}))
     if (!argv.test && initToggle) {
       timeout && clearTimeout(timeout)
       timeout = setTimeout(initEnd, 1000)
