@@ -8,6 +8,7 @@ module.exports = _rpc_ => {
   Usage: rpc-apitest [options]
   
   options:
+    -d --devmode    \t running in devmode
     -h --help       \t show this help
     -m --mockserver \t def: http://127.0.0.1:4010
     -o --open       \t open the browser
