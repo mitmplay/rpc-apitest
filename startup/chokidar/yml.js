@@ -1,6 +1,9 @@
 const swgtorequest = require('./swgtorequest')
+const fn  = require('../../_rpc_')
 
 let initToggle = 1
+const rg1 = /\\/g
+const rg2 = /\/(user-rpc|RPC)\/(\w+)\/(.+)\.yaml/
 
 function yml(_rpc_) {
   const {
@@ -17,25 +20,32 @@ function yml(_rpc_) {
       console.log(c.magentaBright(`>>> YAML watcher OK`))
       initToggle = 0
       swgtorequest(_rpc_)
+      fn(_rpc_)
     }
   }
 
   function loadYAML(path, msg) {
-    let [app,yml] = path.replace(/\\/g,'/') .split('/').slice(-2)
-    const name = yml.replace(/\.yaml$/, '')
-
+    let [app,name] = path.replace(rg1,'/').match(rg2).slice(2)
+  
     if (!_rpc_[app]) {
       _rpc_[app] = {
         _YAML_   : {},
+        _openapi_: {},
         _request_: {},
       }
     } else if (!_rpc_[app]._YAML_) {
       _rpc_[app]._YAML_   = {}
+      _rpc_[app]._openapi_= {}
       _rpc_[app]._request_= {}
     }
 
     const str = fs.readFileSync(path, 'utf8')
-    _rpc_[app]._YAML_[name] = YAML.parse(str)
+    const obj = YAML.parse(str)
+    if (obj.openapi) {
+      _rpc_[app]._YAML_[name] = obj
+    } else {
+      _rpc_[app]._request_[name] = obj
+    }
 
     console.log(msg,  JSON.stringify({app,yml}))
     if (!argv.test && initToggle) {
@@ -55,7 +65,10 @@ function yml(_rpc_) {
   }
 
   // Initialize watcher.
-  const path = `${HOME}/user-rpc/*/*.yaml`
+  const path = [
+    `${__app}/RPC/**/*.yaml`,
+    `${HOME}/user-rpc/**/*.yaml`
+  ]
   if (argv.test) {
     console.log(c.magentaBright(`>>> YAML loader:`), [tilde(path)])
     const arr = fg.sync([path], { dot: false })

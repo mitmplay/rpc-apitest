@@ -4,9 +4,9 @@ async function mocks() {
   const _rpc_ = fn()
   const epmocks = []
   for (const app in _rpc_) {
-    const _request_ = _rpc_[app]._request_ || {}
-    for (const apiname in _request_) {
-      const endpoints = _request_[apiname] || {}
+    const _openapi_ = _rpc_[app]._openapi_ || {}
+    for (const apiname in _openapi_) {
+      const endpoints = _openapi_[apiname] || {}
       for (const endpoint in endpoints) {
         const methods = endpoints[endpoint]
         for (const mth in methods) {

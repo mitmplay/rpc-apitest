@@ -16,7 +16,7 @@ async function openapi(templateName='apidemo~openapi[post]/pet', opt={}) {
   const [p0, nmspace, name, mth, epoint] = match
   let method = []
   if (_rpc_[nmspace]) {
-    const apiname = _rpc_[nmspace]?._request_[name]
+    const apiname = _rpc_[nmspace]?._openapi_[name]
     if (apiname) {
       const endpoint = apiname[epoint]
       if (!endpoint) {

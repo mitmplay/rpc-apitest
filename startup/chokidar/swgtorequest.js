@@ -4,13 +4,13 @@ const headers = {"Content-Type": "application/json"}
 
 function swgtorequest(_rpc_) {
   function constructRequerst({swagger, nmspace, api}) {
-    const {_request_} = _rpc_[nmspace]
-    if (!_request_[api]) {
-      _request_[api] = {}
+    const {_openapi_} = _rpc_[nmspace]
+    if (!_openapi_[api]) {
+      _openapi_[api] = {}
     }
 
     function generateGetRequest(_urls, method) {
-      const apis = _request_[api]
+      const apis = _openapi_[api]
       for (const endpoint in _urls) {
         const urls = _urls[endpoint][method]
         if (!apis[endpoint]) {
@@ -26,7 +26,7 @@ function swgtorequest(_rpc_) {
     }
 
     function generatePostRequest(_urls, method, schema) {
-      const apis = _request_[api]
+      const apis = _openapi_[api]
       for (const endpoint in _urls) {
         const urls = _urls[endpoint][method]
         if (!apis[endpoint]) {

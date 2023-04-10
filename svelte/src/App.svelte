@@ -7,6 +7,7 @@
   } from './stores/logsStore';
   import Tab1 from "./Tab1/Tab1.svelte";
   import Tab2 from "./Tab2/Tab2.svelte";
+  import Tab3 from "./Tab3/Tab3.svelte";
   import Tabs from "./Tabs/Tabs.svelte";
 
   let ttl = 0
@@ -21,6 +22,10 @@
     { label: "API",
      value: 2,
      component: Tab2
+    },
+    { label: "Request",
+     value: 3,
+     component: Tab3
     },
   ];
 
