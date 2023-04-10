@@ -1,3 +1,4 @@
+const rpc       = require('../../_rpc_')
 const dnslookup = require('./dnslookup')
 const tildehome = require('./tildehome')
 const request   = require('./request')
@@ -15,6 +16,7 @@ function fn(_rpc_) {
     request,
     nanoid,
     apilog,
+    rpc,
   }
 }
 module.exports = fn

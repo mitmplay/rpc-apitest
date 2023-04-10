@@ -21,7 +21,7 @@ let _rpc_ = {
   _version_,
 }
 
-module.exports = o => {
+const rpc = o => {
   if (o===undefined) {
     return _rpc_
   } else {
@@ -31,3 +31,5 @@ module.exports = o => {
     }
   }
 }
+global.rpc = rpc 
+module.exports = rpc
