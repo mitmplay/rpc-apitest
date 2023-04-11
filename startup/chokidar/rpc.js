@@ -50,16 +50,19 @@ function rpc(_rpc_) {
     `${__app}/RPC/*/*.js`,
     `${HOME}/user-rpc/*/*.js`
   ]
+  const ignored = /(\/_.*|index)\.js$/
   if (argv.test) {
     console.log(c.magentaBright(`>>> RPC loader:`), [tilde(path)])
     const arr = fg.sync([path], { dot: false })
     arr.forEach(_ =>{
-      !/\/_.*\.js$/.test(_) && loadJS(_, 'load', broadcast)
+      if (!ignored.test(_)) {
+        loadJS(_, 'load', broadcast)
+      }
     })  
   } else {
     console.log(c.magentaBright(`>>> RPC watcher:`), [tilde(path)])
     const uRPCWatcher = chokidar.watch([path], {
-      ignored: /\/_.*\.js$/, // ignore files
+      ignored, // ignore files
       persistent: true
     })
     // Something to use when events are received.
