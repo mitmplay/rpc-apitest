@@ -1,20 +1,12 @@
-const connect = function({
-    host: connectString,
-    user, 
-    // schema, 
-    // database, 
-    password,
-}) {
-  const c = {
+const connect = function({host, user, password}) {
+  const connectString = host
+  return global.knex({
     client: 'oracledb',
     connection: {
-      connectString,
       user,
-      // schema,
-      // database,
       password,
+      connectString,
     }
-  }
-  return global.knex(c)
+  })
 }
 module.exports = connect
