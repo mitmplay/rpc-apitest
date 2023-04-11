@@ -20,17 +20,21 @@ export function showCode(evn, _rpc) {
   const el = evn.currentTarget.parentElement
   const {nspace, fn} = el.dataset
   setTimeout(async _ => {
+    let initcode = false
     const open = (typeof el.getAttribute('open')==='string')
     if (open && _rpc[nspace][fn]?.code==='...') {
       console.log('show code')
       let code = window.RPC[nspace][fn]+''
       if (code.includes('sendRequest')) {
-        code = await window.RPC.api.code(nspace, fn)
+        initcode = await window.RPC.api.code(nspace, fn)
       }
-      rpc.update(json => {
-        json.rpc[nspace][fn].code = code
-        return json
-      })
     }
+    rpc.update(json => {
+      if (initcode) {
+        json.rpc[nspace][fn].code = initcode
+      }
+      json.rpc[nspace][fn]._openCode = open
+      return json
+    })
   })
 }

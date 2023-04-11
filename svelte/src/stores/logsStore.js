@@ -37,10 +37,10 @@ export function updateLogs(newLogs) {
       _logs3[date].logs[id] = _logs[id]
     }
 
-    json.logs = _logs
+    json.logs  = _logs
     json.logs2 = _logs2
     json.logs3 = _logs3
-    window.json = json
+    window.json= json
     return json
   });
 }

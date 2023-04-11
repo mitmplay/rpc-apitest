@@ -1,5 +1,5 @@
 <script>
-  import {logs, clickGroup, clickCollapse} from '../stores/logsStore';
+  import {logs}   from '../stores/logsStore';
   import Actions  from './Actions.svelte';
   import AllLogs  from './AllLogs.svelte';
   import GrpLogs  from './GrpLogs.svelte';

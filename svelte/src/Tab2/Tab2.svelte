@@ -1,8 +1,6 @@
 <script lang="ts">
   import {onMount} from 'svelte';
   import {rpc, clickSummary, showCode} from '../stores/apiStore';
-  import CodeMirror from "./CodeMirror.svelte";
-  let value = "";
 
   onMount(() => {
     const rpcs = {}
@@ -54,7 +52,7 @@
   </summary>
   <div>
     {#each toArray(window.RPC[nspace]) as fn}
-      <details data-nspace={nspace} data-fn={fn}>
+      <details data-nspace={nspace} data-fn={fn} data-name="_openCode" open={$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]._openCode}>
         <summary on:click={e=>showCode(e,$rpc.rpc)}>
           <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
           <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
