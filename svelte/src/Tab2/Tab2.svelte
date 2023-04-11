@@ -1,6 +1,7 @@
 <script lang="ts">
   import {onMount} from 'svelte';
   import {rpc, clickSummary, showCode} from '../stores/apiStore';
+  import Actions  from './Actions.svelte';
 
   onMount(() => {
     const rpcs = {}
@@ -45,6 +46,7 @@
   <meta name="description" content="Showing some contents" />
 </svelte:head>
 
+<Actions />
 {#each toArray(window.RPC) as nspace}
 <details data-nspace={nspace} data-name="_openName" open={$rpc.rpc[nspace] && $rpc.rpc[nspace]._openName}>
   <summary on:click={clickSummary}>

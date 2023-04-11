@@ -38,3 +38,21 @@ export function showCode(evn, _rpc) {
     })
   })
 }
+
+export function clickCollapse(evn) {
+  setTimeout(_ => {
+    rpc.update(json => {
+      for (const id1 in json.rpc) {
+        const api = json.rpc[id1]
+        api._openName = false
+        for (const id2 in api) {
+          const code = api[id2]
+          if (!/^_/.test(id2)) {
+            code._openCode = false
+          }
+        }
+      }
+      return json
+    })
+  })
+}
