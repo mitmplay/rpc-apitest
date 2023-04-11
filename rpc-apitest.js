@@ -1,9 +1,7 @@
-const database   = require('./database')
 const startup    = require('./startup')
-const server     = require('./server')
-const rmtpCall   = require('./RPC')
+const RPC        = require('./RPC')
+const DB         = require('./DB')
 const {_rpc_,fn} = startup()
-global.__app  = __dirname.replace(/\\/g, '/')
 
 async function run(_fn) {
   const {c} = _rpc_._lib_
@@ -24,14 +22,15 @@ async function run(_fn) {
     console.error(msg1+msg2+msg3)
     process.exit(1)
   }
-} 
+}
 
-rmtpCall(_rpc_)
-database(fn)
-const {test} = _rpc_._obj_.argv
+global.__app = __dirname.replace(/\\/g, '/')
+var {test} = _rpc_._obj_.argv
+RPC(_rpc_)
+DB(fn)
 if (test) { 
   // execute the test...
   run(test)
 } else {
-  server()
+  require('./server')()
 }
