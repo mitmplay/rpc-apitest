@@ -1,7 +1,8 @@
 const fn  = require('../../_rpc_')
 
 async function openapi(templateName='apidemo~openapi[post]/pet', opt={}) {
-  const {_lib_, _obj_} = fn()
+  const _rpc_ = fn()
+  const {_lib_, _obj_} = _rpc_
   const mockserver = _obj_.argv.mockserver || 'http://127.0.0.1:4010'
   opt.api = 'mockserver'
   opt.act = templateName

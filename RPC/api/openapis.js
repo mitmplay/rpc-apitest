@@ -1,6 +1,6 @@
 const fn  = require('../../_rpc_')
 
-async function mocks() {
+async function openapis() {
   const _rpc_ = fn()
   const epmocks = []
   for (const app in _rpc_) {
@@ -17,4 +17,4 @@ async function mocks() {
   }
   return JSON.stringify(epmocks.sort(), null, 2)
 }
-module.exports = mocks
+module.exports = openapis
