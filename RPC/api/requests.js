@@ -21,29 +21,26 @@ function toTreeObj(app, paths) {
   return result  
 }
 
-async function mocks(plain=false) {
+async function requests(plain=false) {
   const _rpc_ = fn()
   if (plain) {
-    let requests = {}
+    let requests1 = {}
     for (const app in _rpc_) {
       if (_rpc_[app]._request_) {
-        requests[app] = toTreeObj(app, _rpc_[app]._request_)
+        requests1[app] = toTreeObj(app, _rpc_[app]._request_)
       }
     }
-    return requests
+    return requests1
   
   } else {
-    const epmocks = []
+    const requests2 = []
     for (const app in _rpc_) {
       const _request_ = _rpc_[app]._request_ || {}
       for (const apiname in _request_) {
-        // const paths = apiname.split('/')
-        // if (paths.length===1) {
-          epmocks.push(`await RPC.api.fetch('${app}~${apiname}')`)
-        // }
+        requests2.push(`await RPC.api.fetch('${app}~${apiname}')`)
       }
     }
-    return JSON.stringify(epmocks.sort(), null, 2)  
+    return JSON.stringify(requests2.sort(), null, 2)  
   }
 }
-module.exports = mocks
+module.exports = requests
