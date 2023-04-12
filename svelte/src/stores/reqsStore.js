@@ -34,6 +34,23 @@ export function clickSummary(evn, req, json) {
   })
 }
 
-export function showRequest(evn, req, json) {
+function collapse(_req) {
+  for (const id in _req) {
+    const req = _req[id]
+    if (!/^_/.test(id)) {
+      req._openName = false
+      if (!req.run) {
+        collapse(req) 
+      }  
+    } 
+  }
+}
 
+export function clickCollapse(evn) {
+  setTimeout(_ => {
+    reqs.update(json => {
+      collapse(json.req)
+      return json
+    })
+  })
 }

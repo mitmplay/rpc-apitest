@@ -1,6 +1,7 @@
 <script lang="ts">
   import {onMount} from 'svelte';
   import {reqs, init} from '../stores/reqsStore';
+  import Actions  from './Actions.svelte';
   import Tree from './Tree.svelte';
   let value = "";
 
@@ -27,6 +28,7 @@
   <meta name="description" content="Showing Requests" />
 </svelte:head>
 
+<Actions />
 <Tree _req={$reqs.req} json={$reqs.req} />
 
 <style lang="scss">
