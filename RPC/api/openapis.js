@@ -10,7 +10,7 @@ async function openapis() {
       for (const endpoint in endpoints) {
         const methods = endpoints[endpoint]
         for (const mth in methods) {
-          epmocks.push(`await RPC.api.fetch('${app}~${apiname}[${mth}]${endpoint}')`)
+          epmocks.push(`await RPC.api.fetch('${app}/${apiname}[${mth}]${endpoint}')`)
         }
       }
     }

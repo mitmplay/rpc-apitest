@@ -1,5 +1,5 @@
 const fn  = require('../../_rpc_')
-const is_openapi = /~\w+\[\w+\]\//
+const is_openapi = /\w+\[\w+\]\//
 
 async function fetch(xhr, opt) {
   const defOptions = {api: 'fetch', act: 'act'}

@@ -1,14 +1,12 @@
 const fn  = require('../../_rpc_')
 
-async function openapi(templateName='apidemo~openapi[post]/pet', opt={}) {
+async function openapi(templateName='apidemo/openapi[post]/pet', opt={}) {
   const _rpc_ = fn()
   const {_lib_, _obj_} = _rpc_
   const mockserver = _obj_.argv.mockserver || 'http://127.0.0.1:4010'
   opt.api = 'mockserver'
   opt.act = templateName
-  //'apidemo~openapi[get]/pet'.match(/(\w+)~(\w+)\[(\w+)\](\/.+)/)
-  //['..', 'apidemo', 'openapi', 'get', '/pet',...]
-  const match = templateName.match(/(\w+)~(\w+)\[(\w+)\](\/.+)/)
+  const match = templateName.match(/(\w+)\/(\w+)\[(\w+)\](\/.+)/)
   if (!match) {
     const errmsg = {error: 'openapi mock is not there!'}
     console.error(errmsg)
@@ -36,7 +34,7 @@ async function openapi(templateName='apidemo~openapi[post]/pet', opt={}) {
   if (!method.length) {
     const errmsg = {
       error: 'no openapi mock!',
-      syntax: `await RPC.api.fetch('apidemo~openapi[get]/pet')`
+      syntax: `await RPC.api.fetch('apidemo/openapi[get]/pet')`
     }
     console.error(errmsg)
     return errmsg

@@ -1,7 +1,7 @@
 const fn  = require('../../_rpc_')
 
-async function request(req='apidemo~_request_u_agent_post', opt={}) {
-  const match = req.match(/^(\w+)~([\w/]+)$/)
+async function request(req='apidemo/request_u_agent_post', opt={}) {
+  const match = req.match(/^(\w+)\/([\w/]+)$/)
   const _rpc_ = fn()
   if (!match) {
     const errmsg = {error: `request: ${req} is not there!`}

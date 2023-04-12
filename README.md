@@ -51,7 +51,7 @@ await RPC.api.fetch({
   }
 })
 // use openapi mock request
-await RPC.api.fetch('apidemo~openapi[get]/pet')
+await RPC.api.fetch('apidemo/openapi[get]/pet')
 ```
 #### Registering `broadcast event`: 
 ```js
