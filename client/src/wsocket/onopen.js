@@ -30,12 +30,13 @@ function onopen(ws) {
   window.sendRequest = sendRequest
 
   // Example usage with async/await and Promise.all()
-  async function addAll() {
+  async function promiseAllClient() {
+    //# client code
     try {
       const all = await Promise.all([
-        sendRequest('apidemo.add', [{ value: 1 }]),
-        sendRequest('apidemo.add', [{ value: 2 }]),
-        sendRequest('apidemo.add', [{ value: 3 }]),
+        sendRequest('apidemo.demo_add', [{ value: 1 }]),
+        sendRequest('apidemo.demo_add', [{ value: 2 }]),
+        sendRequest('apidemo.demo_add', [{ value: 3 }]),
       ])
       console.log(`Got data: ${JSON.stringify(all)}`)
       return all
@@ -47,7 +48,7 @@ function onopen(ws) {
 
   ws.onopen = async data => {
     console.log('Websocket open...')
-    window.RPC.apitest.addAll = addAll
+    window.RPC.apitest.promiseAllClient = promiseAllClient
     for (const k1 in window.RPC) {
       if (!/^_.+_$/.test(k1)) {
         window.RPC[k1].log = log

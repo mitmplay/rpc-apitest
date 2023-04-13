@@ -1,12 +1,12 @@
 const {parse, success, error, JsonRpcError} = require('jsonrpc-lite')
 const native = /\{\s*\[native code\]\s*\}/
 
-module.exports = async _rpc_ => {
+module.exports = async _ => {
   async function executeRpcMethod({id, method, params}, senderIp) {
     const [k1, k2] = method.split('.')
     try {
-      let result 
-      const fn = _rpc_[k1][k2]
+      let result
+      const fn = rpc()[k1][k2]
       fn.senderIp = senderIp
       if (native.test('' + fn.then)) {
         result = await fn.apply(fn, params)
@@ -28,7 +28,7 @@ module.exports = async _rpc_ => {
     if (broadcast) {
       const {method} = payload
       if (method!=='api.peek') {
-        result = success(result.id, await _rpc_.api.peek())
+        result = success(result.id, await rpc().api.peek())
       }
       const rtn = {
         broadcast: method,

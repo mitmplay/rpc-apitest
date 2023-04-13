@@ -1,7 +1,15 @@
 const fn  = require('../../_rpc_')
 const is_openapi = /\w+\[\w+\]\//
 
-async function fetch(xhr, opt) {
+def_req = {
+  url: "https://yesno.wtf/api",
+  method: "get",
+  headers: {
+    "Content-Type": "application/json"
+  }
+}
+
+async function fetch(xhr=def_req, opt) {
   const defOptions = {api: 'fetch', act: 'act'}
   const _rpc_ = fn()
   if (opt==='*') {

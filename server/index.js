@@ -5,7 +5,6 @@ const https = require('https')
 const WebSocket = require('ws')
 const website = require('./website')
 const jsonrpc = require('./jsonrpc')
-const fn = require('../_rpc_')
 
 async function start() {
   const express = website()
@@ -20,7 +19,7 @@ async function start() {
 
   global.Websocket = WebSocket
   global.wss = new WebSocket.Server({ noServer: true })
-  const jrpc = await jsonrpc(fn())
+  const jrpc = await jsonrpc()
   global.wss.on('connection', ws => {
     console.log('Client connected')
     jrpc(ws)
