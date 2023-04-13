@@ -5,8 +5,24 @@
   import Tree from './Tree.svelte';
 
   function toArray(_json) {
-    const arr = Object.keys(_json)
-    return arr.filter(id=>!/^_/.test(id)).sort()
+    const arr1 = []
+    const arr2 = []
+    const arr3 = []
+    for (const key in _json) {
+      if (/_template_/.test(key)) {
+        arr2.push(key)
+      } else if (_json[key].run) {
+        arr3.push(key)
+      } else if (!/^_/.test(key) ) {
+        arr1.push(key)
+      }
+    }
+    const arr = [
+      ...arr1.sort(),
+      ...arr2.sort(),
+      ...arr3.sort(),
+    ]
+    return arr
   }
 
   async function run(evn) {
@@ -25,7 +41,9 @@
 {#each toArray(json) as nspace}
 <details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
   <summary on:click={evn => clickSummary(evn, _req, json)}>
-    {#if json[nspace].run}
+    {#if /_template_/.test(json[nspace].run)}
+      <b>{`${json[nspace].run}`}</b>
+    {:else if json[nspace].run}
       <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}')</b>
       <a href="#" data-run={json[nspace].run} on:click={run}>run</a>
     {:else}

@@ -37,7 +37,9 @@ async function requests(plain=false) {
     for (const app in _rpc_) {
       const _request_ = _rpc_[app]._request_ || {}
       for (const apiname in _request_) {
-        requests2.push(`await RPC.api.fetch('${app}/${apiname}')`)
+        if (!/_template_/.test(apiname)) {
+          requests2.push(`await RPC.api.fetch('${app}/${apiname}')`)
+        }
       }
     }
     return JSON.stringify(requests2.sort(), null, 2)  

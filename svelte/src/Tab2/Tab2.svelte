@@ -3,10 +3,18 @@
   import {rpc, clickSummary, showCode} from '../stores/apiStore';
   import Actions  from './Actions.svelte';
 
+  function filter(v) {
+    if (/_template_/.test(v)) {
+      return true
+    } else {
+      return !/^_/.test(v) 
+    }
+  }
+
   onMount(() => {
     const rpcs = {}
     let arr = Object.keys(window.RPC)
-    arr = arr.filter((v,i)=>!/^_/.test(v)).sort()
+    arr = arr.filter(filter).sort()
     for (const key1 of arr) {
       rpcs[key1] = $rpc.rpc[key1] || {}
       for (const key2 in window.RPC[key1]) {
@@ -23,7 +31,7 @@
 
   function toArray(json) {
     let arr = Object.keys(json)
-    arr = arr.filter((v,i)=>!/^_/.test(v)).sort()
+    arr = arr.filter(filter).sort()
     return arr
   }
 
