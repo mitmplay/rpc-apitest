@@ -24,27 +24,32 @@ function merge(obj1, obj2) {
   return result;
 }
 
-function nested(arr, obj1) {
+function _env(ob, env) {
+  const tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined
+  return tp3
+}
+
+function nested(arr, tp2, env) {
   key = arr.shift()
-  const obj2 = obj1[key]
+  const tp3 = _env(tp2, env) //# || tp2[key]
   if (arr.length) {
-    return nested(arr, obj2)
+    return tp3 && nested(arr, tp3) || nested(arr, tp2[key])
   } else {
-    return obj2
+    return tp3 ||  tp2[key]
   }
 }
 
-function parser(xhr, tp2) {
+function parser(xhr, tp2, env) {
   if (xhr.url===undefined) delete xhr.url
   if (xhr.body===undefined) delete xhr.body
   if (xhr.headers===undefined) delete xhr.headers
   
   for (const key in xhr) {
-    let value1 = xhr[key]
+    let value1 = _env(xhr, env) || xhr[key]
     if (value1===undefined) {
       continue
     } else if (typeof value1!=='string') {
-      parser(value1, tp2)
+      parser(value1, tp2, env)
       continue
     }
     let match = value1.match(/\{([\w.]+)\}/g)
@@ -54,7 +59,7 @@ function parser(xhr, tp2) {
     match = match.map(x=>x.slice(1,-1))
     match.forEach((v,i) => {
       const arr = v.split('.')
-      const value2 = nested(arr, tp2)
+      const value2 = nested(arr, tp2, env)
       if (match.length===1 && value1.trim()===`{${match[0]}}`) {
         value1 = value2
       } else {
@@ -76,15 +81,15 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   }
   const [p0, nmspace, name] = match
   if (_rpc_[nmspace]) {
-    const xhr = _rpc_[nmspace]?._request_[name]
+    let xhr = _rpc_[nmspace]?._request_[name]
     const tp1 = `/${name}`.replace(/\/\w+$/, '/_template_').slice(1)
     const tp2 = tp1 ? _rpc_[nmspace]?._request_[tp1] : null
     if (tp2) {
-      const {url, headers, body} = opt
+      xhr = JSON.parse(JSON.stringify(xhr))
+      const {url, headers, body, env='dev'} = opt
+      xhr = merge(xhr, parser(xhr, tp2, env))
       if (url || headers || body) {
-        return  merge(xhr, parser({url, headers, body}, tp2))
-      } else {
-        return parser(xhr, tp2)
+        xhr = merge(xhr, parser({url, headers, body}, tp2, env))
       }
     }
     return xhr

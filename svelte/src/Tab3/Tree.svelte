@@ -42,7 +42,7 @@
 <details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
   <summary on:click={evn => clickSummary(evn, _req, json)}>
     {#if /_template_/.test(json[nspace].run)}
-      <b>{`${json[nspace].run}`}</b>
+      <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
       <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}')</b>
       <a href="#" data-run={json[nspace].run} on:click={run}>run</a>
