@@ -20,7 +20,7 @@ await RPC.apidemo.add()       //# no broadcast
 await RPC.apidemo.api_yesno() //# triggering broadcast
 ```
 
-All api inside namespace: `'api.'` will trigger broadcast message
+All api start with: `'.api_'` will trigger broadcast message
 ```js
 await RPC.apidemo.api_yesno()   
 await RPC.apidemo.api_u_agent() 
