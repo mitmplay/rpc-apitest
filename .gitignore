@@ -1,0 +1,10 @@
+log
+*.zip
+*.tgz
+*.sqlite
+coverage
+.DS_Store
+*build.js
+.cjsescache
+node_modules
+svelte/node_modules
