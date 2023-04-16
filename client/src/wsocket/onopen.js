@@ -48,11 +48,16 @@ function onopen(ws) {
 
   ws.onopen = async data => {
     console.log('Websocket open...')
-    window.RPC.apitest.promiseAllClient = promiseAllClient
-    for (const k1 in window.RPC) {
-      if (!/^_.+_$/.test(k1)) {
-        window.RPC[k1].log = log
+    if (window.RPC._obj_.argv.devmode) {
+      if (!window.RPC.apitest) {
+        window.RPC.apitest = {}
       }
+      window.RPC.apitest.promiseAllClient = promiseAllClient
+      // for (const k1 in window.RPC) {
+      //   if (!/^_.+_$/.test(k1)) {
+      //     window.RPC[k1].log = log
+      //   }
+      // }  
     }
   }
 }

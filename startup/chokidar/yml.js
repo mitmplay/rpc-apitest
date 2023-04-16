@@ -3,7 +3,7 @@ const fn  = require('../../_rpc_')
 
 let initToggle = 1
 const rg1 = /\\/g
-const rg2 = /\/(user-rpc|RPC)\/(\w+)\/(.+)\.yaml/
+const rg2 = /\/(user-rpc|RPC)\/([\w-]+)\/(.+)\.yaml/
 
 function yml(_rpc_) {
   const {
@@ -65,10 +65,12 @@ function yml(_rpc_) {
   }
 
   // Initialize watcher.
-  const path = [
-    `${__app}/RPC/**/*.yaml`,
-    `${HOME}/user-rpc/**/*.yaml`
-  ]
+  const path = []
+  if (_rpc_._obj_.argv.devmode) {
+    path.push(`${__app}/RPC/**/*.yaml`)
+  }
+  path.push(`${HOME}/user-rpc/**/*.yaml`)
+
   if (argv.test) {
     console.log(c.magentaBright(`>>> YAML loader:`), [tilde(path)])
     const arr = fg.sync([path], { dot: false })
@@ -85,7 +87,7 @@ function yml(_rpc_) {
     uYMLWatcher // Add event listeners.
     .on('add',    _ => { _ = update(_, 'add') })
     .on('change', _ => { _ = update(_, 'chg') })
-    .on('unlink', _ => { _ =   remove(_, 'del') })
+    .on('unlink', _ => { _ = remove(_, 'del') })
     _rpc_._watcher_.uYMLWatcher = uYMLWatcher
   }
 }

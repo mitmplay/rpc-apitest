@@ -7,7 +7,7 @@ const _db_     = {}
 const _fn_     = {}
 const _obj_    = {}
 const _lib_    = {}
-const apitest  = {}
+// const apitest  = {}
 const _watcher_= {}
 
 let _rpc_ = {
@@ -16,7 +16,7 @@ let _rpc_ = {
   _obj_,
   _lib_,
   _name_,
-  apitest,
+  // apitest,
   _watcher_,
   _version_,
 }

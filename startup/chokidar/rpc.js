@@ -46,10 +46,12 @@ function rpc(_rpc_) {
   }
 
   // Initialize watcher.
-  const path = [
-    `${__app}/RPC/*/*.js`,
-    `${HOME}/user-rpc/*/*.js`
-  ]
+  const path = []
+  if (_rpc_._obj_.argv.devmode) {
+    path.push(`${__app}/RPC/*/*.js`)
+  }
+  path.push(`${HOME}/user-rpc/*/*.js`)
+
   const ignored = /(\/_.*|index)\.js$/
   if (argv.test) {
     console.log(c.magentaBright(`>>> RPC loader:`), [tilde(path)])

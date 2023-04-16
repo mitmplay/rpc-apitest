@@ -18,6 +18,7 @@ function ism() {
     msg += '}\n'
   }
   msg += `window.RPC._obj_ = {}\n`
+  msg += `window.RPC._obj_ = ${JSON.stringify(_rpc_._obj_)}\n`
   return msg
 }
 

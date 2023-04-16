@@ -1,13 +1,16 @@
 # RPC Apitest
 #### Installation
 ```js
+// -d devmode
+// -o open browser
 npm i -g rpc-apitest
-rpc-apitest -o // open browser to http://localhost:3001
+rpc-apitest -do // open browser to http://localhost:3001
 ```
 Open in https & avoid warning of self-sign certificate  
 ```js
+// -s open in https
 export NODE_TLS_REJECT_UNAUTHORIZED=0
-rpc-apitest -os // open browser to https://localhost:3002
+rpc-apitest -dos // open browser to https://localhost:3002
 ```
 
 
@@ -40,7 +43,7 @@ await RPC.api.fetch({
 #### Test with mock server
 ```js
 npm install -g @stoplight/prism-cli
-prism mock https://raw.githack.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore-expanded.yaml
+prism mock https://raw.githack.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml
 
 await RPC.api.fetch({
   url: "http://127.0.0.1:4010/pets",
