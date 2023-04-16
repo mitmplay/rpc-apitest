@@ -4,8 +4,11 @@ async function openapi(templateName='apidemo/openapi[post]/pet', opt={}) {
   const _rpc_ = fn()
   const {_lib_, _obj_} = _rpc_
   const mockserver = _obj_.argv.mockserver || 'http://127.0.0.1:4010'
-  opt.api = 'mockserver'
-  opt.act = templateName
+  opt = {
+    ...opt,
+    api: 'mockserver',
+    act: templateName
+  }
   const match = templateName.match(/(\w+)\/(\w+)\[(\w+)\](\/.+)/)
   if (!match) {
     const errmsg = {error: 'openapi mock is not there!'}
@@ -45,6 +48,6 @@ async function openapi(templateName='apidemo/openapi[post]/pet', opt={}) {
     xhr.body = _lib_.jsfaker(schema)
   }
   xhr.url = `${mockserver}${xhr.url.replace(/\{\w+\}/g, '123')}`
-  return xhr
+  return opt.yaml ? _lib_.YAML.stringify(xhr) : xhr
 }
 module.exports = openapi

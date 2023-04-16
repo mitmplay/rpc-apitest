@@ -1,4 +1,5 @@
-const fn  = require('../../_rpc_')
+const fn = require('../../_rpc_')
+const aReq = ['url', 'method', 'headers', 'body']
 
 function _env(ob, env, key) {
   const tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined
@@ -57,18 +58,35 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   }
   const [p0, nmspace, name] = match
   if (_rpc_[nmspace]) {
-    let xhr = _rpc_[nmspace]?._request_[name]
+    let xhr = _rpc_[nmspace]._request_[name]
     const tp1 = `/${name}`.replace(/\/\w+$/, '/_template_').slice(1)
     const tp2 = tp1 ? _rpc_[nmspace]?._request_[tp1] : null
     if (tp2) {
       xhr = JSON.parse(JSON.stringify(xhr))
       const {url, headers, body, env='dev'} = opt
+      if (tp2.default) {
+        if (xhr.env || xhr.default) {
+          const upperTid = tp1.split('/').slice(1)
+          const upperTpl = _rpc_[nmspace]?._request_[upperTid]
+          if (upperTpl) {
+            _rpc_[nmspace]._request_[name] = _rpc_._fn_.merge(upperTpl, xhr)
+          }
+        } else {
+          xhr = _rpc_._fn_.merge(tp2.default, xhr)
+        }
+      }
       xhr = _rpc_._fn_.merge(xhr, parser(xhr, tp2, env))
       if (url || headers || body) {
         xhr = _rpc_._fn_.merge(xhr, parser({url, headers, body}, tp2, env))
       }
     }
-    return xhr
+    const xhr2 = {}
+    aReq.forEach(k => {
+      if (xhr[k]) {
+        xhr2[k] = xhr[k]
+      }
+    })
+    return xhr.env || xhr.default ? xhr : xhr2
   }
 }
 module.exports = request
