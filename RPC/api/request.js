@@ -48,6 +48,27 @@ function parser(xhr, tp2, env) {
   return xhr
 }
 
+function template(ns, name, merge) {
+  const fullpathTemplate = `/${name}`.replace(/\/\w+$/, '/_template_')
+  const arrpathTemplate = fullpathTemplate.split('/')
+  const fileTemplate = arrpathTemplate.pop()
+
+  let path = ''
+  let template = {}
+  const arr = arrpathTemplate.map(v=> {
+    let tpl 
+    if (v==='') {
+      tpl = ns?._request_[fileTemplate]
+    } else {
+      path += `${v}/`
+      tpl = ns?._request_[`${path}${fileTemplate}`]
+    }
+    template = merge(template, tpl)
+  })
+  console.log(name, template)
+  return template
+}
+
 async function request(req='apidemo/u_agent_post', opt={}) {
   const match = req.match(/^(\w+)\/([\w/]+)$/)
   const _rpc_ = fn()
@@ -57,27 +78,22 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     return errmsg
   }
   const [p0, nmspace, name] = match
-  if (_rpc_[nmspace]) {
-    let xhr = _rpc_[nmspace]._request_[name]
-    const tp1 = `/${name}`.replace(/\/\w+$/, '/_template_').slice(1)
-    const tp2 = tp1 ? _rpc_[nmspace]?._request_[tp1] : null
+  const {merge} = _rpc_._fn_
+  const ns = _rpc_[nmspace]
+  if (ns) {
+    let xhr = ns._request_[name]
+    const tp2 = template(ns, name, merge)
     if (tp2) {
       xhr = JSON.parse(JSON.stringify(xhr))
       const {url, headers, body, env='dev'} = opt
       if (tp2.default) {
-        if (xhr.env || xhr.default) {
-          const upperTid = tp1.split('/').slice(1)
-          const upperTpl = _rpc_[nmspace]?._request_[upperTid]
-          if (upperTpl) {
-            _rpc_[nmspace]._request_[name] = _rpc_._fn_.merge(upperTpl, xhr)
-          }
-        } else {
-          xhr = _rpc_._fn_.merge(tp2.default, xhr)
+        if (!(xhr.env || xhr.default)) {
+          xhr = merge(tp2.default, xhr)
         }
       }
-      xhr = _rpc_._fn_.merge(xhr, parser(xhr, tp2, env))
+      xhr = merge(xhr, parser(xhr, tp2, env))
       if (url || headers || body) {
-        xhr = _rpc_._fn_.merge(xhr, parser({url, headers, body}, tp2, env))
+        xhr = merge(xhr, parser({url, headers, body}, tp2, env))
       }
     }
     const xhr2 = {}
