@@ -1,37 +1,13 @@
 const fn  = require('../../_rpc_')
 
-function merge(obj1, obj2) {
-  let result = {};
-  
-  for (let key in obj1) {
-    if (obj2.hasOwnProperty(key)) {
-      if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-        result[key] = merge(obj1[key], obj2[key]);
-      } else {
-        result[key] = obj2[key];
-      }
-    } else {
-      result[key] = obj1[key];
-    }
-  }
-  
-  for (let key in obj2) {
-    if (!obj1.hasOwnProperty(key)) {
-      result[key] = obj2[key];
-    }
-  }
-  
-  return result;
-}
-
-function _env(ob, env) {
+function _env(ob, env, key) {
   const tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined
   return tp3
 }
 
 function nested(arr, tp2, env) {
   key = arr.shift()
-  const tp3 = _env(tp2, env) //# || tp2[key]
+  const tp3 = _env(tp2, env, key) //# || tp2[key]
   if (arr.length) {
     return tp3 && nested(arr, tp3) || nested(arr, tp2[key])
   } else {
@@ -45,7 +21,7 @@ function parser(xhr, tp2, env) {
   if (xhr.headers===undefined) delete xhr.headers
   
   for (const key in xhr) {
-    let value1 = _env(xhr, env) || xhr[key]
+    let value1 = _env(xhr, env, key) || xhr[key]
     if (value1===undefined) {
       continue
     } else if (typeof value1!=='string') {
@@ -87,9 +63,9 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     if (tp2) {
       xhr = JSON.parse(JSON.stringify(xhr))
       const {url, headers, body, env='dev'} = opt
-      xhr = merge(xhr, parser(xhr, tp2, env))
+      xhr = _rpc_._fn_.merge(xhr, parser(xhr, tp2, env))
       if (url || headers || body) {
-        xhr = merge(xhr, parser({url, headers, body}, tp2, env))
+        xhr = _rpc_._fn_.merge(xhr, parser({url, headers, body}, tp2, env))
       }
     }
     return xhr

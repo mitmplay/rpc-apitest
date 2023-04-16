@@ -10,25 +10,17 @@ def_req = {
 }
 
 async function fetch(xhr=def_req, opt) {
-  const defOptions = {api: 'fetch', act: 'act'}
-  const _rpc_ = fn()
-  if (opt==='*') {
-    opt = defOptions
-  } else {
-    opt = {
-      ...defOptions,
-      ...opt,
-    }  
-  }
+  opt = {api:'fetch',act:'act',...opt}
+  const {api, _fn_: {request}} = fn()
   if (typeof xhr==='string') {
     if (is_openapi.test(xhr)) {
-      xhr = await _rpc_.api.openapi(xhr, opt)
+      xhr = await api.openapi(xhr, opt)
     } else {
-      xhr = await _rpc_.api.request(xhr, opt)
+      xhr = await api.request(xhr, opt)
     }
   }
   opt.senderIp = this.senderIp
-  const result = await _rpc_._fn_.request(xhr, opt)
+  const result = await request(xhr, opt)
   return result
 }
 module.exports = fetch

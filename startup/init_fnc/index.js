@@ -1,9 +1,11 @@
 const rpc       = require('../../_rpc_')
+const toTreeObj = require('./totreeobj')
 const dnslookup = require('./dnslookup')
 const tildehome = require('./tildehome')
 const request   = require('./request')
 const nanoid    = require('./nanoid')
 const apilog    = require('./apilog')
+const merge     = require('./merge')
 
 function fn(_rpc_) {
   const {_home, _win32, ...thome} = tildehome
@@ -12,10 +14,12 @@ function fn(_rpc_) {
   _rpc_._fn_ = {
     ..._rpc_._fn_,
     ...thome,
+    toTreeObj,
     dnslookup,
     request,
     nanoid,
     apilog,
+    merge,
     rpc,
   }
 }

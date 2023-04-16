@@ -1,13 +1,13 @@
 <script lang="ts">
   import {onMount} from 'svelte';
-  import {reqs, init} from '../stores/reqsStore';
+  import {reqs, init} from '../stores/oapiStore'
   import Actions  from './Actions.svelte';
   import Tree from './Tree.svelte';
   let value = "";
 
   onMount(async () => {
     const requests = await init()
-    console.log('Tab3 onmount!', requests)
+    console.log('Tab4 onmount!', requests)
   })
 </script>
 
