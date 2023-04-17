@@ -70,7 +70,7 @@ function template(ns, name, merge) {
 }
 
 async function request(req='apidemo/u_agent_post', opt={}) {
-  const match = req.match(/^(\w+)\/([\w/]+)$/)
+  const match = req.match(/^([\w-]+)\/([\w-/]+)$/)
   const _rpc_ = fn()
   if (!match) {
     const errmsg = {error: `request: ${req} is not there!`}
