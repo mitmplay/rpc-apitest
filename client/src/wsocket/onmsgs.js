@@ -3,22 +3,22 @@ function onmsgs(ws) {
   ws.onmessage = message => {
     const {data} = message
     const payload = JSON.parse(data)
-    const {id, result, error, broadcast} = payload
+    const {id, result, error, broadcast:method} = payload
     try {
-      if (broadcast) {
-        const fnc = RPC._broadcast_[broadcast]
+      if (method) {
+        const fnc = RPC._broadcast_[method.split(':')[0]]
         const any = RPC._broadcast_._any_
         let exany = true
         if (fnc) {
-          console.log(`${broadcast} RPC:`, payload)
-          if (fnc(payload)===false) {
+          console.log(`${method} RPC:`, payload)
+          if (fnc(payload, method)===false) {
             exany = false
           }
         }
         if (exany) {
           let executed = 0
           for (const f in any) {
-            if (any[f](payload)!==false) {
+            if (any[f](payload, method)!==false) {
               executed++
             }
           }

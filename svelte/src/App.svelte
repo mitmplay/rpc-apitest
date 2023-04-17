@@ -1,10 +1,8 @@
 <script>
   import {onMount} from 'svelte';
 
-  import {
-    logs,
-    updateLogs
-  } from './stores/logsStore';
+  import {updateLogs} from './stores/logsStore';
+  import {updateReq } from './stores/reqsStore';
   import Tab1 from "./Tab1/Tab1.svelte";
   import Tab2 from "./Tab2/Tab2.svelte";
   import Tab3 from "./Tab3/Tab3.svelte";
@@ -35,12 +33,19 @@
   ];
 
   onMount(() => {
-    window.RPC._broadcast_._any_.homepage = async data => {
+    window.RPC._broadcast_._any_.homepage = async (data, method) => {
+      const [name, path] = method.split(':')
       const {broadcast, result} = data
-      updateLogs(result)
-      console.log({broadcast})
-      window.logs = result
-      ttl++
+      if (name==='api.peek') {
+        updateLogs(result)
+        console.log({broadcast})
+        window.logs = result
+        ttl++
+      } else if (name==='request') {
+        updateReq(path, result)
+      } else {
+        console.log(method, data)
+      }
     }
     setTimeout(async ()=>{await window.RPC.api.peek()}, 500)
   })

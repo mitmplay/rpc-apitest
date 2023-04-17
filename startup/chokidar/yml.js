@@ -12,7 +12,10 @@ function yml(_rpc_) {
     _lib_: {chokidar, YAML, fs, fg, c}
   } = _rpc_
 
-  const broadcast = () => {}
+  const broadcast = (method, obj) => {
+    const _broadcast2 = fn()._fn_._broadcast2
+    _broadcast2 && _broadcast2(method, obj)
+  }
 
   let timeout = false
   function initEnd() {
@@ -24,7 +27,7 @@ function yml(_rpc_) {
     }
   }
 
-  function loadYAML(path, msg) {
+  function loadYAML(path, msg, broadcast) {
     let [app,name] = path.replace(rg1,'/').match(rg2).slice(2)
   
     if (!_rpc_[app]) {
@@ -48,9 +51,14 @@ function yml(_rpc_) {
     }
 
     console.log(msg,  JSON.stringify({app,yml}))
-    if (!argv.test && initToggle) {
-      timeout && clearTimeout(timeout)
-      timeout = setTimeout(initEnd, 1000)
+    if (!argv.test) { 
+      if (initToggle) {
+        timeout && clearTimeout(timeout)
+        timeout = setTimeout(initEnd, 1000)
+      }
+      const typ = obj.openapi ? 'openapi' : 'request'
+      const method = `${typ}:${app}/${name}`
+      broadcast(method, obj)
     }
   }
 

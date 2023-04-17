@@ -17,6 +17,22 @@ export async function init() {
   return req2
 }
 
+export async function updateReq(path) {
+  const request = await RPC.api.request(path)
+  reqs.update(_ => {
+    let {req} = _
+    const folders = path.split('/')
+    const file = folders.pop()
+    for (const folder of folders) {
+      req = req[folder]
+    }
+    if (req[file]) {
+      req[file].request = JSON.stringify(request, null, 2)
+    }
+    return _
+  })
+}
+
 export function clickSummary(evn, req, json) {
   const el = evn.currentTarget.parentElement
   setTimeout(async _1 => {

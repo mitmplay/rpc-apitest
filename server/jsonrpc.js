@@ -26,12 +26,13 @@ module.exports = async _ => {
 
   async function _broadcast(payload, broadcast, result) {
     if (broadcast) {
-      const {method} = payload
-      if (method!=='api.peek') {
+      let {method} = payload
+      const peekcall = /\.(api_|fetch)/.test(method)
+      if (peekcall) {
         result = success(result.id, await rpc().api.peek())
       }
       const rtn = {
-        broadcast: method,
+        broadcast: peekcall ? `api.peek:${method}` : method,
         ...result
       }
       wss.clients.forEach(function each (client) {
@@ -40,6 +41,19 @@ module.exports = async _ => {
         }
       })
     }
+  }
+
+  async function _broadcast2(method, result) {
+    const rtn = {
+      broadcast: method,
+      jsonrpc: "2.0",
+      result
+    }
+    wss.clients.forEach(function each (client) {
+      if (client.readyState === global.Websocket.OPEN) {
+        client.send(JSON.stringify(rtn))
+      }
+    })
   }
 
   async function handleRequest(parsed, ws) {
@@ -93,5 +107,8 @@ module.exports = async _ => {
       }
     })
   }
+  const {_fn_} = rpc()
+  _fn_._broadcast = _broadcast
+  _fn_._broadcast2= _broadcast2
   return jsonrpc
 }
