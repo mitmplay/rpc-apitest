@@ -29,7 +29,8 @@ function parser(xhr, tp2, env) {
       parser(value1, tp2, env)
       continue
     }
-    let match = value1.match(/\{([\w.]+)\}/g)
+    // interpolation key with '-' and '.' separator  
+    let match = value1.match(/\{([\w-.]+)\}/g)
     if (match===null) {
       continue
     }
