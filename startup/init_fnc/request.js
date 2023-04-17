@@ -24,7 +24,8 @@ const req = function(request, opt={}) {
         global.data = body
         let resp = {}
         if (body) {
-          if (Math.round(statusCode/100)===2) {
+          const scode = Math.round(statusCode/100)
+          if ([2,4].includes(scode)) {
             body = JSON.parse(body)
           }
           resp = body
