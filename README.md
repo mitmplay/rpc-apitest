@@ -60,7 +60,7 @@ await RPC.api.fetch('apidemo/openapi[get]/pet')
 ```js
 const fn = x => x
 RPC._broadcast_._any_.fn = fn
-RPC._broadcast_.['apidemo.api_yesno'] = fn
+RPC._broadcast_['apidemo.api_yesno'] = fn
 ```
 
 #### Public API
