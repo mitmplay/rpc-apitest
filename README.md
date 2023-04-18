@@ -21,7 +21,7 @@ rpc-apitest -dos // open browser to https://localhost:3002
 #### RPC call
 Open Chrome Devtools Console, test it by copy paste one line and execute
 
-or you can try from UI tab: Script 
+or you can try from UI `Tab:Script` 
 ```js
 await RPC.apidemo.demo_add()  //# no broadcast 
 await RPC.apidemo.api_yesno() //# triggering broadcast
@@ -49,8 +49,8 @@ await RPC.api.fetch({
 #### Request Tab
 Each of requests are define using YAML file and can having variable and dynamic-var content where the parser of vars denotate with `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
 
-* `{static-var}` => _template_.yaml
-* `{{dynamic-var}}` => _template_.js
+* `{static-var}` => `_template_.yaml`
+* `{{dynamic-var}}` => `_template_.js`
 
 Each `request definition file` will be loaded in the UI and can be tested, as the files is watched!, when you edit the file and save it, it will automaticaly reflected on the UI.
 
@@ -73,7 +73,8 @@ await RPC.api.fetch({
     api_key: "123"
   }
 })
-// use mock definition visible on the UI Tab: OpenApi
+
+// use mock definition visible on the UI Tab:OpenApi
 await RPC.api.fetch('apidemo/openapi[get]/pet')
 ```
 #### Registering `broadcast event`: 
