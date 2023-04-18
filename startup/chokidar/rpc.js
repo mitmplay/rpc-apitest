@@ -52,7 +52,7 @@ function rpc(_rpc_) {
   }
   path.push(`${HOME}/user-rpc/*/*.js`)
 
-  const ignored = /(\/_.*|index)\.js$/
+  const ignored = /(\/index)\.js$/
   if (argv.test) {
     console.log(c.magentaBright(`>>> RPC loader:`), [tilde(path)])
     const arr = fg.sync([path], { dot: false })

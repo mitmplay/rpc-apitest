@@ -1,11 +1,15 @@
 # RPC Apitest
 #### Installation
 ```js
+npm i -g rpc-apitest
+```
+Open in http  
+```js
 // -d devmode
 // -o open browser
-npm i -g rpc-apitest
 rpc-apitest -do // open browser to http://localhost:3001
 ```
+
 Open in https & avoid warning of self-sign certificate  
 ```js
 // -s open in https
@@ -15,8 +19,11 @@ rpc-apitest -dos // open browser to https://localhost:3002
 
 
 #### RPC call
+Open Chrome Devtools Console, test it by copy paste one line and execute
+
+or you can try from UI tab: Script 
 ```js
-await RPC.apidemo.add()       //# no broadcast 
+await RPC.apidemo.demo_add()  //# no broadcast 
 await RPC.apidemo.api_yesno() //# triggering broadcast
 ```
 
@@ -39,12 +46,25 @@ await RPC.api.fetch({
   body: {ua}
 })
 ```
+#### Request Tab
+Each of requests are define using YAML file and can having variable and dynamic-var content where the parser of vars denotate with `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
 
-#### Test with mock server
+* `{static-var}` => _template_.yaml
+* `{{dynamic-var}}` => _template_.js
+
+Each `request definition file` will be loaded in the UI and can be tested, as the files is watched!, when you edit the file and save it, it will automaticaly reflected on the UI.
+
+```js
+await RPC.api.fetch('apidemo/u_agent_post') run
+```
+#### OpenAPI & Test with OpenAPI mock server
+
+When you have an OpenAPI difinition file in YAML, you can drop it to your home folder: `~/user-rpc/apidemo` 
 ```js
 npm install -g @stoplight/prism-cli
 prism mock https://raw.githack.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml
 
+// test the OpenApi mock server with fetch function
 await RPC.api.fetch({
   url: "http://127.0.0.1:4010/pets",
   method: "get",
@@ -53,12 +73,12 @@ await RPC.api.fetch({
     api_key: "123"
   }
 })
-// use openapi mock request
+// use mock definition visible on the UI Tab: OpenApi
 await RPC.api.fetch('apidemo/openapi[get]/pet')
 ```
 #### Registering `broadcast event`: 
 ```js
-const fn = x => x
+const fn = x => console.log(x)
 RPC._broadcast_._any_.fn = fn
 RPC._broadcast_['apidemo.api_yesno'] = fn
 ```

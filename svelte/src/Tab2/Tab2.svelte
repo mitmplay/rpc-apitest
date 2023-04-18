@@ -64,8 +64,12 @@
     {#each toArray(window.RPC[nspace]) as fn}
       <details data-nspace={nspace} data-fn={fn} data-name="_openCode" open={$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]._openCode}>
         <summary on:click={e=>showCode(e,$rpc.rpc)}>
-          <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
-          <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
+          {#if /_template_/.test(fn)}
+            <b>{`${fn}`}</b>
+          {:else}
+            <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
+            <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
+          {/if}
         </summary>  
         <pre>{$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</pre>
       </details>

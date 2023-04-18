@@ -11,6 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "args": ["-d"],
             "program": "${workspaceFolder}\\rpc-apitest.js"
         }
     ]
