@@ -7,3 +7,4 @@ default:
 body:
   ua: Mozilla/6.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0
 greet-ed: hello
+ua-tpl: Mozilla/16.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0

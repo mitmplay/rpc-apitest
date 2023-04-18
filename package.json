@@ -1,6 +1,6 @@
 {
   "name": "rpc-apitest",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "RPC Apitest - Test API isomorphic way from terminal of nodejs or browser",
   "main": "rpc-apitest.js",
   "bin": {

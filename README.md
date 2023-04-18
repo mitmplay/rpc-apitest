@@ -1,16 +1,16 @@
 # RPC Apitest
-#### Installation
+# Installation
 ```js
 npm i -g rpc-apitest
 ```
-Open in http  
+# Open in http  
 ```js
 // -d devmode
 // -o open browser
 rpc-apitest -do // open browser to http://localhost:3001
 ```
 
-Open in https & avoid warning of self-sign certificate  
+# Open in https & avoid warning: self-sign certificate  
 ```js
 // -s open in https
 export NODE_TLS_REJECT_UNAUTHORIZED=0
@@ -18,7 +18,7 @@ rpc-apitest -dos // open browser to https://localhost:3002
 ```
 
 
-#### RPC call
+# RPC call
 Open Chrome Devtools Console, test it by copy paste one line and execute
 
 or you can try from UI `Tab:Script` 
@@ -46,7 +46,7 @@ await RPC.api.fetch({
   body: {ua}
 })
 ```
-#### Request Tab
+# Request Tab
 Each of requests are define using YAML file and can having variable and dynamic-var content where the parser of vars denotate with `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
 
 * `{static-var}` => `_template_.yaml`
@@ -57,7 +57,37 @@ Each `request definition file` will be loaded in the UI and can be tested, as th
 ```js
 await RPC.api.fetch('apidemo/u_agent_post') run
 ```
-#### OpenAPI & Test with OpenAPI mock server
+# Parser
+## Simple
+```js
+greet: Hello       // _template_.yaml
+
+...
+body: {greet}      // request_post.yaml
+=> body: Hello
+```
+## Nested
+```js
+greet:             // _template_.yaml
+  nice: Hi Alice
+
+body: {greet.nice} // request_post.yaml
+=> body: Hi Alice
+
+body: {greet}      // request_post.yaml
+=> body:
+     nice: Hi Alice
+```
+## Shorthand `{&}`
+```js
+greet:             // _template_.yaml
+  body: Howdy John
+
+body: {greet.&}    // request_post.yaml
+   ~> {greet.body}
+=> body: Howdy John
+```
+# OpenApi & mock server
 
 When you have an OpenAPI difinition file in YAML, you can drop it to your home folder: `~/user-rpc/apidemo` 
 ```js
@@ -77,14 +107,15 @@ await RPC.api.fetch({
 // use mock definition visible on the UI Tab:OpenApi
 await RPC.api.fetch('apidemo/openapi[get]/pet')
 ```
-#### Registering `broadcast event`: 
+# Registering `broadcast event`: 
 ```js
 const fn = x => console.log(x)
 RPC._broadcast_._any_.fn = fn
 RPC._broadcast_['apidemo.api_yesno'] = fn
 ```
 
-#### Public API
+# Public API
+Some sample of public APIs:
 * https://apis.guru/
 * https://www.apicagent.com/ 
 

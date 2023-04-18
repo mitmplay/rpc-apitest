@@ -25,7 +25,7 @@ function nested2(arr, tp2, env) {
   }
 }
 
-function interpolate(regx, value1, tp2, env, ns) {
+function interpolate(regx, value1, tp2, env, key, ns) {
   let match = value1.match(regx)
   if (match===null) {
     return value1
@@ -33,6 +33,9 @@ function interpolate(regx, value1, tp2, env, ns) {
   const tp1 = ns && ns._template_ && ns._template_()
   match = match.map(x=>(tp1 ? x.slice(2,-2) : x.slice(1,-1)))
   match.forEach((v,i) => {
+    if (v.match('&')) { // ua: {&-tpl} => ua: {ua-tpl}
+      v = v.replace(/&/g, key)
+    }
     const arr = v.split('.')
     let value2 
     if (tp1) {
@@ -55,8 +58,8 @@ function parser(xhr, ns, tp2, env) {
   if (xhr.body===undefined) delete xhr.body
   if (xhr.headers===undefined) delete xhr.headers
   
-  const fncRegx = /\{\{([\w-.]+)\}\}/g
-  const varRegx = /\{([\w-.]+)\}/g
+  const fncRegx = /\{\{([\w-.&]+)\}\}/g
+  const varRegx = /\{([\w-.&]+)\}/g
   for (const key in xhr) {
     let value1 = _env(xhr, env, key) || xhr[key]
     if (value1===undefined) {
@@ -66,8 +69,8 @@ function parser(xhr, ns, tp2, env) {
       continue
     }
     // interpolation key with '-' and '.' separator
-    value1 = interpolate(fncRegx, value1, tp2, env, ns)
-    value1 = interpolate(varRegx, value1, tp2, env)
+    value1 = interpolate(fncRegx, value1, tp2, env, key, ns)
+    value1 = interpolate(varRegx, value1, tp2, env, key)
     if (value1===undefined) {
       continue
     }
