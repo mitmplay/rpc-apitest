@@ -61,7 +61,7 @@ function parser(xhr, ns, tp2, env) {
   const fncRegx = /\{\{([\w-.&]+)\}\}/g
   const varRegx = /\{([\w-.&]+)\}/g
   for (const key in xhr) {
-    let value1 = _env(xhr, env, key) || xhr[key]
+    let value1 = env && _env(xhr, env, key) || xhr[key]
     if (value1===undefined) {
       continue
     } else if (typeof value1!=='string') {
@@ -94,7 +94,7 @@ function template(ns, name, merge) {
       path += `${v}/`
       tpl = ns?._request_[`${path}${fileTemplate}`]
     }
-    template = merge(template, tpl)
+    template = merge(template, parser(tpl, ns, template))
   })
   console.log(name, template)
   return template
@@ -118,7 +118,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       xhr = JSON.parse(JSON.stringify(xhr))
       const {url, headers, body, env='dev'} = opt
       if (tp2.default) {
-        if (!(xhr.env || xhr.default)) {
+        if (!name.includes('_template_')) {
           xhr = merge(tp2.default, xhr)
         }
       }
@@ -133,7 +133,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         xhr2[k] = xhr[k]
       }
     })
-    return xhr.env || xhr.default ? xhr : xhr2
+    return name.includes('_template_') ? xhr : xhr2
   }
 }
 module.exports = request

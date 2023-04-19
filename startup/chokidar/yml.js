@@ -50,13 +50,13 @@ function yml(_rpc_) {
       _rpc_[app]._request_[name] = obj
     }
 
-    console.log(msg,  JSON.stringify({app,yml}))
+    const typ = obj.openapi ? 'openapi' : 'request'
+    console.log(msg,  JSON.stringify({app, typ, name}))
     if (!argv.test) { 
       if (initToggle) {
         timeout && clearTimeout(timeout)
         timeout = setTimeout(initEnd, 1000)
       }
-      const typ = obj.openapi ? 'openapi' : 'request'
       const method = `${typ}:${app}/${name}`
       broadcast(method, obj)
     }
