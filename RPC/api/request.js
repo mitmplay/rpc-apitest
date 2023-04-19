@@ -86,7 +86,7 @@ function template(ns, name, merge) {
 
   let path = ''
   let template = {}
-  const arr = arrpathTemplate.map(v=> {
+  const arr = arrpathTemplate.map((v, i)=> {
     let tpl 
     if (v==='') {
       tpl = ns?._request_[fileTemplate]
@@ -94,7 +94,8 @@ function template(ns, name, merge) {
       path += `${v}/`
       tpl = ns?._request_[`${path}${fileTemplate}`]
     }
-    template = merge(template, parser(tpl, ns, template))
+    // 1st iteration template={} need to parser to it-self
+    template = merge(template, parser(tpl, ns, i?template:tpl))
   })
   console.log(name, template)
   return template
