@@ -18,13 +18,13 @@
      component: Tab1,
      props: {rows}
     },
-    { label: "Script",
-     value: 2,
-     component: Tab2
-    },
     { label: "Request",
-     value: 3,
+     value: 2,
      component: Tab3
+    },
+    { label: "Script",
+     value: 3,
+     component: Tab2
     },
     { label: "OpenApi",
      value: 4,

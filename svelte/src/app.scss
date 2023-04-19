@@ -88,6 +88,7 @@ button:focus-visible {
 details>div, details>pre {
   padding-left: 12px;
 }
+
 summary{
   cursor: pointer;
   font-size: 12px;
@@ -95,11 +96,18 @@ summary{
   font-family: monospace;
   white-space: pre;
 }
+
 summary:hover {
   background-color: yellow;
 }
+
 pre {
   font-size: 11px;
   margin-top: 0;
   margin-bottom: 6px;
+}
+
+.action {
+  background-color: #d2dbc1;
+  padding: 0 0 4px 4px;
 }

@@ -1,8 +1,10 @@
 <script>
-    import {clickCollapse} from '../stores/reqsStore';
+  import {clickCollapse} from '../stores/reqsStore';
 </script>
 
-<button on:click={clickCollapse}>Collapse</button>
+<div class=action>
+  <button on:click={clickCollapse}>Collapse</button>
+</div>
 
 <style lang="scss">
 
