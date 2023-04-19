@@ -26,7 +26,11 @@ const req = function(request, opt={}) {
         if (body) {
           const scode = Math.round(statusCode/100)
           if ([2,4].includes(scode)) {
-            body = JSON.parse(body)
+            try {
+              body = JSON.parse(body)              
+            } catch (error) {
+              // OK
+            }
           }
           resp = body
         } else {

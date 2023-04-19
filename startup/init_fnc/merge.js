@@ -1,6 +1,9 @@
 function merge(obj1, obj2) {
+  if (Array.isArray(obj2)) {
+    return JSON.parse(JSON.stringify(obj2))
+  }
+
   let result = {};
-  
   for (let key in obj1) {
     if (obj2.hasOwnProperty(key)) {
       if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
