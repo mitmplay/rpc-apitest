@@ -55,7 +55,7 @@
   <b>R</b>emote
   <b>P</b>rocedure
   <b>C</b>all
-  Apitest
+  Apitest <b>v{window.RPC._version_}</b>
 </h1>
 <div>
   <Tabs {items} />
