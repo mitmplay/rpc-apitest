@@ -43,9 +43,8 @@
         ttl++
       } else if (name==='request') {
         updateReq(path, result)
-      } else {
-        console.log(method, data)
       }
+      // return false
     }
     setTimeout(async ()=>{await window.RPC.api.peek()}, 500)
   })

@@ -12,9 +12,30 @@ function yml(_rpc_) {
     _lib_: {chokidar, YAML, fs, fg, c}
   } = _rpc_
 
-  const broadcast = (method, obj) => {
-    const _broadcast2 = fn()._fn_._broadcast2
-    _broadcast2 && _broadcast2(method, obj)
+  const broadcast = async (method, obj) => {
+    const RPC = rpc()
+    const _broadcast2 = RPC._fn_._broadcast2
+    if (_broadcast2) {
+      _broadcast2(method, obj)
+
+      if (initToggle===0 && method.includes('_template_')) {
+        const folders = method.split(/[:/]/).slice(1,-1)
+        const app = folders.shift()
+        const pth = folders.join('/')
+        const requests = RPC[app]._request_
+        for (const path in requests) {
+          if (path.includes(pth)) {
+            const path2 = `${app}/${path}`
+            const method2 = `request:${path2}`
+            if (method!==method2) {
+              const reqs = await RPC.api.request(path2)
+              console.log(method2, reqs)
+              _broadcast2(method2, reqs)
+            }
+          }
+        }
+      }  
+    }
   }
 
   let timeout = false
@@ -75,11 +96,11 @@ function yml(_rpc_) {
   // Initialize watcher.
   const path = []
   if (_rpc_._obj_.argv.devmode) {
-    path.push(`${__app}/RPC/**/request/*.yaml`)
-    path.push(`${__app}/RPC/**/openapi/*.yaml`)
+    path.push(`${__app}/RPC/*/request/**/*.yaml`)
+    path.push(`${__app}/RPC/*/openapi/**/*.yaml`)
   }
-  path.push(`${HOME}/user-rpc/**/request/*.yaml`)
-  path.push(`${HOME}/user-rpc/**/openapi/*.yaml`)
+  path.push(`${HOME}/user-rpc/*/request/**/*.yaml`)
+  path.push(`${HOME}/user-rpc/*/openapi/**/*.yaml`)
 
   if (argv.test) {
     console.log(c.magentaBright(`>>> YAML loader:`), [tilde(path)])

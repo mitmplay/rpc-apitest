@@ -1,6 +1,6 @@
 function onmsgs(ws) {
   const {pendingRequests}= ws
-  ws.onmessage = message => {
+  ws.onmessage = async message => {
     const {data} = message
     const payload = JSON.parse(data)
     const {id, result, error, broadcast:method} = payload
@@ -18,11 +18,17 @@ function onmsgs(ws) {
         if (exany) {
           let executed = 0
           for (const f in any) {
-            if (any[f](payload, method)!==false) {
+            let result = any[f](payload, method)
+            if (result.then) {
+              result = await result
+            }
+            if (result!==false) {
               executed++
             }
           }
-          executed && console.log('any RPC:', payload)
+          if (executed) {
+            console.log('any RPC:', payload)
+          }
         }
       } else {
         const { resolve, reject } = pendingRequests.get(id)

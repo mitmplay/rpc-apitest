@@ -1,6 +1,6 @@
 env:
   dev:
-    greet: hello ENV!!
+    greet: hello ENV!1
 default:
   headers:
     Content-Type: application/json

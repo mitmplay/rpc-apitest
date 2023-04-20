@@ -17,14 +17,17 @@ export async function init() {
   return req2
 }
 
-export async function updateReq(path) {
-  const request = await RPC.api.request(path)
+export async function updateReq(path, request) {
+  if (!request) { // if it came from broadcast
+    request = await RPC.api.request(path)
+  }
+
   reqs.update(_ => {
     let {req} = _
     const folders = path.split('/')
     const file = folders.pop()
     for (const folder of folders) {
-      req = req[folder]
+      req = req[folder] || {}
     }
     if (req[file]) {
       req[file].request = JSON.stringify(request, null, 2)
