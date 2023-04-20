@@ -1,7 +1,5 @@
-const fn  = require('../../_rpc_')
-
 async function requests(plain=false) {
-  const _rpc_ = fn()
+  const _rpc_ = rpc()
   if (plain) {
     let requests1 = {}
     for (const app in _rpc_) {

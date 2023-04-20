@@ -1,5 +1,4 @@
 const env = require('./env')
-const fn  = require('../../_rpc_')
 
 async function yesno(all={}) {
   const {opt, ...oth} = {x_tag:'x-request-id', ...all}
@@ -7,7 +6,7 @@ async function yesno(all={}) {
 
   console.log(JSON.stringify({...xhr, body}, null, 2))
   xhr.body = JSON.stringify(body)
-  const result = await fn()._fn_.request(xhr, {
+  const result = await rpc()._fn_.request(xhr, {
     senderIp: this.senderIp,
     api: 'yes/no',
     act: '1.get',

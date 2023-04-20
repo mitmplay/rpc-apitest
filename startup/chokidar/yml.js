@@ -3,7 +3,7 @@ const fn  = require('../../_rpc_')
 
 let initToggle = 1
 const rg1 = /\\/g
-const rg2 = /\/(user-rpc|RPC)\/([\w-]+)\/(.+)\.yaml/
+const rg2 = /\/(user-rpc|RPC)\/([\w-]+)\/(request|openapi)\/(.+)\.yaml/
 
 function yml(_rpc_) {
   const {
@@ -28,7 +28,7 @@ function yml(_rpc_) {
   }
 
   function loadYAML(path, msg, broadcast) {
-    let [app,name] = path.replace(rg1,'/').match(rg2).slice(2)
+    let [app, typ, name] = path.replace(rg1,'/').match(rg2).slice(2)
   
     if (!_rpc_[app]) {
       _rpc_[app] = {
@@ -50,7 +50,7 @@ function yml(_rpc_) {
       _rpc_[app]._request_[name] = obj
     }
 
-    const typ = obj.openapi ? 'openapi' : 'request'
+    // const typ = obj.openapi ? 'openapi' : 'request'
     console.log(msg,  JSON.stringify({app, typ, name}))
     if (!argv.test) { 
       if (initToggle) {
@@ -75,9 +75,11 @@ function yml(_rpc_) {
   // Initialize watcher.
   const path = []
   if (_rpc_._obj_.argv.devmode) {
-    path.push(`${__app}/RPC/**/*.yaml`)
+    path.push(`${__app}/RPC/**/request/*.yaml`)
+    path.push(`${__app}/RPC/**/openapi/*.yaml`)
   }
-  path.push(`${HOME}/user-rpc/**/*.yaml`)
+  path.push(`${HOME}/user-rpc/**/request/*.yaml`)
+  path.push(`${HOME}/user-rpc/**/openapi/*.yaml`)
 
   if (argv.test) {
     console.log(c.magentaBright(`>>> YAML loader:`), [tilde(path)])

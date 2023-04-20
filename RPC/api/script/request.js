@@ -1,4 +1,3 @@
-const fn = require('../../_rpc_')
 const aReq = ['url', 'method', 'headers', 'body']
 
 function _env(ob, env, key) {
@@ -103,7 +102,7 @@ function template(ns, name, merge) {
 
 async function request(req='apidemo/u_agent_post', opt={}) {
   const match = req.match(/^([\w-]+)\/([\w-/]+)$/)
-  const _rpc_ = fn()
+  const _rpc_ = rpc()
   if (!match) {
     const errmsg = {error: `request: ${req} is not there!`}
     console.error(errmsg)

@@ -1,4 +1,3 @@
-const fn  = require('../../_rpc_')
 const is_openapi = /\w+\[\w+\]\//
 
 def_req = {
@@ -11,7 +10,7 @@ def_req = {
 
 async function fetch(xhr=def_req, opt) {
   opt = {api:'fetch',act:'act',...opt}
-  const {api, _fn_: {request}} = fn()
+  const {api, _fn_: {request}} = rpc()
   if (typeof xhr==='string') {
     if (is_openapi.test(xhr)) {
       xhr = await api.openapi(xhr, opt)

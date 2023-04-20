@@ -1,7 +1,5 @@
-const fn  = require('../../_rpc_')
-
 function iterate(fnc) {
-  const _rpc_ = fn()
+  const _rpc_ = rpc()
   for (const app in _rpc_) {
     const _openapi_ = _rpc_[app]._openapi_ || {}
     for (const apiname in _openapi_) {

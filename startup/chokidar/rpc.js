@@ -18,7 +18,7 @@ function rpc(_rpc_) {
   }
   function loadJS(path1, msg) {
     const path2 = path1.replace(/\\/g, '/')
-    let [app,rpc] = path2.split('/').slice(-2)
+    let [app, typ, rpc] = path2.split('/').slice(-3)
     rpc = rpc.replace('.js', '')
 
     delete require.cache[path1];
@@ -48,9 +48,9 @@ function rpc(_rpc_) {
   // Initialize watcher.
   const path = []
   if (_rpc_._obj_.argv.devmode) {
-    path.push(`${__app}/RPC/*/*.js`)
+    path.push(`${__app}/RPC/*/script/*.js`)
   }
-  path.push(`${HOME}/user-rpc/*/*.js`)
+  path.push(`${HOME}/user-rpc/*/script/*.js`)
 
   const ignored = /(\/index)\.js$/
   if (argv.test) {
