@@ -2,6 +2,7 @@ console.log('Start:')
 const YAML= require('yaml')
 const fs  = require('fs-extra')
 const fg  = require('fast-glob')
+const Chance = require('chance')
 const c   = require('ansi-colors')
 const chokidar = require('chokidar')
 const jsfaker = require('json-schema-faker');
@@ -20,6 +21,7 @@ function init_lib(_rpc_) {
   _lib_.YAML = YAML
   _lib_.jsfaker = jsfaker
   _lib_.chokidar = chokidar
+  _lib_.chance = new Chance()
   import('open').then(async m => {
     _lib_.open = m.default
     if (_obj_.argv.open && !_obj_.argv.test) {

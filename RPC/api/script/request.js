@@ -38,11 +38,17 @@ function interpolate(regx, value1, tp2, env, key, ns) {
     const arr = v.split('.')
     let value2 
     if (tp1) {
-      value2 = nested1(arr, tp1)
+      if (v.includes('chance.')) {
+        const fname = arr[1]
+        const {chance:c} = rpc()._lib_
+        value2 = c[fname] && (fname==='version' ? c.VERSION : c[fname]())
+      } else {
+        value2 = nested1(arr, tp1)
+      }
     } else {
       value2 = nested2(arr, tp2, env)
     }
-    const str = tp1 ? `{{${match[0]}}}` : `{${match[0]}}`
+    const str = tp1 ? `{{${v}}}` : `{${v}}`
     if (match.length===1 && str===value1.trim()) {
       value1 = value2
     } else {

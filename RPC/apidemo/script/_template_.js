@@ -1,3 +1,4 @@
 module.exports = $ => ({
-  now: _ => `{greet-ed} ${(new Date()).toISOString()}`,
+  first: _ => rpc()._lib_.chance.first(),
+  dtnow: _ => `{greet-ed} ${(new Date()).toISOString()}`,
 })

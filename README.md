@@ -87,6 +87,23 @@ body: {greet.&}    // request_post.yaml
    ~> {greet.body}
 => body: Howdy John
 ```
+# Function Parser
+Function parser is a special `\_template\_.js` to host functions and it can use inside request:
+```js
+module.exports = $ => ({ // _template_.js
+  first: _ => rpc()._lib_.chance.first(),
+  dtnow: _ => `{greet-ed} ${(new Date()).toISOString()}`,
+})
+
+body: {{now}}            // request_post.yaml
+=> body: 2023-04-20T07:34:57.092Z
+``` 
+# Chance faker
+Built in Function Parser to generate random faker
+```js
+body: {{chance.address}} // request_post.yaml
+=> body: 908 Cezkaw Junction
+``` 
 # OpenApi & mock server
 
 When you have an OpenAPI difinition file in YAML, you can drop it to your home folder: `~/user-rpc/apidemo` 
