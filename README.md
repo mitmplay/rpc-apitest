@@ -99,7 +99,7 @@ body: {{now}}            // request_post.yaml
 => body: 2023-04-20T07:34:57.092Z
 ``` 
 # Chance faker
-Built in Function Parser to generate random faker
+Built in Function Parser to generate random faker, you can visit [Chance website](https://chancejs.com/)
 ```js
 body: {{chance.address}} // request_post.yaml
 => body: 908 Cezkaw Junction
