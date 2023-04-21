@@ -54,15 +54,15 @@ export function clickSummary(evn, req, json) {
   })
 }
 
-function collapse(_req) {
-  for (const id in _req) {
-    const req = _req[id]
-    if (!/^_/.test(id)) {
+function collapse(_reqs) {
+  for (const key in _reqs) {
+    const req = _reqs[key]
+    if (!/^_[a-zA-Z0-9.-]+$/.test(key)) {
       req._openName = false
       if (!req.run) {
         collapse(req) 
       }  
-    } 
+    }
   }
 }
 
