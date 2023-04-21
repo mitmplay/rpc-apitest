@@ -110,4 +110,12 @@ pre {
 .action {
   background-color: #d2dbc1;
   padding: 0 0 4px 4px;
+  border-top-right-radius: 0.25rem;
+}
+
+section {
+  padding: 0 10px 0 10px;
+  height: calc(100vh - 110px);
+  width: calc(100vw - 54px);
+  overflow: auto;
 }

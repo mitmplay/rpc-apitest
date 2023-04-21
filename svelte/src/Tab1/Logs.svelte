@@ -6,8 +6,8 @@
   import DateLogs from './DateLogs.svelte';
 </script>
 
+<Actions />
 <section>
-  <Actions />
   {#if $logs.options.grouping==='1'}
     <AllLogs  logs ={$logs.logs}/>
   {:else if $logs.options.grouping==='2'}

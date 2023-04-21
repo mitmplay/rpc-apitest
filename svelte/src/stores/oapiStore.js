@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { pretty } from '../lib/common';
 const json = {
   req: {},
 }
@@ -24,7 +25,7 @@ export function clickSummary(evn, req, json) {
     const {run, request} = json[nspace]
     if (run && !request) {
       const request = await RPC.api.openapi(run)
-      json[nspace].request = JSON.stringify(request, null, 2)
+      json[nspace].request = pretty(request)
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')

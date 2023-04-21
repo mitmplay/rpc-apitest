@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { pretty } from '../lib/common';
 const json = {
   req: {},
 }
@@ -30,7 +31,7 @@ export async function updateReq(path, request) {
       req = req[folder] || {}
     }
     if (req[file]) {
-      req[file].request = JSON.stringify(request, null, 2)
+      req[file].request = pretty(request)
     }
     return _
   })
@@ -43,7 +44,7 @@ export function clickSummary(evn, req, json) {
     const {run, request} = json[nspace]
     if (run && !request) {
       const request = await RPC.api.request(run)
-      json[nspace].request = JSON.stringify(request, null, 2)
+      json[nspace].request = pretty(request)
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')

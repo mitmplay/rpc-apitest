@@ -1,5 +1,5 @@
 <script>
-  import {clickCollapse} from '../stores/apiStore';
+  import {clickCollapse} from '../stores/reqsStore';
 </script>
 
 <div class=action>

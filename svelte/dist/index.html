@@ -9,32 +9,36 @@
         }
       }
       </script>
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image" href="/assets/fave.ico" />
     <meta id='vport' name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Svelte + wow!</title>
-    <script type="module" crossorigin src="/assets/index-1882b3ea.js"></script>
-    <link rel="stylesheet" href="/assets/index-ea92e3a3.css">
+    <title>RPC Apitest</title>
+    <script type="module" crossorigin src="/assets/index-8b7b9676.js"></script>
+    <link rel="stylesheet" href="/assets/index-5892a7e9.css">
   </head>
   <body>
     <script>
       const ports = {
-        '3002': `https://${location.hostname}:3002/js`,
-        '3001':  `http://${location.hostname}:3001/js`,
-        '5173':  `http://${location.hostname}:3001/js`
+        '3002': `https://${location.hostname}:3002`,
+        '3001':  `http://${location.hostname}:3001`,
+        '5173':  `http://${location.hostname}:3001`
       }
 
       const src1 = document.createElement('script')
       const src2 = document.createElement('script')
+      const src3 = document.createElement('link')
 
       const path = ports[location.port]
-      src1.src = `${path}/client.js`
-      src2.src = `${path}/isomorphics.js`
+      src1.src = `${path}/js/client.js`
+      src2.src = `${path}/js/isomorphics.js`
+      src3.href= `${path}/Fave.ico`
+      src3.type= 'image'
 
       const head  = document.getElementById('head')
       const vport = document.getElementById('vport')
 
       head.insertBefore(src1, vport)
       head.insertBefore(src2, vport)
+      head.insertBefore(src3, vport)
     </script>
     <div id="app"></div>
     

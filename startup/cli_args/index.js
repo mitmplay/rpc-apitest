@@ -15,6 +15,7 @@ module.exports = (_rpc_) => {
   argsChg('s', 'https'     )
   argsChg('t', 'test'      )
   argsChg('x', 'proxy'     )
+  argsChg('y', 'yaml'      )
 
   if (_obj_.argv.help) {
     helper(_rpc_)

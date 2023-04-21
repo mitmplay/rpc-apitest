@@ -15,6 +15,7 @@ module.exports = _rpc_ => {
     -s --https      \t change to https
     -t --test       \t func() to test
     -x --proxy      \t a proxy request
+    -y --yaml       \t show in yaml
 
   v${_version_}
 `))

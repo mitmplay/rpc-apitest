@@ -22,13 +22,10 @@
 <style>
   .box {
     margin-bottom: 5px;
-    padding: 10px;
+    padding: 0;
     border: 1px solid #dee2e6;
     border-radius: 0 0 .5rem .5rem;
     border-top: 0;
-    height: calc(100vh - 110px);
-    width: calc(100vw - 55px);
-    overflow: auto;
   }
   ul {
     display: flex;
@@ -59,7 +56,7 @@
 
   li.active > span {
     color: #495057;
-    background-color: #fff;
-    border-color: #dee2e6 #dee2e6 #fff;
+    background-color: #d2dbc1;
+    border-color: #dee2e6 #dee2e6 #d2dbc1;
   }
 </style>

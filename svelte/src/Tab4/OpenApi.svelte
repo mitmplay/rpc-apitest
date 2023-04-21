@@ -7,7 +7,7 @@
 
   onMount(async () => {
     const requests = await init()
-    console.log('Tab4 onmount!', requests)
+    console.log('OpenApi onmount!', requests)
   })
 </script>
 
@@ -17,7 +17,9 @@
 </svelte:head>
 
 <Actions />
-<Tree _req={$reqs.req} json={$reqs.req} />
+<section>
+  <Tree _req={$reqs.req} json={$reqs.req} />
+</section>
 
 <style lang="scss">
   summary{

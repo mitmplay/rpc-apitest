@@ -104,6 +104,14 @@ Built in Function Parser to generate random faker, you can visit [Chance website
 body: {{chance.address}} // request_post.yaml
 => body: 908 Cezkaw Junction
 ``` 
+Use Chrome Console browser to test `chance faker`
+```js
+await RPC.api.chance('name')
+await RPC.api.chance('address')
+await RPC.api.chance('cc', {type: 'mc'})
+await RPC.api.chance('cc', {type: 'visa'})
+await RPC.api.chance('paragraph', { sentences: 1 })
+```
 # OpenApi & mock server
 
 When you have an OpenAPI difinition file in YAML, you can drop it to your home folder: `~/user-rpc/apidemo` 

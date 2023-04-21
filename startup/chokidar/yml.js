@@ -15,33 +15,31 @@ function yml(_rpc_) {
   const broadcast = async (method, obj) => {
     const RPC = rpc()
     const _broadcast2 = RPC._fn_._broadcast2
-    if (_broadcast2) {
-      _broadcast2(method, obj)
-
-      if (initToggle===0) {
-        if (method.includes('_template_')) {
-          const folders = method.split(/[:/]/).slice(1,-1)
-          const app = folders.shift()
-          const pth = folders.join('/')
-          const requests = RPC[app]._request_
-          for (const path in requests) {
-            if (path.includes(pth)) {
-              const path2 = `${app}/${path}`
-              const method2 = `request:${path2}`
-              if (method!==method2) {
-                const reqs = await RPC.api.request(path2)
-                console.log(method2, reqs)
-                _broadcast2(method2, reqs)
-              }
-            }
+    if (initToggle || !_broadcast2) {
+      return
+    }
+    const {request} = RPC.api
+    if (method.includes('_template_')) {
+      const folders = method.split(/[:/]/).slice(1,-1)
+      const pth = folders.join('/')
+      const app = folders.shift()
+      const {requests} = RPC[app]
+      for (const path in requests) {
+        if (path.includes(pth)) {
+          const path2 = `${app}/${path}`
+          const method2 = `request:${path2}`
+          if (method!==method2) {
+            const reqs = await request(path2)
+            console.log(method2, reqs)
+            _broadcast2(method2, reqs)
           }
-        } else {
-          const [_, path] = method.split(/:/)
-          const reqs = await RPC.api.request(path)
-          console.log(method, reqs)
-          _broadcast2(method, reqs)
         }
       }
+    } else {
+      const [_, path] = method.split(/:/)
+      const reqs = await request(path)
+      console.log(method, reqs)
+      _broadcast2(method, reqs)
     }
   }
 

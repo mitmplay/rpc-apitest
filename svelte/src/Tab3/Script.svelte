@@ -26,7 +26,7 @@
     rpc.update(_ => {
       return {rpc: rpcs}
     })
-    console.log('Tab2 onmount!', rpcs)
+    console.log('Script onmount!', rpcs)
   })
 
   function toArray(json) {
@@ -55,28 +55,30 @@
 </svelte:head>
 
 <Actions />
-{#each toArray(window.RPC) as nspace}
-<details data-nspace={nspace} data-name="_openName" open={$rpc.rpc[nspace] && $rpc.rpc[nspace]._openName}>
-  <summary on:click={clickSummary}>
-    {nspace}
-  </summary>
-  <div>
-    {#each toArray(window.RPC[nspace]) as fn}
-      <details data-nspace={nspace} data-fn={fn} data-name="_openCode" open={$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]._openCode}>
-        <summary on:click={e=>showCode(e,$rpc.rpc)}>
-          {#if /_template_/.test(fn)}
-            <b>{`${fn}`}</b>
-          {:else}
-            <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
-            <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
-          {/if}
-        </summary>  
-        <pre>{$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</pre>
-      </details>
-    {/each}
-  </div>
-</details>
-{/each}
+<section>
+  {#each toArray(window.RPC) as nspace}
+  <details data-nspace={nspace} data-name="_openName" open={$rpc.rpc[nspace] && $rpc.rpc[nspace]._openName}>
+    <summary on:click={clickSummary}>
+      {nspace}
+    </summary>
+    <div>
+      {#each toArray(window.RPC[nspace]) as fn}
+        <details data-nspace={nspace} data-fn={fn} data-name="_openCode" open={$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]._openCode}>
+          <summary on:click={e=>showCode(e,$rpc.rpc)}>
+            {#if /_template_/.test(fn)}
+              <b>{`${fn}`}</b>
+            {:else}
+              <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
+              <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
+            {/if}
+          </summary>  
+          <pre>{$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</pre>
+        </details>
+      {/each}
+    </div>
+  </details>
+  {/each}  
+</section>
 
 <style lang="scss">
   summary{
