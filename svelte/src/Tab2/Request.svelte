@@ -7,7 +7,9 @@
 
   onMount(async () => {
     const requests = await init()
-    console.log('Request onmount!', requests)
+    if (RPC._obj_.argv.debug) {
+      console.log('Request onmount!', requests)
+    }
   })
 </script>
 

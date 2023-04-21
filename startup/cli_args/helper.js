@@ -17,6 +17,8 @@ module.exports = _rpc_ => {
     -t --test       \t func() to test
     -x --proxy      \t a proxy request
 
+    -D --debug      \t more info on logs
+
   v${_version_}
 `))
 process.exit(0)

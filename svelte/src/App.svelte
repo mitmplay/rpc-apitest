@@ -28,7 +28,9 @@
       const {broadcast, result} = data
       if (name==='api.peek') {
         updateLogs(result)
-        console.log({broadcast})
+        if (RPC._obj_.argv.debug) {
+          console.log({broadcast})
+        }
         window.logs = result
         ttl++
       } else if (name==='request') {

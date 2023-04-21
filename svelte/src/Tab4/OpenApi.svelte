@@ -7,7 +7,9 @@
 
   onMount(async () => {
     const requests = await init()
-    console.log('OpenApi onmount!', requests)
+    if (RPC._obj_.argv.debug) {
+      console.log('OpenApi onmount!', requests)
+    }
   })
 </script>
 

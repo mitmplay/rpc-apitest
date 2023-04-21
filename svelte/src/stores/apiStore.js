@@ -23,7 +23,6 @@ export function showCode(evn, _rpc) {
     let initcode
     const open = (typeof el.getAttribute('open')==='string')
     if (open && _rpc[nspace][fn]?.code==='...') {
-      console.log('show code')
       let code = window.RPC[nspace][fn]+''
       if (/await +sendRequest/.test(code)) {
         initcode = await window.RPC.api.code(nspace, fn)

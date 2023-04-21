@@ -6,33 +6,37 @@ function onmsgs(ws) {
     const {id, result, error, broadcast:method} = payload
     try {
       if (method) {
-        const fnc = RPC._broadcast_[method.split(':')[0]]
-        const any = RPC._broadcast_._any_
-        let exany = true
-        if (fnc) {
+        const func = RPC._broadcast_[method.split(':')[0]]
+        const fany = RPC._broadcast_._any_
+        let exfunc = true
+        let run 
+        if (func) {
           console.log(`${method} RPC:`, payload)
-          if (fnc(payload, method)===false) {
-            exany = false
+          run = func(payload, method)
+          if (run===false) {
+            exfunc= false
           }
         }
-        if (exany) {
-          let executed = 0
-          for (const f in any) {
-            let result = any[f](payload, method)
-            if (result.then) {
-              result = await result
+        if (exfunc) {
+          let t_executed = 0
+          for (const f in fany) {
+            run = fany[f](payload, method)
+            if (run.then) {
+              run = await run
             }
-            if (result!==false) {
-              executed++
+            if (run!==false) {
+              t_executed++
             }
           }
-          if (executed) {
-            console.log('any RPC:', payload)
+          if (t_executed) {
+            console.log('f_any RPC:', payload)
           }
         }
-      } else {
-        const { resolve, reject } = pendingRequests.get(id)
+      }
+      const pending = pendingRequests.get(id)
+      if (pending) {
         pendingRequests.delete(id)
+        const { resolve, reject } = pending
         error ? reject(error) : resolve(result)  
       }
     } catch (error) {

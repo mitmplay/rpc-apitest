@@ -26,7 +26,9 @@
     rpc.update(_ => {
       return {rpc: rpcs}
     })
-    console.log('Script onmount!', rpcs)
+    if (RPC._obj_.argv.debug) {
+      console.log('Script onmount!', rpcs)
+    }
   })
 
   function toArray(json) {
