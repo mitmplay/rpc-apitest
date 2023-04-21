@@ -33,7 +33,9 @@ function interpolate(regx, value1, tp2, env, key, ns) {
   match = match.map(x=>(tp1 ? x.slice(2,-2) : x.slice(1,-1)))
   match.forEach((v,i) => {
     if (v.match('&')) { // ua: {&-tpl} => ua: {ua-tpl}
+      const old = `{${v}}`
       v = v.replace(/&/g, key)
+      value1 = value1.replace(old, `{${v}}`)
     }
     const arr = v.split('.')
     let value2 

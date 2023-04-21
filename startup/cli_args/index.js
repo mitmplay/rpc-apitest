@@ -10,12 +10,12 @@ module.exports = (_rpc_) => {
 
   argsChg('d', 'devmode'   )
   argsChg('h', 'help'      )
+  argsChg('j', 'json'      )
   argsChg('m', 'mockserver')
   argsChg('o', 'open'      )
   argsChg('s', 'https'     )
   argsChg('t', 'test'      )
   argsChg('x', 'proxy'     )
-  argsChg('y', 'yaml'      )
 
   if (_obj_.argv.help) {
     helper(_rpc_)
