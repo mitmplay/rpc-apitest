@@ -63,13 +63,13 @@ function swgtorequest(_rpc_) {
   }
 
   for (const nmspace in _rpc_) {
-    const _YAML_ = _rpc_[nmspace]._YAML_
-    if (_YAML_) {
+    const _openapi_ = _rpc_[nmspace]._openapi_
+    if (_openapi_) {
       const apis = {}
-      for (const api in _YAML_) {
+      for (const api in _openapi_) {
         apis[api] = {}
         const obj = {
-          swagger: _YAML_[api],
+          swagger: _openapi_[api],
           nmspace,
           api
         }

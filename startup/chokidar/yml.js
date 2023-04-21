@@ -58,12 +58,12 @@ function yml(_rpc_) {
   
     if (!_rpc_[app]) {
       _rpc_[app] = {
-        _YAML_   : {},
+        _openapi_   : {},
         _openapi_: {},
         _request_: {},
       }
-    } else if (!_rpc_[app]._YAML_) {
-      _rpc_[app]._YAML_   = {}
+    } else if (!_rpc_[app]._openapi_) {
+      _rpc_[app]._openapi_   = {}
       _rpc_[app]._openapi_= {}
       _rpc_[app]._request_= {}
     }
@@ -71,7 +71,7 @@ function yml(_rpc_) {
     const str = fs.readFileSync(path, 'utf8')
     const obj = YAML.parse(str)
     if (obj.openapi) {
-      _rpc_[app]._YAML_[name] = obj
+      _rpc_[app]._openapi_[name] = obj
     } else {
       _rpc_[app]._request_[name] = obj
     }
