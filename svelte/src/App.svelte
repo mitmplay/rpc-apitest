@@ -6,6 +6,7 @@
 
   import Tabs    from "./Tabs/Tabs.svelte";
   import Logs    from "./Tab1/Logs.svelte";
+  import Docs    from "./Tab5/Docs.svelte";
   import Request from "./Tab2/Request.svelte";
   import Script  from "./Tab3/Script.svelte";
   import OpenApi from "./Tab4/OpenApi.svelte";
@@ -19,6 +20,7 @@
     { label: "Request", value: 2, component: Request            },
     { label: "Script" , value: 3, component: Script             },
     { label: "OpenApi", value: 4, component: OpenApi            },
+    { label: "Docs"   , value: 5, component: Docs               },
   ];
 
   onMount(() => {

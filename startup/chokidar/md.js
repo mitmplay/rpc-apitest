@@ -1,4 +1,6 @@
 let initToggle = 1
+const rg1 = /\\/g
+const rg2 = /\/(user-rpc|RPC)\/([\w-]+)\/(docs)\/(.+)\.md/
 
 function md(_rpc_) {
   const {
@@ -12,67 +14,56 @@ function md(_rpc_) {
   let timeout = false
   function initEnd() {
     if (initToggle) {
+      _rpc_._mrkdown_ = {}
       console.log(c.magentaBright(`>>> Markdown watcher OK`))
       initToggle = 0
     }
   }
-  function mdLoad(path1, msg) {
-    const path2 = path1.replace(/\\/g, '/')
-    let [app, typ, rpc] = path2.split('/').slice(-3)
-    rpc = rpc.replace('.js', '')
-
-    delete require.cache[path1];
-    const fn = require(path1)
+  function loadMD(path, msg) {
+    let [app, typ, name] = path.replace(rg1,'/').match(rg2).slice(2)
     if (!_rpc_[app]) {
-      _rpc_[app] = {}
+      _rpc_[app] = {
+        _mrkdown_: {},
+        _openapi_: {},
+        _request_: {},
+      }
+    } else if (!_rpc_[app]._openapi_) {
+      _rpc_[app]._mrkdown_= {}
+      _rpc_[app]._openapi_= {}
+      _rpc_[app]._request_= {}
     }
 
-    _rpc_[app][rpc] = fn
-    console.log(msg, JSON.stringify({app,rpc}))
+    _rpc_[app]._mrkdown_[`${name}`] = {path}
+    console.log(msg, JSON.stringify({app, typ, name}))
     if (!argv.test && initToggle) {
       timeout && clearTimeout(timeout)
       timeout = setTimeout(initEnd, 1000)
     }
   }
 
-  function updateJS (path, msg) {
-    loadJS(path, msg, broadcast)
-    timeout = setTimeout(initEnd, 1000)
-    initToggle = 1
-  }
-
   function remove (path, msg) {
-    console.log('removeJS', path)
+    console.log('remove Markdown file', path)
   }
 
   // Initialize watcher.
   const path = []
+  _rpc_._mrkdown_ = {}
+  const p = `${__app}/README.md`
+  _rpc_._mrkdown_['_readme_'] = {path: p}
   if (_rpc_._obj_.argv.devmode) {
-    path.push(`${__app}/**/*.md`)
+    path.push(`${__app}/RPC/*/docs/*.md`)
   }
   path.push(`${HOME}/user-rpc/*/docs/*.md`)
 
-  const ignored = /(\/index)\.js$/
-  if (argv.test) {
-    console.log(c.magentaBright(`>>> RPC loader:`), [tilde(path)])
-    const arr = fg.sync([path], { dot: false })
-    arr.forEach(_ =>{
-      if (!ignored.test(_)) {
-        loadJS(_, 'load', broadcast)
-      }
-    })  
-  } else {
-    console.log(c.magentaBright(`>>> RPC watcher:`), [tilde(path)])
-    const uRPCWatcher = chokidar.watch([path], {
-      ignored, // ignore files
-      persistent: true
-    })
-    // Something to use when events are received.
-    uRPCWatcher // Add event listeners.
-    .on('add',    _ => { _ = updateJS(_, 'add') })
-    .on('change', _ => { _ = updateJS(_, 'chg') })
-    .on('unlink', _ => { _ =   remove(_, 'del') })
-    _rpc_._watcher_.uRPCWatcher = uRPCWatcher
-  }
+  console.log(c.magentaBright(`>>> Markdown watcher:`), [tilde(path)])
+  const uMDWatcher = chokidar.watch([path], {
+    persistent: true
+  })
+  // Something to use when events are received.
+  uMDWatcher // Add event listeners.
+  .on('add',    _ => { _ = loadMD(_, 'add') })
+  .on('change', _ => { _ = loadMD(_, 'chg') })
+  .on('unlink', _ => { _ = remove(_, 'del') })
+  _rpc_._watcher_.uMDWatcher = uMDWatcher
 }
 module.exports = md

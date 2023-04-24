@@ -58,12 +58,12 @@ function yml(_rpc_) {
   
     if (!_rpc_[app]) {
       _rpc_[app] = {
-        _openapi_   : {},
+        _mrkdown_: {},
         _openapi_: {},
         _request_: {},
       }
     } else if (!_rpc_[app]._openapi_) {
-      _rpc_[app]._openapi_   = {}
+      _rpc_[app]._mrkdown_= {}
       _rpc_[app]._openapi_= {}
       _rpc_[app]._request_= {}
     }

@@ -1,6 +1,6 @@
 {
   "name": "rpc-apitest",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "description": "RPC Apitest - Test API isomorphic way from terminal of nodejs or browser",
   "main": "rpc-apitest.js",
   "bin": {
@@ -32,6 +32,7 @@
     "express": "^4.18.2",
     "fast-glob": "^3.2.12",
     "fs-extra": "^11.1.0",
+    "highlight.js": "^11.7.0",
     "https": "^1.0.0",
     "json-schema-faker": "^0.5.0-rcv.46",
     "json-schema-ref-parser": "^9.0.9",

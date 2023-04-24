@@ -43,8 +43,8 @@ export function clickSummary(evn, req, json) {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]
     if (run && !request) {
-      const request = await RPC.api.request(run)
-      json[nspace].request = pretty(request)
+      const data = await RPC.api.request(run)
+      json[nspace].request = pretty(data)
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
