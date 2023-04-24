@@ -6,6 +6,7 @@ const fetch   = require('./script/fetch')
 const peek    = require('./script/peek')
 const code    = require('./script/code')
 const docs    = require('./script/docs')
+const doc     = require('./script/doc')
 module.exports = {
   requests,
   openapis,
@@ -15,4 +16,5 @@ module.exports = {
   peek,
   code,
   docs,
+  doc,
 }
