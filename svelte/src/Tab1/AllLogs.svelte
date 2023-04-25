@@ -6,7 +6,6 @@
     req,
     date,
     resp,
-    trunc,
     toArray,
   } from './Tab1';
 </script>
@@ -36,8 +35,8 @@
         </div>
       </details>
       <div class="sub-content">
-        <div class="title aliceblue"><b>Response Body: {'{'}</b></div>
-        <pre class="aliceblue">{trunc(row.response)}</pre>
+        <div class="title aliceblue"><b>Response Body:</b></div>
+        <pre class="aliceblue">{row.response}</pre>
       </div>
     </div>
 </details>

@@ -42,7 +42,3 @@ export function resp({resp_hdr}) {
     return JSON.stringify(json, null, 2)        
   }
 }
-
-export function trunc(str) {
-  return str.replace(/^{\n/, '')
-}
