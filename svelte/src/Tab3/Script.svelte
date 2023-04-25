@@ -74,7 +74,7 @@
               <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
             {/if}
           </summary>  
-          <pre>{$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</pre>
+          <pre><code class="language-js">{@html $rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</code></pre>
         </details>
       {/each}
     </div>
@@ -91,5 +91,8 @@
   }
   b {
     color:darkblue
+  }
+  pre {
+    background: linen;
   }
 </style>

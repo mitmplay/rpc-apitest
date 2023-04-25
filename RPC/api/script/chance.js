@@ -6,6 +6,5 @@ async function chance() {
     fn = 'address'
   }
   return c[fn].apply(c, arr)
-
 }
 module.exports = chance

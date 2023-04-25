@@ -52,6 +52,7 @@ function init_lib(_rpc_) {
   _lib_.c  = c
   _lib_.md = md
   _lib_.fs = fs
+  _lib_.hj = hj
   _lib_.fg = fg
   _lib_.YAML = YAML
   _lib_.jsfaker = jsfaker

@@ -47,7 +47,11 @@
     {/if}
   </summary>
   {#if json[nspace].run}
-    <pre>{json[nspace].request || '...'}</pre>
+    {#if RPC._obj_?.argv?.json}
+      <pre class="aliceblue"><code class="language-json">{@html json[nspace].request || '...'}</code></pre>
+    {:else}
+      <pre class="aliceblue"><code class="language-yaml">{@html json[nspace].request || '...'}</code></pre>
+    {/if}
   {:else}
     <div><Tree {_req} json={json[nspace]} /></div>
   {/if}

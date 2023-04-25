@@ -24,7 +24,7 @@
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>
         <summary on:click={e=>clickSummary(e,'logs')}>Request</summary>
         <div class="reqs-content">
-          <pre>{row.request}</pre>  
+          <pre><code class="language-json">{@html row.request}</code></pre>  
         </div>
       </details>
       <details data-id={row._id} data-name=openHdr open={row.openHdr}>
@@ -36,7 +36,7 @@
       </details>
       <div class="sub-content">
         <div class="title aliceblue"><b>Response Body:</b></div>
-        <pre class="aliceblue">{row.response}</pre>
+        <pre class="aliceblue"><code class="language-json">{@html row.response}</code></pre>
       </div>
     </div>
 </details>
@@ -63,7 +63,7 @@
     margin-left: 10px;
     background-color: antiquewhite;
   }
-  .resp-content pre {
+  .resp-content pre, .reqs-content {
     margin: 0;
   }
   .azure {

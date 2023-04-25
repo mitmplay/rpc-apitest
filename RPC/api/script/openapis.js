@@ -7,7 +7,9 @@ function iterate(fnc) {
       for (const endpoint in endpoints) {
         const methods = endpoints[endpoint]
         for (const mth in methods) {
-          fnc(app, apiname, endpoint, mth, _rpc_)
+          if (['get','put','post','delete'].includes(mth)) {
+            fnc(app, apiname, endpoint, mth, _rpc_)
+          }  
         }
       }
     }

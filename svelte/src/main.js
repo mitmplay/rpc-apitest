@@ -1,5 +1,5 @@
+import './base.css'
 import './app.scss'
-import './highlight.css'
 import './markdown.scss'
 import App from './App.svelte'
 
