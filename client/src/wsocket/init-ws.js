@@ -1,7 +1,7 @@
 const ports = {
-  '3002': `wss://${location.hostname}:3002/ws`,
-  '3001':  `ws://${location.hostname}:3001/ws`,
-  '5173':  `ws://${location.hostname}:3001/ws`
+  '4002': `wss://${location.hostname}:4002/ws`,
+  '4001':  `ws://${location.hostname}:4001/ws`,
+  '5173':  `ws://${location.hostname}:4001/ws`
 }
 
 function initws() {

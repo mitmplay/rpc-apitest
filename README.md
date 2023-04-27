@@ -7,14 +7,14 @@ npm i -g rpc-apitest
 ```js
 // -d devmode
 // -o open browser
-rpc-apitest -do // open browser to http://localhost:3001
+rpc-apitest -do // open browser to http://localhost:4001
 ```
 
 # Open in https & avoid warning: self-sign certificate  
 ```js
 // -s open in https
 export NODE_TLS_REJECT_UNAUTHORIZED=0
-rpc-apitest -dos // open browser to https://localhost:3002
+rpc-apitest -dos // open browser to https://localhost:4002
 ```
 
 

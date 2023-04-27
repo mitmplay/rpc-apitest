@@ -40,8 +40,8 @@ async function start() {
   server1.on('upgrade', upgrade)
   server2.on('upgrade', upgrade)
 
-  console.log('MITM-RPC server started on port http:3001 & https:3002')
-  server1.listen(3001)
-  server2.listen(3002)
+  console.log('MITM-RPC server started on port http:4001 & https:4002')
+  server1.listen(4001)
+  server2.listen(4002)
 }
 module.exports = start

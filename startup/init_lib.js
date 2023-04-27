@@ -62,9 +62,9 @@ function init_lib(_rpc_) {
     _lib_.open = m.default
     if (_obj_.argv.open && !_obj_.argv.test) {
       if (!_obj_.argv.https) {
-        await _lib_.open('http://localhost:3001')
+        await _lib_.open('http://localhost:4001')
       } else {
-        await _lib_.open('https://localhost:3002')
+        await _lib_.open('https://localhost:4002')
       }
     } 
   })
