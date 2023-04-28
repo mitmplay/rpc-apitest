@@ -7,6 +7,7 @@ const sv = '../svelte/dist'
 module.exports = () => {
   app.use('/js', static(path.join(__dirname, '../client/build')))
   app.get('/js/isomorphics.js', (req, res) => {
+    res.append('Content-Type', 'application/javascript; charset=UTF-8');
     res.send(client())
   })
 
