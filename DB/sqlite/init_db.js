@@ -29,7 +29,7 @@ module.exports = async () => {
 
   function request(t) {
     t.increments('id').primary()
-    t.string    ('dns',  100)
+    t.string    ('host', 100)
     t.string    ('name', 200)
     t.text      ('template' )
     t.text      ('generate' )
@@ -40,7 +40,7 @@ module.exports = async () => {
 
   function apilog(t) {
     t.increments('id').primary()
-    t.string    ('dns',  100)
+    t.string    ('host',  100)
     t.string    ('api',  200)
     t.string    ('act',  200)
     t.string    ('rspcode',3)
@@ -64,7 +64,7 @@ module.exports = async () => {
   if (!rows.length) {
     const ts = Date.now()
     await sql('api_log').insert({
-      dns:     'LOCALHOST',
+      host:     'LOCALHOST',
       api:     'greetings',
       act:     '0.hello-world!',
       rspcode: '200',

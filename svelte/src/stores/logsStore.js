@@ -18,14 +18,14 @@ export function updateLogs(newLogs) {
     for (const id in newLogs) {
       _logs[id] = json.logs[id] || newLogs[id]
       // group by host
-      const {dns} = _logs[id]
-      if (!_logs2[dns]) {
-        _logs2[dns] = {
-          id: dns,
+      const {host} = _logs[id]
+      if (!_logs2[host]) {
+        _logs2[host] = {
+          id: host,
           logs: {}
         }
       }
-      _logs2[dns].logs[id] = _logs[id]
+      _logs2[host].logs[id] = _logs[id]
       // group by date
       const date = (new Date(_logs[id]?.created)).toISOString().replace(/T.+/,'')
       if (!_logs3[date]) {

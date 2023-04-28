@@ -1,6 +1,6 @@
 async function apilog(request, resp_hdr, response, opt={}) {
   const {
-    dns='', 
+    host='', 
     api='', 
     act='', 
     notes='', 
@@ -20,7 +20,7 @@ async function apilog(request, resp_hdr, response, opt={}) {
     reqs.body = JSON.parse(body)
   }
   return await sql('api_log').insert({
-    dns: dns || senderIp,
+    host: host || senderIp,
     api,
     act,
     rspcode,

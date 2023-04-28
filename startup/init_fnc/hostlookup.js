@@ -1,7 +1,7 @@
-const dns = require('dns');
+const host = require('dns');
 const { resolve } = require('path');
 
-function dnslookup(ipAddress) {
+function hostlookup(ipAddress) {
   if (typeof ipAddress!=='string') {
     resolve('undefined')
   } else {
@@ -10,7 +10,7 @@ function dnslookup(ipAddress) {
       if (ipAddress==='1') {
         resolve('LOCALHOST')
       } else {
-        dns.reverse(ipAddress, (err, hostnames) => {
+        host.reverse(ipAddress, (err, hostnames) => {
           if (err) {
             reject(err);
           } else {
@@ -21,4 +21,4 @@ function dnslookup(ipAddress) {
     });  
   }
 }
-module.exports = dnslookup
+module.exports = hostlookup

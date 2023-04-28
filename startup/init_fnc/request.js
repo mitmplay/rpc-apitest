@@ -46,8 +46,8 @@ const req = function(request, opt={}) {
           },
           error,
         })
-        const {apilog, dnslookup} = fn()._fn_
-        opt.dns = await dnslookup(opt.senderIp)
+        const {apilog, hostlookup} = fn()._fn_
+        opt.host = await hostlookup(opt.senderIp)
         const row = await apilog(request, headers, resp, opt)
         console.log(row)
       }
