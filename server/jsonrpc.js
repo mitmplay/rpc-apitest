@@ -25,6 +25,7 @@ module.exports = async _ => {
   }
 
   async function _broadcast(payload, broadcast, result) {
+    const {_obj_} = rpc()
     if (broadcast) {
       let {method} = payload
       const peekcall = /\.(api_|fetch)/.test(method)
@@ -34,6 +35,9 @@ module.exports = async _ => {
       const rtn = {
         broadcast: peekcall ? `api.peek:${method}` : method,
         ...result
+      }
+      if (_obj_.argv.devmode) {
+        console.log('_broadcast')
       }
       wss.clients.forEach(function each (client) {
         if (client.readyState === global.Websocket.OPEN) {
@@ -68,7 +72,7 @@ module.exports = async _ => {
     }
     console.log('Result:', result)
     ws.send(JSON.stringify(result))
-    _broadcast(payload, broadcast, result)
+    setTimeout(()=>_broadcast(payload, broadcast, result))    
   }
 
   async function handleBatchRequest(parsed, ws) {
@@ -87,7 +91,7 @@ module.exports = async _ => {
 
     const response = stringify(results)
     ws.send(response)
-    _broadcast(requests, broadcast, results)
+    setTimeout(()=>_broadcast(requests, broadcast, results))
   }
 
   function jsonrpc(ws) {

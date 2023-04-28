@@ -8,7 +8,7 @@ function hostlookup(ipAddress) {
     ipAddress = ipAddress.split(':').pop()
     return new Promise((resolve, reject) => {
       if (ipAddress==='1') {
-        resolve('LOCALHOST')
+        resolve('localhost')
       } else {
         host.reverse(ipAddress, (err, hostnames) => {
           if (err) {
