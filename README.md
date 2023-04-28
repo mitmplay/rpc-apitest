@@ -8,6 +8,10 @@ npm i -g rpc-apitest
 // -d devmode
 // -o open browser
 rpc-apitest -do // open browser to http://localhost:4001
+
+// debugging server code
+NODE_OPTIONS='--inspect' rpc-apitest -do
+NODE_OPTIONS='--inspect-brk' rpc-apitest -do
 ```
 
 # Open in https & avoid warning: self-sign certificate  
