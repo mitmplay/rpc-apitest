@@ -14,7 +14,11 @@ function hostlookup(ipAddress) {
           if (err) {
             reject(err);
           } else {
-            resolve(hostnames);
+            if (hostnames.length) {
+              resolve(hostnames.pop());
+            } else {
+              resolve(ipAddress)
+            }
           }
         });  
       }

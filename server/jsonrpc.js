@@ -62,21 +62,26 @@ module.exports = async _ => {
 
   async function handleRequest(parsed, ws) {
     const {payload, broadcast, senderIp} = parsed
-    let result = executeRpcMethod(payload, senderIp)
-    if (native.test('' + result.then)) {
-      try {
-        result = await result      
-      } catch (error) {
-        result = error 
-      }
+    const {_obj_} = rpc()
+    let result
+    try {
+      result = await executeRpcMethod(payload, senderIp)
+    } catch (error) {
+      result = error 
     }
-    console.log('Result:', result)
+    if (_obj_.argv.verbose) {
+      console.log('executeRpcMethod:', result)
+    } else if (_obj_.argv.devmode) {
+      console.log('executeRpcMethod!')
+    }
     ws.send(JSON.stringify(result))
-    setTimeout(()=>_broadcast(payload, broadcast, result), 100)    
+    const timeout = +(_obj_.argv.timeout || 100)
+    setTimeout(()=>_broadcast(payload, broadcast, result), timeout)    
   }
 
   async function handleBatchRequest(parsed, ws) {
     const {payload, broadcast, senderIp} = parsed
+    const {_obj_} = rpc()
     const results = requests.map(async ({ id, method, params }) => {
       let result = executeRpcMethod(payload)
       if (native.test('' + result.then)) {
@@ -91,7 +96,8 @@ module.exports = async _ => {
 
     const response = stringify(results)
     ws.send(response)
-    setTimeout(()=>_broadcast(requests, broadcast, results), 100)
+    const timeout = +(_obj_.argv.timeout || 100)
+    setTimeout(()=>_broadcast(requests, broadcast, results), timeout)
   }
 
   function jsonrpc(ws) {

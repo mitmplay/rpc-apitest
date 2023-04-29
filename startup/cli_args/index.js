@@ -18,6 +18,7 @@ module.exports = (_rpc_) => {
   argsChg('x', 'proxy'     )
 
   argsChg('D', 'debug'     )
+  argsChg('T', 'timeout'   )
   argsChg('V', 'verbose'   )
 
   if (_obj_.argv.help) {

@@ -18,6 +18,8 @@ module.exports = _rpc_ => {
     -x --proxy      \t a proxy request
 
     -D --debug      \t more info on logs
+    -T --timeout    \t delay:100 before broadcast
+    -V --verbose    \t more info on console logs
 
   v${_version_}
 `))
