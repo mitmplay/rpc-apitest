@@ -47,7 +47,12 @@ const req = function(request, opt={}) {
           error,
         })
         const {apilog, hostlookup} = fn()._fn_
-        opt.host = await hostlookup(opt.senderIp)
+        const ipAddress = opt.senderIp.replace(/^[:f]+/, '')
+        try {
+          opt.host = await hostlookup(ipAddress)          
+        } catch (error) {
+          opt.host = ipAddress
+        }
         const row = await apilog(request, headers, resp, opt)
         console.log(row)
       }

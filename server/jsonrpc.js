@@ -72,7 +72,7 @@ module.exports = async _ => {
     }
     console.log('Result:', result)
     ws.send(JSON.stringify(result))
-    setTimeout(()=>_broadcast(payload, broadcast, result))    
+    setTimeout(()=>_broadcast(payload, broadcast, result), 100)    
   }
 
   async function handleBatchRequest(parsed, ws) {
@@ -91,7 +91,7 @@ module.exports = async _ => {
 
     const response = stringify(results)
     ws.send(response)
-    setTimeout(()=>_broadcast(requests, broadcast, results))
+    setTimeout(()=>_broadcast(requests, broadcast, results), 100)
   }
 
   function jsonrpc(ws) {

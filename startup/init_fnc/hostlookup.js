@@ -3,7 +3,7 @@ const { resolve } = require('path');
 
 function hostlookup(ipAddress) {
   if (typeof ipAddress!=='string') {
-    resolve('undefined')
+    resolve('unknown')
   } else {
     ipAddress = ipAddress.split(':').pop()
     return new Promise((resolve, reject) => {
