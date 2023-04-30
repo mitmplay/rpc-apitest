@@ -1,6 +1,8 @@
 <script>
   export let logs;
+  export let yaml;
   import {clickSummary} from '../stores/logsStore';
+  import { toJson, toYaml } from '../lib/common';
   import {
     no1,
     req,
@@ -24,19 +26,31 @@
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>
         <summary on:click={e=>clickSummary(e,'logs')}>Request</summary>
         <div class="reqs-content">
-          <pre><code class="language-json">{@html row.request}</code></pre>  
+        {#if yaml}
+          <pre><code class="language-yaml">{@html toYaml(row.request)}</code></pre>  
+        {:else}
+          <pre><code class="language-json">{@html toJson(row.request)}</code></pre>  
+        {/if}
         </div>
       </details>
       <details data-id={row._id} data-name=openHdr open={row.openHdr}>
         <summary on:click={e=>clickSummary(e,'logs')}>Response headers</summary>
         <div class="resp-content">
           <pre>{row.x_tag}</pre>
-          <pre>{resp(row)}</pre>  
+          {#if yaml}
+            <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
+          {:else}
+            <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
+          {/if}
         </div>
       </details>
       <div class="sub-content">
-        <div class="title aliceblue"><b>Response Body:</b></div>
-        <pre class="aliceblue"><code class="language-json">{@html row.response}</code></pre>
+        <div class="title"><b>Response Body:</b></div>
+        {#if yaml}
+          <pre class="aliceblue"><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
+        {:else}
+          <pre class="aliceblue"><code class="language-json">{@html toJson(row.response)}</code></pre>          
+        {/if}
       </div>
     </div>
 </details>
@@ -53,14 +67,15 @@
     padding-left: 15px;
   }
   .sub-content {
-    padding-left: 10px;
+    pre {
+      padding-left: 10px;
+    }
   }
   .reqs-content {
     margin-left: 10px;
     background-color: aliceblue;
   }
   .resp-content {
-    margin-left: 10px;
     background-color: antiquewhite;
   }
   .resp-content pre, .reqs-content {

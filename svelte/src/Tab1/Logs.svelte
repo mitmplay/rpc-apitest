@@ -9,11 +9,11 @@
 <Actions />
 <section>
   {#if $logs.options.grouping==='1'}
-    <AllLogs  logs ={$logs.logs}/>
+    <AllLogs  logs ={$logs.logs} yaml={$logs.options.yaml}/>
   {:else if $logs.options.grouping==='2'}
-    <GrpLogs  logs2={$logs.logs2}/>
+    <GrpLogs  logs2={$logs.logs2} yaml={$logs.options.yaml}/>
   {:else if $logs.options.grouping==='3'}
-    <DateLogs logs3={$logs.logs3}/>
+    <DateLogs logs3={$logs.logs3} yaml={$logs.options.yaml}/>
   {/if}
 </section>
 

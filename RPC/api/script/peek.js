@@ -1,7 +1,7 @@
 async function peek(limit=25) {
-  const _rpc_ = rpc()
-  const language = 'json'
-  const {_lib_: {hj}} = _rpc_
+  // const _rpc_ = rpc()
+  // const language = 'json'
+  // const {_lib_: {hj}} = _rpc_
   const lparams = [...arguments].pop()
   if (lparams==='h') {
     return info()
@@ -13,8 +13,8 @@ async function peek(limit=25) {
     
   const l = {}
   for(const row of rows) {
-    row.request  = hj.highlight(row.request,  {language}).value
-    row.response = hj.highlight(row.response, {language}).value
+    // row.request  = hj.highlight(row.request,  {language}).value
+    // row.response = hj.highlight(row.response, {language}).value
     l[`_${row.id}`] = row
   }
   return l

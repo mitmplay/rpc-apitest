@@ -4,7 +4,8 @@ const json = {
   logs2: {},
   logs3: {},
   options: {
-    grouping: '1',
+    grouping: '1', //# 1:all, 2:Host, 3:Time
+    yaml: false,
   }
 }
 
@@ -61,6 +62,15 @@ export function clickGroup({currentTarget}) {
   setTimeout(_ => {
     logs.update(json => {
       json.options.grouping = currentTarget.value
+      return json
+    })
+  })
+}
+
+export function clickYaml({currentTarget}) {
+  setTimeout(_ => {
+    logs.update(json => {
+      json.options.yaml = !currentTarget.checked
       return json
     })
   })

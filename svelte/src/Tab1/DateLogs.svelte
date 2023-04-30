@@ -1,5 +1,6 @@
 <script>
   export let logs3;
+  export let yaml;
   import {clickSummary} from '../stores/logsStore';
   import {
     toArray,
@@ -15,7 +16,7 @@
 {#each toArray(logs3) as row}
   <details data-id={row._id} data-name=openDns open={row.openDns}>
     <summary on:click={e=>clickSummary(e,'logs3')}>{row._id}</summary>
-    <div><AllLogs logs={row.logs}/></div>
+    <div><AllLogs logs={row.logs} {yaml}/></div>
 </details>
 {/each}
 

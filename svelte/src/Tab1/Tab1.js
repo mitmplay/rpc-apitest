@@ -30,15 +30,13 @@ export function req({request}, str) {
 }
 
 export function resp({resp_hdr}) {
-  if (resp_hdr) {
-    const json = JSON.parse(resp_hdr)
-    const arr = ['report-to', 'nel']
-    arr.forEach(el => {
-      const data = json[el]
-      if (data) {
-        json[el] = JSON.parse(data)
-      }
-    });
-    return JSON.stringify(json, null, 2)        
-  }
+  const json = JSON.parse(resp_hdr) || {}
+  const arr = ['report-to', 'nel']
+  arr.forEach(el => {
+    const data = json[el]
+    if (data) {
+      json[el] = JSON.parse(data)
+    }
+  });
+  return JSON.stringify(json, null, 2)        
 }
