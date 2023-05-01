@@ -82,7 +82,7 @@ export function clickGroup({currentTarget}) {
   })
 }
 
-export function clickCollapse({activeTab}) {
+export function clickCollapse({activeTab, rowid}) {
   setTimeout(_ => {
     logs.update(json => {
       for (const id in json.logs) {
@@ -93,10 +93,9 @@ export function clickCollapse({activeTab}) {
         obj.openHdr = false
       }
       if (activeTab===1) {
+        const id = `_${rowid}`
         json.options.activeTab = 1
-        json.options.grouping = '1'
-
-        const [id] = Object.keys(json.logs)
+        json.options.grouping  = '1'
         json.logs[id].openLog  = true
         if (json.options.autoExpandRespBody) {
           json.logs[id].openBody = true
@@ -110,7 +109,7 @@ export function clickCollapse({activeTab}) {
       }
       return json
     })
-  }, activeTab ? 500 : 0)
+  }, activeTab ? 110 : 0)
 }
 
 export function clickYaml({currentTarget}) {

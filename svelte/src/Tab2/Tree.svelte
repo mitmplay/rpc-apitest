@@ -33,7 +33,7 @@
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
       if ($reqs.options.autoShowlog) {
-        clickCollapse({activeTab:1})
+        clickCollapse({activeTab:1, rowid: msg.rowid})
       }
     } else {
       console.log(msg)

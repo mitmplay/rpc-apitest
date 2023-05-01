@@ -37,15 +37,6 @@ const req = function(request, opt={}) {
           resp[`[${statusCode}]`] = 'No response payload!'
         }
         console.log(JSON.stringify(resp, null, 2))
-        resolve({
-          request,
-          response:{
-            statusCode,
-            headers,
-            body,
-          },
-          error,
-        })
         const {apilog, hostlookup} = fn()._fn_
         const ipAddress = opt.senderIp.replace(/^[:f]+/, '')
         try {
@@ -53,8 +44,18 @@ const req = function(request, opt={}) {
         } catch (error) {
           opt.host = ipAddress
         }
-        const row = await apilog(request, headers, resp, opt)
-        console.log(row)
+        const [rowid] = await apilog(request, headers, resp, opt)
+        console.log(rowid)
+        resolve({
+          request,
+          response:{
+            statusCode,
+            headers,
+            body,
+          },
+          rowid,
+          error,
+        })
       }
     })    
   })
