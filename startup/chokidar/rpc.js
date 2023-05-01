@@ -1,4 +1,5 @@
 const xpath = require('./xpath')
+const _rpc  = require('../../_rpc_')
 
 let initToggle = 1
 
@@ -16,6 +17,7 @@ function rpc(_rpc_) {
     if (initToggle) {
       console.log(c.magentaBright(`>>> RPC watcher OK`))
       initToggle = 0
+      _rpc(_rpc_)
     }
   }
   function loadJS(path1, msg) {

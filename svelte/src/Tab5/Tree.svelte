@@ -24,13 +24,23 @@
     ]
     return arr
   }
+  let mermaid;
+  function content(src) {
+    !mermaid && (mermaid = window.mermaid);
+    setTimeout(() => {
+      if (document.querySelector('#markdown .mermaid')) {
+        mermaid.init();
+      }
+    }, 1);
+    return src.content;
+  }
 </script>
 
 {#each toArray(json) as nspace}
 <details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
   <summary on:click={evn => clickSummary(evn, _doc, json)}>
     {#if json[nspace].run}
-      <b>{`${json[nspace].run.replace(/(^_|_$)/g, '')}`}</b>
+      <b>{`${json[nspace].run.replace(/(^_|_|\.md$)/g, '').split('/').pop()}`}</b>
     {:else}
       {nspace}
     {/if}
@@ -38,7 +48,7 @@
   {#if json[nspace].run}
     {#if json[nspace].content}
       <div id="markdown">
-        {@html json[nspace].content}
+        {@html content(json[nspace])}
       </div>
     {:else}
       <pre>...</pre>

@@ -11,8 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["-d"],
-            "program": "${workspaceFolder}\\rpc-apitest.js"
+            "args": ["-d", "-r=~/Movies/rpc"],
+            "program": "${workspaceFolder}/rpc-apitest.js"
         }
     ]
 }

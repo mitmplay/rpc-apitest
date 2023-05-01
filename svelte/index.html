@@ -2,6 +2,18 @@
 <html lang="en">
   <head id='head'>
     <meta charset="UTF-8" />
+    <style>
+      html {
+        overflow: hidden;
+      }
+      .mermaid {
+        display: grid;
+        height: 61vh;
+      }
+      .mermaid>svg {
+        height: 100% !important;
+      }
+    </style>
     <script>
       window.RPC = {
         _broadcast_: {
@@ -14,6 +26,7 @@
     <script src="/assets/highlight.js"></script>
     <script src="/assets/json.min.js"></script>
     <script src="/assets/yaml.min.js"></script>
+    <script src="/assets/mermaid.js"></script>
     <title>RPC Apitest</title>
   </head>
   <body>

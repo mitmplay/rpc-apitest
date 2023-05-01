@@ -1,6 +1,6 @@
 const swgtorequest = require('./swgtorequest')
 const xpath = require('./xpath')
-const fn  = require('../../_rpc_')
+const _rpc  = require('../../_rpc_')
 
 let initToggle = 1
 
@@ -48,7 +48,7 @@ function yml(_rpc_) {
       console.log(c.magentaBright(`>>> YAML watcher OK`))
       initToggle = 0
       swgtorequest(_rpc_)
-      fn(_rpc_)
+      _rpc(_rpc_)
     }
   }
 
