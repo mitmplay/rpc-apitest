@@ -2,18 +2,21 @@ import { writable } from 'svelte/store';
 import { pretty } from '../lib/common';
 const json = {
   req: {},
+  options: {
+    autoShowlog: true,
+  }
 }
 export const reqs = writable(json);
 
 export async function init() {
   const req1 = await window.RPC.api.requests(true)
   const req2 = {}
-  reqs.update(_ => {
+  reqs.update(json => {
     for (const nspace in req1) {
-      req2[nspace] = _.req[nspace] || req1[nspace]
+      req2[nspace] = json.req[nspace] || req1[nspace]
     }
-    _.req = req2
-    return _
+    json.req = req2
+    return json
   })
   return req2
 }
@@ -23,8 +26,8 @@ export async function updateReq(path, request) {
     request = await RPC.api.request(path)
   }
 
-  reqs.update(_ => {
-    let {req} = _
+  reqs.update(json => {
+    let {req} = json
     const folders = path.split('/')
     const file = folders.pop()
     for (const folder of folders) {
@@ -33,7 +36,7 @@ export async function updateReq(path, request) {
     if (req[file]) {
       req[file].request = pretty(request)
     }
-    return _
+    return json
   })
 }
 
@@ -49,7 +52,8 @@ export function clickSummary(evn, req, json) {
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
       json[nspace][name]= open
-      return {req}
+      _2.req = req
+      return _2
     });
   })
 }
@@ -70,6 +74,19 @@ export function clickCollapse(evn) {
   setTimeout(_ => {
     reqs.update(json => {
       collapse(json.req)
+      return json
+    })
+  })
+}
+
+export function autoShowlog({currentTarget}) {
+  clickTogle(currentTarget, 'autoShowlog')
+}
+
+function clickTogle(el, key) {
+  setTimeout(_ => {
+    reqs.update(json => {
+      json.options[key] = !el.checked
       return json
     })
   })

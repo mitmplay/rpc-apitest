@@ -24,7 +24,7 @@
     </summary>
     <div class="main-content">
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>
-        <summary on:click={e=>clickSummary(e,'logs')}>Request</summary>
+        <summary class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>
         <div class="reqs-content">
         {#if yaml}
           <pre><code class="language-yaml">{@html toYaml(row.request)}</code></pre>  
@@ -34,8 +34,8 @@
         </div>
       </details>
       <details data-id={row._id} data-name=openHdr open={row.openHdr}>
-        <summary on:click={e=>clickSummary(e,'logs')}>Response headers</summary>
-        <div class="resp-content">
+        <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
+        <div class="resp-header">
           <pre>{row.x_tag}</pre>
           {#if yaml}
             <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
@@ -44,41 +44,38 @@
           {/if}
         </div>
       </details>
-      <div class="sub-content">
-        <div class="title"><b>Response Body:</b></div>
-        {#if yaml}
-          <pre class="aliceblue"><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
-        {:else}
-          <pre class="aliceblue"><code class="language-json">{@html toJson(row.response)}</code></pre>          
-        {/if}
-      </div>
+      <details data-id={row._id} data-name=openBody open={row.openBody}>
+        <summary class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response body</summary>
+        <div class="resp-body aliceblue">
+          {#if yaml}
+            <pre><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
+          {:else}
+            <pre><code class="language-json">{@html toJson(row.response)}</code></pre>          
+          {/if}
+        </div>
+      </details>
     </div>
 </details>
 {/each}
 
 <style lang="scss">
-  .title>b {
+  .title-brown {
+    color: #db6b6b;
+  }
+  .title-blue {
     color: blue;
-    font-size: 12px;
-    font-weight: bold;
-    font-family: monospace;
   }
-  .main-content {
+  .main-header {
     padding-left: 15px;
-  }
-  .sub-content {
-    pre {
-      padding-left: 10px;
-    }
   }
   .reqs-content {
     margin-left: 10px;
     background-color: aliceblue;
   }
-  .resp-content {
+  .resp-header {
     background-color: antiquewhite;
   }
-  .resp-content pre, .reqs-content {
+  .resp-header pre, .resp-body pre, .reqs-content {
     margin: 0;
   }
   .azure {

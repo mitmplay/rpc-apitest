@@ -1,7 +1,8 @@
 <script>
   export let _req
   export let json
-  import {clickSummary} from '../stores/reqsStore';
+  import {reqs, clickSummary}  from '../stores/reqsStore';
+  import {logs, clickCollapse} from '../stores/logsStore';
   import Tree from './Tree.svelte';
 
   function toArray(_json) {
@@ -31,6 +32,9 @@
     const msg = await RPC.api.fetch(run)
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
+      if ($reqs.options.autoShowlog) {
+        clickCollapse({activeTab:1})
+      }
     } else {
       console.log(msg)
     }

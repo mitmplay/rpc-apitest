@@ -4,8 +4,12 @@ const json = {
   logs2: {},
   logs3: {},
   options: {
+    activeTab: 1,
     grouping: '1', //# 1:all, 2:Host, 3:Time
-    yaml: false,
+    autoExpandRequest: false,
+    autoExpandRespHdr: false,
+    autoExpandRespBody: true,
+    yaml: true,
   }
 }
 
@@ -53,6 +57,17 @@ export function clickSummary(evn, lg) {
       const {id,name} = el.dataset
       const open = (typeof el.getAttribute('open')==='string')
       json[lg][id][name]= open
+      if (name==='openLog') {
+        if (json.options.autoExpandRespBody) {
+          json.logs[id].openBody = true
+        }
+        if (json.options.autoExpandRespHdr) {
+          json.logs[id].openHdr = true
+        }
+        if (json.options.autoExpandRequest) {
+          json.logs[id].openRqs = true
+        }
+      }
       return json
     });  
   })
@@ -67,24 +82,57 @@ export function clickGroup({currentTarget}) {
   })
 }
 
-export function clickYaml({currentTarget}) {
-  setTimeout(_ => {
-    logs.update(json => {
-      json.options.yaml = !currentTarget.checked
-      return json
-    })
-  })
-}
-
-export function clickCollapse(evn) {
+export function clickCollapse({activeTab}) {
   setTimeout(_ => {
     logs.update(json => {
       for (const id in json.logs) {
         const obj = json.logs[id]
+        obj.openBody= false
         obj.openLog = false
         obj.openRqs = false
         obj.openHdr = false
       }
+      if (activeTab===1) {
+        json.options.activeTab = 1
+        json.options.grouping = '1'
+
+        const [id] = Object.keys(json.logs)
+        json.logs[id].openLog  = true
+        if (json.options.autoExpandRespBody) {
+          json.logs[id].openBody = true
+        }
+        if (json.options.autoExpandRespHdr) {
+          json.logs[id].openHdr = true
+        }
+        if (json.options.autoExpandRequest) {
+          json.logs[id].openRqs = true
+        }
+      }
+      return json
+    })
+  }, activeTab ? 500 : 0)
+}
+
+export function clickYaml({currentTarget}) {
+  clickTogle(currentTarget, 'yaml')
+}
+
+export function autoExpandRequest({currentTarget}) {
+  clickTogle(currentTarget, 'autoExpandRequest')
+}
+
+export function autoExpandRespHdr({currentTarget}) {
+  clickTogle(currentTarget, 'autoExpandRespHdr')
+}
+
+export function autoExpandRespBody({currentTarget}) {
+  clickTogle(currentTarget, 'autoExpandRespBody')
+}
+
+function clickTogle(el, key) {
+  setTimeout(_ => {
+    logs.update(json => {
+      json.options[key] = !el.checked
       return json
     })
   })

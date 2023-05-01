@@ -1,19 +1,24 @@
 <script>
   export let items = [];
-  export let activeTabValue = 1;
+  import {logs}   from '../stores/logsStore';
 
-  const handleClick = tabValue => () => (activeTabValue = tabValue);
+  const handleClick = tabValue => () => {
+    logs.update(json => {
+      json.options.activeTab = tabValue
+      return json
+    })
+  };
 </script>
 
 <ul>
 {#each items as item}
-  <li class={activeTabValue === item.value ? 'active' : ''}>
+  <li class={$logs.options.activeTab === item.value ? 'active' : ''}>
     <span on:click={handleClick(item.value)}>{item.label}</span>
   </li>
 {/each}
 </ul>
 {#each items as item}
-  {#if activeTabValue == item.value}
+  {#if $logs.options.activeTab == item.value}
   <div class="box">
     <svelte:component this={item.component}/>
   </div>
