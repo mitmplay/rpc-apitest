@@ -1,9 +1,8 @@
 const swgtorequest = require('./swgtorequest')
+const xpath = require('./xpath')
 const fn  = require('../../_rpc_')
 
 let initToggle = 1
-const rg1 = /\\/g
-const rg2 = /\/(user-rpc|RPC)\/([\w-]+)\/(request|openapi)\/(.+)\.yaml/
 
 function yml(_rpc_) {
   const {
@@ -54,8 +53,8 @@ function yml(_rpc_) {
   }
 
   function loadYAML(path, msg, broadcast) {
-    let [app, typ, name] = path.replace(rg1,'/').match(rg2).slice(2)
-  
+    let [app, typ, name] = xpath(path)
+    name = name.replace(/\.yaml$/, '')
     if (!_rpc_[app]) {
       _rpc_[app] = {
         _mrkdown_: {},
@@ -104,8 +103,9 @@ function yml(_rpc_) {
     path.push(`${__app}/RPC/*/request/**/*.yaml`)
     path.push(`${__app}/RPC/*/openapi/**/*.yaml`)
   }
-  path.push(`${HOME}/user-rpc/*/request/**/*.yaml`)
-  path.push(`${HOME}/user-rpc/*/openapi/**/*.yaml`)
+  const rpath = argv.rpcpath || `${HOME}/user-rpc`
+  path.push(`${rpath}/*/request/**/*.yaml`)
+  path.push(`${rpath}/*/openapi/**/*.yaml`)
 
   if (argv.test) {
     console.log(c.magentaBright(`>>> YAML loader:`), [tilde(path)])

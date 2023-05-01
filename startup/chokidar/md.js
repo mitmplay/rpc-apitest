@@ -1,12 +1,12 @@
+const xpath = require('./xpath')
+
 let initToggle = 1
-const rg1 = /\\/g
-const rg2 = /\/(user-rpc|RPC)\/([\w-]+)\/(docs)\/(.+)\.md/
 
 function md(_rpc_) {
   const {
     _fn_ : {tilde},
     _obj_: {HOME, argv},
-    _lib_: {chokidar, fg, c}
+    _lib_: {chokidar, c}
   } = _rpc_
 
   const broadcast = () => {}
@@ -20,7 +20,7 @@ function md(_rpc_) {
     }
   }
   function loadMD(path, msg) {
-    let [app, typ, name] = path.replace(rg1,'/').match(rg2).slice(2)
+    let [app, typ, name] = xpath(path)
     if (!_rpc_[app]) {
       _rpc_[app] = {
         _mrkdown_: {},
@@ -47,13 +47,13 @@ function md(_rpc_) {
 
   // Initialize watcher.
   const path = []
-  _rpc_._mrkdown_ = {}
   const p = `${__app}/README.md`
   _rpc_._mrkdown_['_readme_'] = {path: p}
   if (_rpc_._obj_.argv.devmode) {
     path.push(`${__app}/RPC/*/docs/*.md`)
   }
-  path.push(`${HOME}/user-rpc/*/docs/*.md`)
+  const rpath = argv.rpcpath || `${HOME}/user-rpc`
+  path.push(`${rpath}/*/docs/*.md`)
 
   console.log(c.magentaBright(`>>> Markdown watcher:`), [tilde(path)])
   const uMDWatcher = chokidar.watch([path], {

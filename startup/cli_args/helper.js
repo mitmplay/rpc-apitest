@@ -14,6 +14,7 @@ module.exports = _rpc_ => {
     -m --mockserver \t def: http://127.0.0.1:4010
     -o --open       \t open the browser
     -s --https      \t change to https
+    -r --rpcpath    \t to {rpcpath}/user-rpc
     -t --test       \t func() to test
     -x --proxy      \t a proxy request
 

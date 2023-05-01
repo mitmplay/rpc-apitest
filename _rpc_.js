@@ -8,6 +8,7 @@ const _fn_     = {}
 const _obj_    = {}
 const _lib_    = {}
 // const apitest  = {}
+const _mrkdown_= {}
 const _watcher_= {}
 
 let _rpc_ = {
@@ -17,6 +18,7 @@ let _rpc_ = {
   _lib_,
   _name_,
   // apitest,
+  _mrkdown_,
   _watcher_,
   _version_,
 }
