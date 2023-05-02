@@ -22,12 +22,22 @@ function yml(_rpc_) {
       const folders = method.split(/[:/]/).slice(1,-1)
       const pth = folders.join('/')
       const app = folders.shift()
-      const {requests} = RPC[app]
-      for (const path in requests) {
-        if (path.includes(pth)) {
+      const requests = RPC[app]._request_
+      const keys = Object.keys(requests).map(x=>{
+        if (x.includes('_template_')) {
+          x = x.replace(/_template_$/, '-template-')
+        }
+        return x
+      }).sort()
+      for (const id of keys) {
+        let path = id
+        if (id.includes('-template-')) {
+          path = id.replace(/-template-$/,'_template_')
+        }
+        if (folders.length==0 || path.includes(pth)) {
           const path2 = `${app}/${path}`
           const method2 = `request:${path2}`
-          if (method!==method2) {
+          if (folders.length==0 || method!==method2) {
             const reqs = await request(path2)
             console.log(method2, reqs)
             _broadcast2(method2, reqs)

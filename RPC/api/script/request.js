@@ -101,6 +101,7 @@ function template(ns, name, merge) {
       path += `${v}/`
       tpl = ns?._request_[`${path}${fileTemplate}`]
     }
+    tpl = JSON.parse(JSON.stringify(tpl))
     // 1st iteration template={} need to parser to it-self
     template = merge(template, parser(tpl, ns, i?template:tpl))
   })
