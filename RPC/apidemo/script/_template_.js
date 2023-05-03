@@ -1,4 +1,8 @@
-module.exports = $ => ({
-  first: _ => rpc()._lib_.chance.first(),
-  dtnow: _ => `{greet-ed} ${(new Date()).toISOString()}`,
-})
+module.exports = $ => {
+  const {chance} = rpc()._lib_
+  return { // _template_.js
+    first: _ => chance.first(),
+    xkcd:  _ => chance.integer({ min: 1, max: 700 }),
+    dtnow: _ => `{greet-ed} ${(new Date()).toISOString()}`,
+  }
+}

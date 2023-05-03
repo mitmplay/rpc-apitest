@@ -40,6 +40,15 @@
     }
     RPC._obj_.run = msg   
   }
+
+  function showRequest(nspace) {
+    const {request, ori} = json[nspace]
+    if ($reqs.options.autoParsed) {
+      return request
+    } else {
+      return ori
+    }
+  }
 </script>
 
 {#each toArray(json) as nspace}
@@ -56,9 +65,9 @@
   </summary>
   {#if json[nspace].run}
     {#if RPC._obj_?.argv?.json}
-      <pre class="aliceblue"><code class="language-json">{@html json[nspace].request || '...'}</code></pre>
+      <pre class="aliceblue"><code class="language-json">{@html showRequest(nspace) || '...'}</code></pre>
     {:else}
-      <pre class="aliceblue"><code class="language-yaml">{@html json[nspace].request || '...'}</code></pre>
+      <pre class="aliceblue"><code class="language-yaml">{@html showRequest(nspace) || '...'}</code></pre>
     {/if}
   {:else}
     <div><Tree {_req} json={json[nspace]} /></div>

@@ -1,4 +1,4 @@
-const startup    = require('./startup')
+const startup    = require('./init')
 const RPC        = require('./RPC')
 const DB         = require('./DB')
 const {_rpc_,fn} = startup()

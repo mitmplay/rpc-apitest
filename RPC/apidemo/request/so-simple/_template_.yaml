@@ -1,3 +1,0 @@
-default:
-  headers:
-    Application: json

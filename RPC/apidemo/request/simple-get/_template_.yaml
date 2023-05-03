@@ -1,0 +1,4 @@
+default:
+  method: get
+  headers:
+    Application: json

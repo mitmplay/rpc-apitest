@@ -175,7 +175,7 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 # Public API
 Some sample of public APIs:
 * https://apis.guru/
-* https://www.apicagent.com/ 
+* https://xkcd.com/json.html
 
 <br/>
 <hr/>

@@ -4,6 +4,7 @@ const json = {
   req: {},
   options: {
     autoShowlog: true,
+    autoParsed: true,
   }
 }
 export const reqs = writable(json);
@@ -22,8 +23,9 @@ export async function init() {
 }
 
 export async function updateReq(path, request) {
+  let ori
   if (!request) { // if it came from broadcast
-    request = await RPC.api.request(path)
+    [request, ori] = await RPC.api.request(path)
   }
 
   reqs.update(json => {
@@ -35,6 +37,7 @@ export async function updateReq(path, request) {
     }
     if (req[file]) {
       req[file].request = pretty(request)
+      req[file].ori = pretty(ori)
     }
     return json
   })
@@ -46,8 +49,9 @@ export function clickSummary(evn, req, json) {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]
     if (run && !request) {
-      const data = await RPC.api.request(run)
+      const [data, ori] = await RPC.api.request(run)
       json[nspace].request = pretty(data)
+      json[nspace].ori = pretty(ori)
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
@@ -81,6 +85,10 @@ export function clickCollapse(evn) {
 
 export function autoShowlog({currentTarget}) {
   clickTogle(currentTarget, 'autoShowlog')
+}
+
+export function autoParsed({currentTarget}) {
+  clickTogle(currentTarget, 'autoParsed')
 }
 
 function clickTogle(el, key) {

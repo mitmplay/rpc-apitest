@@ -121,10 +121,10 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   const {merge} = _rpc_._fn_
   const ns = _rpc_[nmspace]
   if (ns) {
-    let xhr = ns._request_[name]
     const tp2 = template(ns, name, merge)
+    const ori = ns._request_[name]
+    let xhr = JSON.parse(JSON.stringify(ori))
     if (tp2) {
-      xhr = JSON.parse(JSON.stringify(xhr))
       const {url, headers, body, env='dev'} = opt
       if (tp2.default) {
         if (!name.includes('_template_')) {
@@ -142,7 +142,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         xhr2[k] = xhr[k]
       }
     })
-    return name.includes('_template_') ? xhr : xhr2
+    return [name.includes('_template_') ? xhr : xhr2, ori]
   }
 }
 module.exports = request

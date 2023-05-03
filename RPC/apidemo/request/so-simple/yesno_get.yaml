@@ -1,3 +1,0 @@
-url: https://yesno.wtf/api
-method: get
-body: 'hi {greet-ed}'

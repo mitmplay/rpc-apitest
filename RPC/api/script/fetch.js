@@ -15,7 +15,8 @@ async function fetch(xhr=def_req, opt) {
     if (is_openapi.test(xhr)) {
       xhr = await api.openapi(xhr, opt)
     } else {
-      xhr = await api.request(xhr, opt)
+      const [parsed] = await api.request(xhr, opt)
+      xhr = parsed
     }
   }
   opt.senderIp = this.senderIp

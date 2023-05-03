@@ -109,7 +109,7 @@ export function clickCollapse({activeTab, rowid}) {
       }
       return json
     })
-  }, activeTab ? 110 : 0)
+  }, activeTab ? 410 : 0)
 }
 
 export function clickYaml({currentTarget}) {

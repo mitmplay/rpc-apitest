@@ -1,4 +1,4 @@
-const startup = require('./startup')
+const startup = require('./init')
 const server  = require('./server')
 
 startup()
