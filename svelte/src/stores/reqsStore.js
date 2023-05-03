@@ -22,11 +22,8 @@ export async function init() {
   return req2
 }
 
-export async function updateReq(path, request) {
-  let ori
-  if (!request) { // if it came from broadcast
-    [request, ori] = await RPC.api.request(path)
-  }
+export async function updateReq(path, o) {
+  const [request, ori] = o || await RPC.api.request(path) // if it came from broadcast
 
   reqs.update(json => {
     let {req} = json
