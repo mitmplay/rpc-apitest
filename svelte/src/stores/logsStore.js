@@ -50,6 +50,17 @@ export function updateLogs(newLogs) {
   });
 }
 
+export function clickChecked({currentTarget}) {
+  const el = currentTarget.parentElement.parentElement
+  setTimeout(_ => {
+    logs.update(json => {
+      const {id} = el.dataset
+      json.logs[id].chkLog = currentTarget.checked
+      return json
+    })
+  })
+}
+
 export function clickSummary(evn, lg) {
   const el = evn.currentTarget.parentElement
   setTimeout(_ => {
@@ -91,6 +102,7 @@ export function clickCollapse({activeTab, rowid}) {
         obj.openLog = false
         obj.openRqs = false
         obj.openHdr = false
+        obj.chkLog  = false
       }
       if (activeTab===1) {
         const id = `_${rowid}`

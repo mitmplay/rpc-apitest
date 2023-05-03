@@ -29,7 +29,12 @@ function onmsgs(ws) {
             }
           }
           if (t_executed) {
-            console.log('f_any RPC:', payload)
+            const {_obj_: {argv}} = RPC
+            const json = {'RPC any-fn': method}
+            if (argv.verbose) {
+              json.result = result
+            }
+            console.log(json)
           }
         }
       }

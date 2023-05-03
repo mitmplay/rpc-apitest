@@ -1,7 +1,7 @@
 <script>
   export let logs;
   export let yaml;
-  import {clickSummary} from '../stores/logsStore';
+  import { clickSummary, clickChecked } from '../stores/logsStore';
   import { toJson, toYaml } from '../lib/common';
   import {
     no1,
@@ -20,7 +20,7 @@
 {#each toArray(logs) as row}
   <details data-id={row._id} data-name=openLog open={row.openLog}>
     <summary on:click={e=>clickSummary(e,'logs')}>
-      {no1(row)}.[{date(row)}][{req(row,'],method,url')}~>({row.rspcode})
+      {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>[{date(row)}][{req(row,'],method,url')}~>({row.rspcode})
     </summary>
     <div class="main-content">
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>

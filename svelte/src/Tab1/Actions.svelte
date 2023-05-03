@@ -8,6 +8,8 @@
     autoExpandRespHdr,
     autoExpandRespBody,
   } from '../stores/logsStore';
+  import {download_html} from './download';
+  
   $: grp = $logs.options.grouping;
   $: yml = $logs.options.yaml;
   $: rqs = $logs.options.autoExpandRequest;
@@ -17,6 +19,7 @@
 
 <div class=action>
   <button on:click={clickCollapse}>Collapse</button>
+  <button on:click={e=>download_html(e, $logs)}>Download</button>
   |
   <label><input type=radio on:click={clickGroup} bind:group={grp} name="all"  value="1">All</label>
   <label><input type=radio on:click={clickGroup} bind:group={grp} name="host" value="2">Host</label>
