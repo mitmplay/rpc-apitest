@@ -87,7 +87,7 @@ function parser(xhr, ns, tp2, env) {
 }
 
 function template(ns, name, merge) {
-  const fullpathTemplate = `/${name}`.replace(/\/\w+$/, '/_template_')
+  const fullpathTemplate = `/${name}`.replace(/\/[^/]+$/, '/_template_')
   const arrpathTemplate = fullpathTemplate.split('/')
   const fileTemplate = arrpathTemplate.pop()
 
