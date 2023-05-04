@@ -4,7 +4,7 @@ const json = {
   req: {},
   options: {
     autoShowlog: true,
-    autoParsed: true,
+    autoParsed: false,
   }
 }
 export const reqs = writable(json);

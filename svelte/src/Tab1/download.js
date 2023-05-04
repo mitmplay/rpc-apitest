@@ -11,10 +11,12 @@ td.rw1 {width: 30px;text-align: end;}
 td.rw2 {width: 75px;text-align: center;}
 td.rw3 {width: 60px;text-align: center;}
 td.data {width: calc(100% - 165px);}
+tr:hover {background-color: yellow;}
 pre {margin: 0;padding: 0 0 5px 17px;}
-summary:hover {background-color: yellow;}
 summary {color: blueviolet;font-weight: bold;}
-.reqs,.rspB {background-color: aliceblue;}
+.reqs,.rspB,.resp_2 {background-color: aliceblue;}
+.resp_4,.resp_5 {background-color: bisque;}
+.resp_3 {background-color: palegoldenrod;}
 .rspH {background-color: antiquewhite;}
 </style>
 </header>
@@ -35,7 +37,7 @@ export function download_html(e, json) {
     } = json.logs[_id]
     if (chkLog) {
       const {method,url} = JSON.parse(request)
-      const content = `<tr>
+      const content = `<tr class="resp_${Math.floor(rspcode/100)}">
 <td class="rw1">${id}</td>
 <td class="rw2">${host}</td>
 <td class="rw3">${method}<i>(${rspcode})</i></td>

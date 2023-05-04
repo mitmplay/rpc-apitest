@@ -6,7 +6,7 @@ const json = {
   options: {
     activeTab: 1,
     grouping: '1', //# 1:all, 2:Host, 3:Time
-    autoExpandRequest: false,
+    autoExpandRequest: true,
     autoExpandRespHdr: false,
     autoExpandRespBody: true,
     yaml: true,
