@@ -119,3 +119,15 @@ section {
   width: calc(100vw - 54px);
   overflow: auto;
 }
+
+p.ttp {
+  margin: 5px 0;
+  font-family: serif;
+  font-style: italic;
+}
+
+p.values {
+  overflow: auto;
+  background: lightgrey;
+  font-family: monospace;
+}

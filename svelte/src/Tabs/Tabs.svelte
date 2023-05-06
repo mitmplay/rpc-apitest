@@ -1,6 +1,8 @@
 <script>
   export let items = [];
-  import {logs}   from '../stores/logsStore';
+  import {logs} from '../stores/logsStore';
+  import {ttp}  from '../stores/ttpStore';
+  import Tooltip from '../lib/Tooltip.svelte';
 
   const handleClick = tabValue => () => {
     logs.update(json => {
@@ -8,6 +10,16 @@
       return json
     })
   };
+
+  function mouseOver({target: el}) {
+    if (el.classList.contains('ttp')) {
+      console.log(el)
+      ttp.update(json => {
+        json.options.visible = false
+        return json
+      })
+    }
+  }
 </script>
 
 <ul>
@@ -17,13 +29,16 @@
   </li>
 {/each}
 </ul>
+
 {#each items as item}
   {#if $logs.options.activeTab == item.value}
-  <div class="box">
-    <svelte:component this={item.component}/>
-  </div>
+    <div class="box">
+      <svelte:component this={item.component}/>
+    </div>
   {/if}
 {/each}
+<Tooltip />
+
 <style>
   .box {
     margin-bottom: 5px;

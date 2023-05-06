@@ -4,13 +4,16 @@ const css = `
 <header>
 <style>
 b {color: red;}
-i {font-size: small;font-weight: bold;}
+i {font-weight: bold;}
 table {border-collapse: collapse;width: 100%;}
-td {border: solid 3px brown;vertical-align: baseline;}
+td {
+  font-family: monospace;font-size: small;
+  border: solid 3px brown;vertical-align: baseline;
+}
 td.rw1 {width: 30px;text-align: end;}
-td.rw2 {width: 75px;text-align: center;}
+td.rw2 {width:155px;text-align: center;}
 td.rw3 {width: 60px;text-align: center;}
-td.data {width: calc(100% - 165px);}
+td.data {width: calc(100% - 245px);}
 tr:hover {background-color: yellow;}
 pre {margin: 0;padding: 0 0 5px 17px;}
 summary {color: blueviolet;font-weight: bold;}

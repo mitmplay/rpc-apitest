@@ -2,6 +2,7 @@
   export let logs;
   export let yaml;
   import { clickSummary, clickChecked } from '../stores/logsStore';
+  import { mouseOver, mouseLeave } from '../stores/ttpStore';
   import { toJson, toYaml } from '../lib/common';
   import {
     no1,
@@ -25,33 +26,33 @@
     <div class="main-content">
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>
         <summary class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>
-        <div class="reqs-content">
-        {#if yaml}
-          <pre><code class="language-yaml">{@html toYaml(row.request)}</code></pre>  
-        {:else}
-          <pre><code class="language-json">{@html toJson(row.request)}</code></pre>  
-        {/if}
+        <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
+          {#if yaml}
+            <pre><code class="language-yaml">{@html toYaml(row.request)}</code></pre>  
+          {:else}
+            <pre><code class="language-json">{@html toJson(row.request)}</code></pre>  
+          {/if}  
         </div>
       </details>
       <details data-id={row._id} data-name=openHdr open={row.openHdr}>
         <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
-        <div class="resp-header">
+        <div class="ttp" data-typ="resp-header" on:mouseover={mouseOver}>
           <pre>{row.x_tag}</pre>
-          {#if yaml}
-            <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
-          {:else}
-            <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
-          {/if}
+            {#if yaml}
+              <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
+            {:else}
+              <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
+            {/if}
         </div>
       </details>
       <details data-id={row._id} data-name=openBody open={row.openBody}>
         <summary class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response body</summary>
-        <div class="resp-body aliceblue">
-          {#if yaml}
-            <pre><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
-          {:else}
-            <pre><code class="language-json">{@html toJson(row.response)}</code></pre>          
-          {/if}
+        <div class="ttp aliceblue" data-typ="resp-body" on:mouseover={mouseOver}>
+            {#if yaml}
+              <pre><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
+            {:else}
+              <pre><code class="language-json">{@html toJson(row.response)}</code></pre>          
+            {/if}
         </div>
       </details>
     </div>
@@ -68,15 +69,16 @@
   .main-header {
     padding-left: 15px;
   }
-  .reqs-content {
-    margin-left: 10px;
+  [data-typ=resp-header] pre, 
+  [data-typ=resp-body] pre, 
+  [data-typ=reqs-content] {
+    margin: 0;
+  }
+  [data-typ=reqs-content] {
     background-color: aliceblue;
   }
-  .resp-header {
+  [data-typ=resp-header] {
     background-color: antiquewhite;
-  }
-  .resp-header pre, .resp-body pre, .reqs-content {
-    margin: 0;
   }
   .azure {
     background-color: azure;
