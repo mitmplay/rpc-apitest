@@ -1,8 +1,8 @@
 <script>
   export let _req
   export let json
+  import {logs, clickCollapse} from '../stores/logsStore';
   import {reqs, clickSummary}  from '../stores/reqsStore';
-  import {clickCollapse} from '../stores/logsStore';
   import {mouseOver} from '../stores/ttpStore';
   import Tree from './Tree.svelte';
 
@@ -33,7 +33,7 @@
     const msg = await RPC.api.fetch(run)
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
-      if ($reqs.options.autoShowlog) {
+      if ($logs.options.autoShowlog) { //# autoShowlog
         clickCollapse({activeTab:1, rowid: msg.rowid})
       }
     } else {

@@ -2,7 +2,6 @@ import { writable } from 'svelte/store';
 const json = {
   rpc: {},
   options: {
-    autoShowlog: true,
   }
 }
 export const rpc = writable(json);
@@ -88,10 +87,6 @@ export function clickCollapse(evn) {
       return json
     })
   })
-}
-
-export function autoShowlog({currentTarget}) {
-  clickTogle(currentTarget, 'autoShowlog')
 }
 
 function clickTogle(el, key) {

@@ -10,6 +10,7 @@
   import Request from "./Tab2/Request.svelte";
   import Script  from "./Tab3/Script.svelte";
   import OpenApi from "./Tab4/OpenApi.svelte";
+  import ShowLog from './ShowLog.svelte';
 
   let ttl = 0
   let rows = []
@@ -51,7 +52,9 @@
   Apitest <b>{version}</b>
 </h1>
 <div>
-  <Tabs {items} />
+  <Tabs {items}>
+    <ShowLog />
+  </Tabs>
 </div>
 
 <style lang="scss">

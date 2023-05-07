@@ -3,7 +3,6 @@ import { pretty } from '../lib/common';
 const json = {
   req: {},
   options: {
-    autoShowlog: true,
     autoParsed: false,
   }
 }
@@ -78,10 +77,6 @@ export function clickCollapse(evn) {
       return json
     })
   })
-}
-
-export function autoShowlog({currentTarget}) {
-  clickTogle(currentTarget, 'autoShowlog')
 }
 
 export function autoParsed({currentTarget}) {

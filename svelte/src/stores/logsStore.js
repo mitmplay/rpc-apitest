@@ -9,6 +9,7 @@ const json = {
     autoExpandRequest: true,
     autoExpandRespHdr: false,
     autoExpandRespBody: true,
+    autoShowlog: true,
     yaml: true,
   }
 }
@@ -138,6 +139,10 @@ export function autoExpandRespHdr({currentTarget}) {
 
 export function autoExpandRespBody({currentTarget}) {
   clickTogle(currentTarget, 'autoExpandRespBody')
+}
+
+export function autoShowlog({currentTarget}) {
+  clickTogle(currentTarget, 'autoShowlog')
 }
 
 function clickTogle(el, key) {

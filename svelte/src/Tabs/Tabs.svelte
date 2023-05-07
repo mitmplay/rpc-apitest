@@ -22,6 +22,9 @@
     <span on:click={handleClick(item.value)}>{item.label}</span>
   </li>
 {/each}
+<li class=slot>
+  <slot></slot>
+</li>
 </ul>
 
 {#each items as item}
@@ -40,6 +43,10 @@
     border: 1px solid #dee2e6;
     border-radius: 0 0 .5rem .5rem;
     border-top: 0;
+  }
+  .slot {
+    position: fixed;
+    right: 18px;
   }
   ul {
     display: flex;

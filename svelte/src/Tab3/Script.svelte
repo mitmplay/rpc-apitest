@@ -7,6 +7,10 @@
     clickSummary, 
     showCode
   } from '../stores/apiStore';
+  import {
+    logs,
+    clickCollapse
+  } from '../stores/logsStore';
   import Actions  from './Actions.svelte';
 
   onMount(_ => init($rpc))
@@ -24,6 +28,9 @@
     const msg = await RPC[nspace][fn]()
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
+      if ($logs.options.autoShowlog) { //# autoShowlog
+        clickCollapse({activeTab:1, rowid: msg.rowid})
+      }
     } else {
       console.log(msg)
     }
