@@ -1,35 +1,15 @@
 <script lang="ts">
   import {onMount} from 'svelte';
-  import {rpc, clickSummary, showCode} from '../stores/apiStore';
+  import {
+    rpc, 
+    init, 
+    filter,
+    clickSummary, 
+    showCode
+  } from '../stores/apiStore';
   import Actions  from './Actions.svelte';
 
-  function filter(v) {
-    if (/_template_/.test(v)) {
-      return true
-    } else {
-      return !/^_/.test(v) 
-    }
-  }
-
-  onMount(() => {
-    const rpcs = {}
-    let arr = Object.keys(window.RPC)
-    arr = arr.filter(filter).sort()
-    for (const key1 of arr) {
-      rpcs[key1] = $rpc.rpc[key1] || {}
-      for (const key2 in window.RPC[key1]) {
-        if (!rpcs[key1][key2]) {
-          rpcs[key1][key2] = {code: '...'}
-        }
-      }
-    }
-    rpc.update(_ => {
-      return {rpc: rpcs}
-    })
-    if (RPC._obj_.argv.debug) {
-      console.log('Script onmount!', rpcs)
-    }
-  })
+  onMount(_ => init($rpc))
 
   function toArray(json) {
     let arr = Object.keys(json)

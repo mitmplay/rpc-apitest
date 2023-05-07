@@ -1,8 +1,40 @@
 import { writable } from 'svelte/store';
 const json = {
   rpc: {},
+  options: {
+    autoShowlog: true,
+  }
 }
 export const rpc = writable(json);
+
+export function filter(v) {
+  if (/_template_/.test(v)) {
+    return true
+  } else {
+    return !/^_/.test(v) 
+  }
+}
+
+export function init(_rpc) {
+  const rpcs = {}
+  let arr = Object.keys(window.RPC)
+  arr = arr.filter(filter).sort()
+  for (const key1 of arr) {
+    rpcs[key1] = _rpc.rpc[key1] || {}
+    for (const key2 in window.RPC[key1]) {
+      if (!rpcs[key1][key2]) {
+        rpcs[key1][key2] = {code: '...'}
+      }
+    }
+  }
+  rpc.update(rpcSet => {
+    rpcSet.rpc = rpcs
+    return rpcSet
+  })
+  if (RPC._obj_.argv.debug) {
+    console.log('Script onmount!', rpcs)
+  }
+}
 
 export function clickSummary(evn) {
   const el = evn.currentTarget.parentElement
@@ -53,6 +85,19 @@ export function clickCollapse(evn) {
           }
         }
       }
+      return json
+    })
+  })
+}
+
+export function autoShowlog({currentTarget}) {
+  clickTogle(currentTarget, 'autoShowlog')
+}
+
+function clickTogle(el, key) {
+  setTimeout(_ => {
+    rpc.update(json => {
+      json.options[key] = !el.checked
       return json
     })
   })
