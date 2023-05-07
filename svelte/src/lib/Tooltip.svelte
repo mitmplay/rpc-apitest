@@ -1,7 +1,8 @@
 <script>
   import {ttp, mouseLeave} from '../stores/ttpStore';
   function style({options:o}) {
-    return `top: ${o._y}px;left: ${o._x}px;`
+    const max = `max-width: calc(100% - ${80+o._x}px)`
+    return `top: ${o._y}px;left: ${o._x}px;${max};`
   }
 </script>
 
@@ -22,7 +23,7 @@
     border-radius: 4px;
     position: absolute;
     overflow: hidden;
-    max-width: 800px;
+    max-width: calc(100% - 130px);
     z-index: 1;
   }
 </style>

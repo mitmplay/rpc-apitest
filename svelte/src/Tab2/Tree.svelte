@@ -2,7 +2,8 @@
   export let _req
   export let json
   import {reqs, clickSummary}  from '../stores/reqsStore';
-  import {logs, clickCollapse} from '../stores/logsStore';
+  import {clickCollapse} from '../stores/logsStore';
+  import {mouseOver} from '../stores/ttpStore';
   import Tree from './Tree.svelte';
 
   function toArray(_json) {
@@ -64,11 +65,13 @@
     {/if}
   </summary>
   {#if json[nspace].run}
-    {#if RPC._obj_?.argv?.json}
-      <pre class="aliceblue"><code class="language-json">{@html showRequest(nspace) || '...'}</code></pre>
-    {:else}
-      <pre class="aliceblue"><code class="language-yaml">{@html showRequest(nspace) || '...'}</code></pre>
-    {/if}
+    <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
+      {#if RPC._obj_?.argv?.json}
+        <pre class="aliceblue"><code class="language-json">{@html showRequest(nspace) || '...'}</code></pre>
+      {:else}
+        <pre class="aliceblue"><code class="language-yaml">{@html showRequest(nspace) || '...'}</code></pre>
+      {/if}
+    </div>
   {:else}
     <div><Tree {_req} json={json[nspace]} /></div>
   {/if}

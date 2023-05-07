@@ -5,21 +5,15 @@
   import Tooltip from '../lib/Tooltip.svelte';
 
   const handleClick = tabValue => () => {
+    ttp.update(ttpSet => {
+      ttpSet.options.isHovered = false
+      return ttpSet
+    })
     logs.update(json => {
       json.options.activeTab = tabValue
       return json
     })
   };
-
-  function mouseOver({target: el}) {
-    if (el.classList.contains('ttp')) {
-      console.log(el)
-      ttp.update(json => {
-        json.options.visible = false
-        return json
-      })
-    }
-  }
 </script>
 
 <ul>

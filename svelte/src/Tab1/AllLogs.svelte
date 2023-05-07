@@ -2,7 +2,7 @@
   export let logs;
   export let yaml;
   import { clickSummary, clickChecked } from '../stores/logsStore';
-  import { mouseOver, mouseLeave } from '../stores/ttpStore';
+  import { mouseOver } from '../stores/ttpStore';
   import { toJson, toYaml } from '../lib/common';
   import {
     no1,
