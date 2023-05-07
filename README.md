@@ -38,11 +38,7 @@ Main functionality is to show the logs after APIs execution, UI interactivity wi
 * Host - grouping into hosts - same order
 * Time - grouping into time  - same order
 
-Detail Log is hidden and it can be expand or collaps, grouped to `Request`, `Response Hdr` & `Response Body` in which it can be expanded or collapsed too, 
-
-Auto expand of the grouped can be done by checking the checkbox on the Action button.
-
-Download logs can be done by checking the checkbox on each log then click "Download" button to download.
+Each logs are group with: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar which having same name. To download the logs, you can checked the row then click "Download" button. and you can togle the logs format between YAML or JSON.
 
 ## Request Tab
 Each of requests are define using YAML file and can having variable and dynamic-var content where the parser of vars denotate with `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
