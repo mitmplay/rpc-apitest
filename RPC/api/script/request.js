@@ -37,6 +37,11 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       v = v.replace(/&/g, key)
       value1 = value1.replace(old, `{${v}}`)
     }
+    let spread = false
+    if (v.match(/(^\.{3})\w+/)) {
+      v = v.replace(/^\.{3}/, '')
+      spread = true
+    }
     const arr = v.split('.')
     let value2 
     if (tp1) {
@@ -50,11 +55,18 @@ function interpolate(regx, value1, tp2, env, key, ns) {
     } else {
       value2 = nested2(arr, tp2, env)
     }
-    const str = tp1 ? `{{${v}}}` : `{${v}}`
-    if (match.length===1 && str===value1.trim()) {
-      value1 = value2
+    if (spread && `{...${v}}`===value1.trim()) {
+      value1 = {
+        _spread_: true,
+        values: value2
+      }
     } else {
-      value1 = value1.replace(str, value2)
+      const str = tp1 ? `{{${v}}}` : `{${v}}`
+      if (match.length===1 && str===value1.trim()) {
+        value1 = value2
+      } else {
+        value1 = value1.replace(str, value2)
+      }  
     }
   })
   return value1
@@ -81,7 +93,14 @@ function parser(xhr, ns, tp2, env) {
     if (value1===undefined) {
       continue
     }
-    xhr[key] = value1
+    if (value1._spread_) {
+      delete xhr[key]
+      for (const id in value1.values) {
+        xhr[id] = value1.values[id]
+      }
+    } else {
+      xhr[key] = value1
+    }
   }
   return xhr
 }

@@ -8,7 +8,7 @@
 </script>
 
 <div class=action>
-  <button on:click={clickCollapse}>Collapse</button>
+  <button on:click={clickCollapse}>[-]</button>
   |
   <label for="checkbkParsed">
     <input type="checkbox" id="checkbkParsed" on:click={autoParsed} bind:checked={prsd}>Parsed
@@ -16,5 +16,7 @@
 </div>
 
 <style lang="scss">
-
+  #checkbkParsed {
+    vertical-align: sub;
+  }
 </style>

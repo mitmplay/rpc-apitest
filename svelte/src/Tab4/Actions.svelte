@@ -3,7 +3,7 @@
 </script>
 
 <div class=action>
-  <button on:click={clickCollapse}>Collapse</button>
+  <button on:click={clickCollapse}>[-]</button>
 </div>
 
 <style lang="scss">
