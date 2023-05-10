@@ -11,11 +11,7 @@
     resp,
     toArray,
   } from './Tab1';
-
-  async function copyClipboard(e) {
-    const el = e.target
-    await navigator.clipboard.writeText(text);
-  }
+  import Copy from './Copy.svelte';
 </script>
 
 <svelte:head>
@@ -28,12 +24,7 @@
     <summary on:click={e=>clickSummary(e,'logs')}>
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>[{date(row)}][{req(row,'],method,url')}~>({row.rspcode})
     </summary>
-    <div class="copylink">
-      Copy: 
-      <a href=# data-copy=all  on:click={copyClipboard}>[All]</a>
-      <a href=# data-copy=reqs on:click={copyClipboard}>[Reqs]</a>
-      <a href=# data-copy=resp on:click={copyClipboard}>[Resp]</a>
-    </div>
+    <Copy {logs}/>
     <div class="main-content">
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>
         <summary class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>

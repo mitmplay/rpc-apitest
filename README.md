@@ -58,6 +58,7 @@ greet: Hello       // _template_.yaml
 
 ...
 body: {greet}      // request_post.yaml
+
 => body: Hello
 ```
 ### Nested
@@ -65,10 +66,14 @@ body: {greet}      // request_post.yaml
 greet:             // _template_.yaml
   nice: Hi Alice
 
+...
 body: {greet.nice} // request_post.yaml
+
 => body: Hi Alice
 
+...
 body: {greet}      // request_post.yaml
+
 => body:
      nice: Hi Alice
 ```
@@ -77,9 +82,25 @@ body: {greet}      // request_post.yaml
 greet:             // _template_.yaml
   body: Howdy John
 
+...
 body: {greet.&}    // request_post.yaml
-   ~> {greet.body}
+~>    {greet.body}
+
 => body: Howdy John
+```
+### Spread
+```js
+names:             // _template_.yaml
+  first: John
+  last: Doe
+
+...
+body:              // request_post.yaml
+  _1: '{...names}'
+
+=> body:
+    first: John
+    last: Doe
 ```
 ## Function Parser
 Function parser is a special `\_template\_.js` to host functions and it can use inside request:
