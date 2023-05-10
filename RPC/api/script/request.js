@@ -84,7 +84,12 @@ function parser(xhr, ns, tp2, env) {
     if (value1===undefined) {
       continue
     } else if (typeof value1!=='string') {
-      parser(value1, ns, tp2, env)
+      const newjson = parser(value1, ns, tp2, env)
+      if (tp2[key]) {
+        tp2[key] = rpc()._fn_.merge(newjson, tp2[key])
+      } else {
+        tp2[key] = newjson
+      }
       continue
     }
     // interpolation key with '-' and '.' separator
@@ -105,6 +110,9 @@ function parser(xhr, ns, tp2, env) {
   return xhr
 }
 
+//# name: simple-get/xkcd
+//# tpl1: simple-get/_template_
+//# tpl2: simple-get/xkcd/_template_
 function template(ns, name, merge) {
   const fullpathTemplate = `/${name}`.replace(/\/[^/]+$/, '/_template_')
   const arrpathTemplate = fullpathTemplate.split('/')
@@ -129,7 +137,9 @@ function template(ns, name, merge) {
   console.log(name, template)
   return template
 }
-
+//# await RPC.api.fetch('apidemo/simple-get/xkcd')
+//# namespace: apidemo
+//# name: simple-get/xkcd
 async function request(req='apidemo/u_agent_post', opt={}) {
   const match = req.match(/^([\w-]+)\/([\w-/]+)$/)
   const _rpc_ = rpc()

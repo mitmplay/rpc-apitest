@@ -2,3 +2,6 @@ default:
   method: get
   headers:
     Application: json
+
+dodol:
+  _1: '{...default}'
