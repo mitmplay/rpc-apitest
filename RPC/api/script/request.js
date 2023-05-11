@@ -154,6 +154,9 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   if (ns) {
     const tp2 = template(ns, name, merge)
     const ori = ns._request_[name]
+    if (ori===undefined) {
+      return [{},{}]
+    }
     let xhr = JSON.parse(JSON.stringify(ori))
     if (tp2) {
       const {url, headers, body, env='dev'} = opt

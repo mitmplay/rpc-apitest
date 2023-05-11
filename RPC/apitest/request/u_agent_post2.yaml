@@ -1,0 +1,5 @@
+url: https://api.apicagent.com/
+method: post
+body:
+  ua: '{&-tpl}'
+  lol: "{greet-ed} out light! {{dtnow}}"

@@ -5,6 +5,7 @@
   import {reqs, clickSummary}  from '../stores/reqsStore';
   import {mouseOver} from '../stores/ttpStore';
   import Tree from './Tree.svelte';
+  import Envs from './Envs.svelte';
 
   function toArray(_json) {
     const arr1 = []
@@ -64,6 +65,9 @@
       {nspace}
     {/if}
   </summary>
+  {#if json[nspace]?._template_?.envs}
+    <Envs ns={nspace}/>
+  {/if}
   {#if json[nspace].run}
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
       {#if RPC._obj_?.argv?.json}

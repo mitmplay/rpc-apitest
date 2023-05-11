@@ -4,7 +4,15 @@ async function requests(plain=false) {
     let requests1 = {}
     for (const app in _rpc_) {
       if (_rpc_[app]._request_) {
-        requests1[app] = _rpc_._fn_.toTreeObj(app, _rpc_[app]._request_)
+        const obj = _rpc_._fn_.toTreeObj(app, _rpc_[app]._request_)
+        const {_template_: t} = obj
+        if (t) {
+          const [xhr, ori] = await RPC.api.request(`${app}/_template_`)
+          const envs = Object.keys(ori?.env||{dev:''})
+          const env  = envs[0]
+          obj._template_ = {...t, envs, env, xhr, ori}
+        }
+        requests1[app] = obj
       }
     }
     return requests1
