@@ -24,7 +24,7 @@
     <summary on:click={e=>clickSummary(e,'logs')}>
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>[{date(row)}][{req(row,'],method,url')}~>({row.rspcode})
     </summary>
-    <Copy {logs}/>
+    <Copy _id={row._id} {logs}/>
     <div class="main-content">
       <details data-id={row._id} data-name=openRqs open={row.openRqs}>
         <summary class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>

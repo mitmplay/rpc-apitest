@@ -1,11 +1,27 @@
 <script>
   export let logs;
+  export let _id;
 
   let ttip = ''
+  /*
+  wget --no-check-certificate --quiet \
+  --method GET \
+  --timeout=0 \
+  --header '' \
+   'https://xkcd.com/info.0.json'
+
+
+ wget --no-check-certificate --quiet \
+  --method POST \
+  --timeout=0 \
+  --header 'lol: lel' \
+  --header 'Content-Type: text/plain' \
+  --body-data '{"woow": "kereen"}' \
+   'https://xkcd.com/info.0.json'  
+  */
 
   async function copyClipboard(e) {
-    const id = e.target.parentElement.parentElement.dataset.id
-    let {request, resp_hdr, response} = logs[id]
+    let {request, resp_hdr, response} = logs[_id]
     const {copy} = e.target.dataset
     let str = ''
     if (copy==='curl') {
@@ -22,18 +38,31 @@
         str += `  -d '${JSON.stringify(json.body)}' \\\n`
       }
       str += `  --compressed`
+    } else if (copy==='wget') {
+      const json = JSON.parse(request)
+      str = `wget --no-check-certificate --quiet \\
+  --method ${json.method.toUpperCase()} \\
+  --timeout=0 \\
+`
+      for (const key in json.headers) {
+        str += `  --header '${key} ${json.headers[key]}' \\\n`
+      }
+      if (['put', 'post'].includes(json.method)) {
+        str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
+      }
+      str += `  '${json.url}'`
     } else {
-      request  = `"1.Request":\n${      request }`
-      resp_hdr = `"2.Response Hdr":\n${ resp_hdr}`
-      response = `"3.Response Body":\n${response}`
+      request  = `1.Request:\n${      request }`
+      resp_hdr = `2.Response_Hdr:\n${ resp_hdr}`
+      response = `3.Response_Body:\n${response}`
       if (copy==='all') {
-        str = [request, resp_hdr, response].join(',\n')
+        str = [request, resp_hdr, response].join('\n')
       } else if (copy==='reqs') {
         str = request
       } else if (copy==='resp') {
         str = [resp_hdr, response].join('\n')
       }
-      str = `{${str}}`
+      str = `${str}`
     }
 
     await navigator.clipboard.writeText(str);
@@ -49,7 +78,14 @@
   [<a href=# data-copy=all  on:click={copyClipboard}>all </a>] 
   [<a href=# data-copy=resp on:click={copyClipboard}>resp</a>]
   [<a href=# data-copy=reqs on:click={copyClipboard}>reqs</a>] | cmd:
-  [<a href=# data-copy=curl on:click={copyClipboard}>curl</a>]
+  <span class="copies">
+    <div>
+      [<a href=# data-copy=curl on:click={copyClipboard}>curl </a>]
+    </div>
+    <ul>
+      <li>[<a href=# data-copy=wget on:click={copyClipboard}>wget</a>]</li>
+    </ul>  
+  </span>
   {#if ttip!==''}
     <span class=notify>{ttip}</span>
   {/if}
@@ -64,8 +100,33 @@
   color: red;
   border: solid;
   padding: 0 2px;
-  margin: 2px 0 0 2px;
+  margin: 0 0 0 49px;
   position: fixed;
   z-index: 1000;
+}
+span.copies {
+  border: 1px solid white;
+  position: fixed;
+  text-align: center;
+  display: inline-table;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: none;
+  }
+  &:hover {
+    border: solid gray;
+    background-color: azure;
+    ul {
+      display: block;
+    }
+  }
+  div:hover, li:hover {
+    background-color: antiquewhite;
+  }
+  &,ul {
+    width: 44px;
+  }
 }
 </style>
