@@ -93,6 +93,7 @@
 
 <style lang="scss">
 .copylink {
+  position: relative;
   color: cadetblue;
   font-size: 12px;
 }
@@ -106,7 +107,7 @@
 }
 span.copies {
   border: 1px solid white;
-  position: fixed;
+  position: absolute;
   text-align: center;
   display: inline-table;
   ul {

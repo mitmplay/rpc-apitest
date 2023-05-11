@@ -12,10 +12,14 @@ export function no1({id}, ln=3) {
   return id.padStart(ln, ' ')
 }
 
-export function date({created,elapsed}, ln=5) {
+export function date({created}) {
   const dt = (new Date(created)).toISOString().replace(/\..+/,'')
+  return `${dt.replace(/.{5}/,'').replace('T','|')}`
+}
+
+export function elapse({elapsed}, ln=5) {
   const str = ''+ Number(elapsed/1000).toFixed(2).padStart(ln, '0')
-  return `${dt.replace(/.{5}/,'').replace('T','|')}|${str}`
+  return `${str}`
 }
 
 export function req({request}, str) {

@@ -1,17 +1,31 @@
 <script>
   export let logs;
   export let yaml;
+  export let options;
   import { clickSummary, clickChecked } from '../stores/logsStore';
   import { mouseOver } from '../stores/ttpStore';
   import { toJson, toYaml } from '../lib/common';
   import {
     no1,
     req,
-    date,
     resp,
+    date,
+    elapse,
     toArray,
   } from './Tab1';
   import Copy from './Copy.svelte';
+
+  function showDate(row) {
+    const {autoShowDate, autoShowElapse} = options
+    const arr = []
+    if (autoShowDate) {
+      arr.push(date(row))
+    }
+    if (autoShowElapse) {
+      arr.push(elapse(row))
+    }
+    return arr.length ? `[${arr.join('|')}]` : ''
+  }
 </script>
 
 <svelte:head>
@@ -22,7 +36,7 @@
 {#each toArray(logs) as row}
   <details data-id={row._id} data-name=openLog open={row.openLog}>
     <summary on:click={e=>clickSummary(e,'logs')}>
-      {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>[{date(row)}][{req(row,'],method,url')}~>({row.rspcode})
+      {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>{@html showDate(row)}[{req(row,'],method,url')}~>({row.rspcode})
     </summary>
     <Copy _id={row._id} {logs}/>
     <div class="main-content">

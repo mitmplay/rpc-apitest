@@ -10,6 +10,8 @@ const json = {
     autoExpandRespHdr: false,
     autoExpandRespBody: true,
     autoShowlog: true,
+    autoShowDate: false,
+    autoShowElapse: false,
     yaml: true,
   }
 }
@@ -143,6 +145,14 @@ export function autoExpandRespBody({currentTarget}) {
 
 export function autoShowlog({currentTarget}) {
   clickTogle(currentTarget, 'autoShowlog')
+}
+
+export function autoShowDate({currentTarget}) {
+  clickTogle(currentTarget, 'autoShowDate')
+}
+
+export function autoShowElapse({currentTarget}) {
+  clickTogle(currentTarget, 'autoShowElapse')
 }
 
 function clickTogle(el, key) {
