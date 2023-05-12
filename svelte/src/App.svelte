@@ -4,14 +4,14 @@
   import {updateLogs} from './stores/logsStore';
   import {updateReq } from './stores/reqsStore';
 
+  import ShowLog from './ShowLog.svelte';
   import Tabs    from "./Tabs/Tabs.svelte";
   import Logs    from "./Tab1/Logs.svelte";
   import Docs    from "./Tab5/Docs.svelte";
-  import Request from "./Tab2/Request.svelte";
   import Script  from "./Tab3/Script.svelte";
+  import Request from "./Tab2/Request.svelte";
   import OpenApi from "./Tab4/OpenApi.svelte";
-  import ShowLog from './ShowLog.svelte';
-
+  
   let ttl = 0
   let rows = []
   $: version = '' 

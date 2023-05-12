@@ -1,4 +1,5 @@
 <script>
+  export let _ns
   export let _req
   export let json
   import {logs, clickCollapse} from '../stores/logsStore';
@@ -28,10 +29,24 @@
     return arr
   }
 
-  async function run(evn) {
+  function enf(req, ns) {
+    if (req[ns]?._template_?.env) {
+      return `, {env: '${req[ns]._template_.env}'}`
+    } else {
+      return ''
+    }
+  }
+
+  async function run(evn, req, ns) {
     const {run} = evn.target.dataset
-    console.log(`await RPC.api.fetch('${run}')`)
-    const msg = await RPC.api.fetch(run)
+    console.log(`await RPC.api.fetch('${run}'${enf(req, ns)})`)
+    let msg
+    const env = req[ns]?._template_?.env
+    if (env) {
+      msg = await RPC.api.fetch(run, {env})
+    } else {
+      msg = await RPC.api.fetch(run)
+    }
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
       if ($logs.options.autoShowlog) { //# autoShowlog
@@ -51,6 +66,7 @@
       return ori
     }
   }
+
 </script>
 
 {#each toArray(json) as nspace}
@@ -59,8 +75,8 @@
     {#if /_template_/.test(json[nspace].run)}
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
-      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}')</b>
-      <a href="#" data-run={json[nspace].run} on:click={run}>run</a>
+      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}'{enf($reqs.req, _ns)})</b>
+      <a href="#" data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
     {:else}
       {nspace}
     {/if}
@@ -77,7 +93,7 @@
       {/if}
     </div>
   {:else}
-    <div><Tree {_req} json={json[nspace]} /></div>
+    <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} /></div>
   {/if}
 </details>
 {/each}

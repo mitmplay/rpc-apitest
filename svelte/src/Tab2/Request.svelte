@@ -20,7 +20,7 @@
 
 <Actions />
 <section>
-  <Tree _req={$reqs.req} json={$reqs.req} />
+  <Tree _req={$reqs.req} json={$reqs.req} _ns={false}/>
 </section>
 
 <style lang="scss">

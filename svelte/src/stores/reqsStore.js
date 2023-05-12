@@ -45,7 +45,9 @@ export function clickSummary(evn, req, json) {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]
     if (run && !request) {
-      const [data, ori] = await RPC.api.request(run)
+      const ns = run.split('/').unshift()
+      const env= req[ns]?._template_?.env || 'dev'
+      const [data, ori] = await RPC.api.request(run, {env})
       json[nspace].request = pretty(data)
       json[nspace].ori = pretty(ori)
     }
