@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 import { pretty } from '../lib/common';
 const json = {
   req: {},
@@ -39,8 +39,9 @@ export async function updateReq(path, o) {
   })
 }
 
-export function clickSummary(evn, req, json) {
+export function clickSummary(evn, json) {
   const el = evn.currentTarget.parentElement
+  const {req} = get(reqs)
   setTimeout(async _1 => {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]

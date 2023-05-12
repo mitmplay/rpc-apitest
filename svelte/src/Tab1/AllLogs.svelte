@@ -24,7 +24,7 @@
     if (autoShowElapse) {
       arr.push(elapse(row))
     }
-    return arr.length ? `[${arr.join('|')}]` : ''
+    return arr.length ? `${arr.join('|')}` : ''
   }
 </script>
 
@@ -35,8 +35,9 @@
 
 {#each toArray(logs) as row}
   <details data-id={row._id} data-name=openLog open={row.openLog}>
-    <summary on:click={e=>clickSummary(e,'logs')}>
-      {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>{@html showDate(row)}[{req(row,'],method,url')}~>({row.rspcode})
+    <summary class="logs" on:click={e=>clickSummary(e,'logs')}>
+      {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>
+      <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url')}~>({row.rspcode})
     </summary>
     <Copy _id={row._id} {logs}/>
     <div class="main-content">
@@ -87,6 +88,17 @@
   }
   .copylink {
     font-family: monospace;
+  }
+  summary.logs {
+    white-space: nowrap;
+    input {
+      vertical-align: sub;
+    }
+    span {
+      padding: 0 1px;
+      color: chocolate;
+      margin-left: -6px;
+    }
   }
   [data-typ=resp-header] pre, 
   [data-typ=resp-body] pre, 

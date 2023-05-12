@@ -30,8 +30,9 @@
   }
 
   function enf(req, ns) {
-    if (req[ns]?._template_?.env) {
-      return `, {env: '${req[ns]._template_.env}'}`
+    const env = req[ns]?._template_?.env
+    if (env && env!=='dev') {
+      return `, {env: '${env}'}`
     } else {
       return ''
     }
@@ -71,7 +72,7 @@
 
 {#each toArray(json) as nspace}
 <details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
-  <summary on:click={evn => clickSummary(evn, _req, json)}>
+  <summary on:click={evn => clickSummary(evn, json)}>
     {#if /_template_/.test(json[nspace].run)}
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
