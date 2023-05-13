@@ -1,13 +1,22 @@
-baseurl: http://domain.com
+baseurl: http://baseurl.com
+
 env:
   dev:
-    greet: hello ENV!1
-  qaint: ''
+    greet: '{baseurl}/hello from DEV'
+  qa: 
+    greet: '{baseurl}/hello from QA'
+  noreplace: 'no change on vars'
+
 default:
   headers:
     Content-Type: application/json
+
 body:
   ua: Mozilla/6.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0
+
+greet: Hi from non ENV
 greet-ed: hello
+
 ua-tpl: Mozilla/16.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0
+
 mainurl: '{baseurl}/woo'

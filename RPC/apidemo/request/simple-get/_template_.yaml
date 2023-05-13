@@ -5,3 +5,4 @@ default:
 
 dodol:
   _1: '{...default}'
+  _2: '{greet}'

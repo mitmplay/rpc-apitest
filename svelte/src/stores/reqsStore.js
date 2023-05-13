@@ -21,8 +21,39 @@ export async function init() {
   return req2
 }
 
+async function requestEnv(json, env) {
+  for (const id in json) {
+    const {run} = json[id]
+    if (run===undefined) {
+      await requestEnv(json[id], env)
+    } else if (json[id].request) {
+      const [xhr, ori] = await RPC.api.request(run, {env})
+      json[id].request = pretty(xhr) 
+      json[id].ori     = pretty(ori)
+    }
+  }
+}
+
+export function changeEnv(ns, env) {
+  setTimeout(async ()=>{
+    const json = get(reqs).req[ns]
+    await requestEnv(json, env)
+    reqs.update(json => {
+      json.req[ns]._template_.env = env
+      return json
+    })
+  })
+}
+
+async function _request(path) {
+  const {req} = get(reqs)
+  const nsp = path.split('/').shift()
+  const env = req[nsp]?._template_?.env || 'dev'
+  return await RPC.api.request(path, {env})
+}
+
 export async function updateReq(path, o) {
-  const [request, ori] = o || await RPC.api.request(path) // if it came from broadcast
+  const [xhr, ori] = o || await _request(path) // if it came from broadcast
 
   reqs.update(json => {
     let {req} = json
@@ -32,8 +63,8 @@ export async function updateReq(path, o) {
       req = req[folder] || {}
     }
     if (req[file]) {
-      req[file].request = pretty(request)
-      req[file].ori = pretty(ori)
+      req[file].request = pretty(xhr)
+      req[file].ori     = pretty(ori)
     }
     return json
   })
@@ -46,11 +77,9 @@ export function clickSummary(evn, json) {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]
     if (run && !request) {
-      const ns = run.split('/').unshift()
-      const env= req[ns]?._template_?.env || 'dev'
-      const [data, ori] = await RPC.api.request(run, {env})
-      json[nspace].request = pretty(data)
-      json[nspace].ori = pretty(ori)
+      const [xhr, ori] = await _request(run)
+      json[nspace].request = pretty(xhr)
+      json[nspace].ori     = pretty(ori)
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
@@ -61,9 +90,13 @@ export function clickSummary(evn, json) {
   })
 }
 
-function collapse(_reqs) {
-  for (const key in _reqs) {
-    const req = _reqs[key]
+function collapse(_reqs_) {
+  for (const key in _reqs_) {
+    const req = _reqs_[key]
+    if (req.request) {
+      delete req.request
+      delete req.ori
+    }
     if (!/^_[a-zA-Z0-9.-]+$/.test(key)) {
       req._openName = false
       if (!req.run) {

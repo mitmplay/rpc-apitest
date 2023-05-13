@@ -1,14 +1,10 @@
 <script>
   export let ns
-  import {reqs}  from '../stores/reqsStore';
+  import {reqs, changeEnv}  from '../stores/reqsStore';
 
-  function chgEnv(e) {
-    setTimeout(()=>{
-      reqs.update(json => {
-        json.req[ns]._template_.env = e.target.value
-        return json
-      })
-    })
+  async function chgEnv(e) {
+    const {value:env} = e.target
+    await changeEnv(ns, env)
   }
 </script>
 

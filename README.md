@@ -1,10 +1,12 @@
 # RPC Apitest
 
-RPC Apitest - an Isomorphic way to test APIs, from Web, Browser Console or Nodejs Debugger.
+RPC Apitest - an Isomorphic way to test APIs, from Web, Browser Console or Nodejs Debugger. one of the key feature is authoring request with nested YAML templating. environment and default request can be define on the main/root template and shared that values across same namespace. 
 
 # Installation
 ```js
 npm i -g rpc-apitest
+
+rpc-apitest -h
 ```
 ## Open in http  
 ```js
@@ -22,31 +24,39 @@ NODE_OPTIONS='--inspect-brk' rpc-apitest -do
 // -s open in https
 export NODE_TLS_REJECT_UNAUTHORIZED=0
 rpc-apitest -dos // open browser to https://localhost:4002
+// or
+NODE_TLS_REJECT_UNAUTHORIZED=0 rpc-apitest -dos
 ```
 
-# Tabs - Web UI
+# Tabs - The Web UI
 The Web UI consist of five tabs:
 * Logs - Show the saved logs after APIs execution
-* Request - Show Request definition and it can be execute(run)
-* Script / RPC call - Show Script definition and it can be execute
+* Request - The request definition, having run link 
+* (RPC) Script - The script def, also having run link
 * OpenApi - Open Api definition with sample request
 * Docs - Documents in Markdown format
 
 ## Logs Tab
-Main functionality is to show the logs after APIs execution, UI interactivity wired using web-socket, all web-sockket connection having auto refresh of Logs after each execution(run). There are three type of list: 
-* All - No grouping - listed in descending order 
-* Host - grouping into hosts - same order
-* Time - grouping into time  - same order
+Main functionality is to show the logs after APIs execution, UI interactivity are wired using web-socket, all web-socket connection having Logs auto refresh after each execution(run). There are three type of list (in descending order ): 
+* All - No grouping
+* Host - group by host
+* Time - group by time
 
-Each logs are group with: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar which having same name. To download the logs, you can checked the row then click "Download" button. and you can togle the logs format between YAML or JSON.
+Each logs are group with: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar or change logs format between **YAML** and **JSON**.
+
+To download the logs, you can checked the row then click "Download" button.
+
+Row also having option to display  **date** or **elapsed** (how long API will response), the option are hidden as a popup on the right top screen under checkbox config "**Show Logs**". the "**Show Logs**" config is auto-change to first tab after API execution.  
 
 ## Request Tab
-Each of requests are define using YAML file and can having variable and dynamic-var content where the parser of vars denotate with `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
+Each of requests are define using **YAML** file and can having **variable** and **dynamic-var**, this vars are mostly define in template, and the parser will identify vars by seeing words inside curly-braches `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
 
 * `{static-var}` => `_template_.yaml`
 * `{{dynamic-var}}` => `_template_.js`
 
 Each `request definition file` will be loaded in the UI and can be tested, as the files is watched!, when you edit the file and save it, it will automaticaly reflected on the UI.
+
+Parser checkbox on the action bar will help (when checked) to see the end result result, but for random value using fake in dynamic vars, the values can be different during the execution of API call.   
 
 ```js
 await RPC.api.fetch('apidemo/u_agent_post') run
@@ -54,56 +64,56 @@ await RPC.api.fetch('apidemo/u_agent_post') run
 ## Parser
 ### Simple
 ```js
-greet: Hello       // _template_.yaml
+greet: Hello        // _template_.yaml
 
 ...
-body: {greet}      // request_post.yaml
+body: {greet}       // request_post.yaml
 
-=> body: Hello
+=> body: Hello      // result
 ```
 ### Nested
 ```js
-greet:             // _template_.yaml
+greet:              // _template_.yaml
   nice: Hi Alice
 
 ...
-body: {greet.nice} // request_post.yaml
+body: {greet.nice}  // request_post.yaml
 
 => body: Hi Alice
 
 ...
-body: {greet}      // request_post.yaml
+body: {greet}       // request_post.yaml
 
 => body:
-     nice: Hi Alice
+     nice: Hi Alice // result
 ```
 ### Shorthand `{&}`
-```js
-greet:             // _template_.yaml
+```js 
+greet:              // _template_.yaml
   body: Howdy John
 
 ...
-body: {greet.&}    // request_post.yaml
+body: {greet.&}     // request_post.yaml
 ~>    {greet.body}
 
-=> body: Howdy John
+=> body: Howdy John // result
 ```
 ### Spread
 ```js
-names:             // _template_.yaml
+names:              // _template_.yaml
   first: John
   last: Doe
 
 ...
-body:              // request_post.yaml
+body:               // request_post.yaml
   _1: '{...names}'
 
-=> body:
+=> body:            // result
     first: John
     last: Doe
 ```
 ## Function Parser
-Function parser is a special `\_template\_.js` to host functions and it can use inside request:
+Function parser is a special `\_template\_.js` to host functions and it can use inside request as `{{dynamic-var}}`:
 ```js
 module.exports = $ => ({ // _template_.js
   first: _ => rpc()._lib_.chance.first(),
@@ -113,6 +123,52 @@ module.exports = $ => ({ // _template_.js
 body: {{now}}            // request_post.yaml
 => body: 2023-04-20T07:34:57.092Z
 ``` 
+
+### Example of `_template_`
+```yaml
+baseurl: http://baseurl.com
+
+env:
+  dev:
+    greet: '{baseurl}/hello from DEV'
+  qa: 
+    greet: '{baseurl}/hello from QA'
+  noreplace: 'no change on vars'
+
+default:
+  method: get
+  headers:
+    Content-Type: application/json
+
+greet: Hi from non ENV
+greet-ed: hello
+
+mainurl: '{baseurl}/woo'
+date: '{{dtnow}}'
+```
+**env:** on the root \_template\_ will determine which var will be taken presedence over regular one. the **Active Env** is visible on the UI as it show on the right-side of **the root \_template\_**. you can see var getting overwrittern by checking the `Parser` option on action-bar. Example below on `greet` var the posibility of values getting overwritten:
+```yaml
+# env: dev
+greet: 'http://baseurl.com/hello from DEV'
+
+# env: qa
+greet: 'http://baseurl.com/hello from QA'
+
+# env: noreplace
+greet: 'Hi from non ENV'
+``` 
+**default:** on the root \_template\_ will be used on request definition
+```yaml
+# test.yaml
+url: '{baseurl}/hello'
+```
+Parsed values:
+```yaml
+url: ''http://baseurl.com/hello'
+headers:
+  method: get
+  Content-Type: application/json
+```
 ## Chance faker
 Built in Function Parser to generate random faker, you can visit [Chance website](https://chancejs.com/)
 ```js
