@@ -28,7 +28,7 @@
     const msg = await RPC[nspace][fn]()
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
-      if ($logs.options.autoShowlog) { //# autoShowlog
+      if ($logs.options.autoShowlog && msg.rowid) { //# autoShowlog
         clickCollapse({activeTab:1, rowid: msg.rowid})
       }
     } else {
