@@ -61,6 +61,8 @@ Parser checkbox on the action bar will help (when checked) to see the end result
 ```js
 await RPC.api.fetch('apidemo/u_agent_post') run
 ```
+<details><summary><b>Parser</b></summary>
+
 ## Parser
 ### Simple
 ```js
@@ -112,6 +114,10 @@ body:               // request_post.yaml
     first: John
     last: Doe
 ```
+</details>
+
+<details><summary><b>Function Parser</b></summary>
+
 ## Function Parser
 Function parser is a special `\_template\_.js` to host functions and it can use inside request as `{{dynamic-var}}`:
 ```js
@@ -123,8 +129,11 @@ module.exports = $ => ({ // _template_.js
 body: {{now}}            // request_post.yaml
 => body: 2023-04-20T07:34:57.092Z
 ``` 
+</details>
 
-### Example of `_template_`
+<details><summary><b>_template_.yaml</b></summary>
+
+### Example of `_template_.yaml`
 ```yaml
 baseurl: http://baseurl.com
 
@@ -169,6 +178,10 @@ headers:
   method: get
   Content-Type: application/json
 ```
+</details>
+
+<details><summary><b>Chance faker</b></summary>
+
 ## Chance faker
 Built in Function Parser to generate random faker, you can visit [Chance website](https://chancejs.com/)
 ```js
@@ -183,6 +196,8 @@ await RPC.api.chance('cc', {type: 'mc'})
 await RPC.api.chance('cc', {type: 'visa'})
 await RPC.api.chance('paragraph', { sentences: 1 })
 ```
+</details>
+
 ## Script / RPC call
 Open Chrome Devtools Console, test it by copy paste one line and execute
 

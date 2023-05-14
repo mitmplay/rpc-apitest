@@ -22,12 +22,23 @@ export function elapse({elapsed}, ln=5) {
   return `${str}`
 }
 
+const _m = {
+  get:    'get ',
+  put:    'put ',
+  post:   'post',
+  delete: 'del ',
+  head:   'head',
+  trace:  'trac',
+  patch:  'patc',
+  connect:'conn',
+  options:'optn',
+}
 export function req({request}, str) {
   const [c, m, u] = str.split(',')
   try {
     const o   = JSON.parse(request)
     const url = o[u].replace(/\?.+/,'...')
-    return `${o[m]}${c}${url}`     
+    return `${_m[o[m]]}${c}${url}`     
   } catch (error) {
     return ''
   }

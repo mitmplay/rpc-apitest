@@ -2,9 +2,12 @@
   export let logs;
   export let yaml;
   export let options;
-  import { clickSummary, clickChecked } from '../stores/logsStore';
   import { mouseOver } from '../stores/ttpStore';
   import { toJson, toYaml } from '../lib/common';
+  import {
+    clickSummary,
+    clickChecked
+  } from '../stores/logsStore';
   import {
     no1,
     req,
@@ -37,7 +40,7 @@
   <details data-id={row._id} data-name=openLog open={row.openLog}>
     <summary class="logs" on:click={e=>clickSummary(e,'logs')}>
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>
-      <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url')}~>({row.rspcode})
+      <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url')}~>{row.rspcode}
     </summary>
     <Copy _id={row._id} {logs}/>
     <div class="main-content">

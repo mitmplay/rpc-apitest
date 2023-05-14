@@ -16,11 +16,11 @@ function apilog(t) {
 
 module.exports = async () => {
   const {
-    _obj_: {HOME},
+    _obj_: {HOME, argv},
     _lib_: {fs,c},
   } = _rpc_
 
-  const home = `${HOME}/user-rpc`
+  const home = argv.rpcpath || `${HOME}/user-rpc`
   const filename = `${home}/logs.sqlite`
 
   try {

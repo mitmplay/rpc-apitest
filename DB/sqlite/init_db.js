@@ -3,11 +3,11 @@ const fn  = require('../../_rpc_')
 module.exports = async () => {
   const {
     _db_,
-    _obj_: {HOME},
+    _obj_: {HOME, argv},
     _lib_: {fs,c},
   } = fn()
 
-  const home = `${HOME}/user-rpc`
+  const home = argv.rpcpath || `${HOME}/user-rpc`
   const filename = `${home}/logs.sqlite`
 
   try {
