@@ -113,7 +113,7 @@ function parser(xhr, ns, tp2, env) {
 //# name: simple-get/xkcd
 //# tpl1: simple-get/_template_
 //# tpl2: simple-get/xkcd/_template_
-function template(ns, name, merge) {
+function template(ns, name, merge, env) {
   const fullpathTemplate = `/${name}`.replace(/\/[^/]+$/, '/_template_')
   const arrpathTemplate = fullpathTemplate.split('/')
   const fileTemplate = arrpathTemplate.pop()
@@ -131,7 +131,15 @@ function template(ns, name, merge) {
     if (tpl) {
       tpl = JSON.parse(JSON.stringify(tpl))
       // 1st iteration template={} need to parser to it-self
-      template = merge(template, parser(tpl, ns, i?template:tpl))  
+      if (i===0) {
+        if (tpl.env && tpl.env[env]) {
+          tpl = merge(tpl, parser(tpl.env[env], false, tpl))
+        }  
+        template = merge(template, parser(tpl, ns, tpl))
+      } else {
+        template = merge(template, parser(tpl, ns, template))
+      }
+      // template = merge(template, parser(tpl, ns, i?template:tpl))
     }
   })
   console.log(name, template)
@@ -152,7 +160,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   const {merge} = _rpc_._fn_
   const ns = _rpc_[nmspace]
   if (ns) {
-    const tp2 = template(ns, name, merge)
+    const tp2 = template(ns, name, merge, opt.env|| 'dev')
     const ori = ns._request_[name]
     if (ori===undefined) {
       return [{},{}]
