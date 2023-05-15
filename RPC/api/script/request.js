@@ -139,7 +139,6 @@ function template(ns, name, merge, env) {
       } else {
         template = merge(template, parser(tpl, ns, template))
       }
-      // template = merge(template, parser(tpl, ns, i?template:tpl))
     }
   })
   console.log(name, template)
