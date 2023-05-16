@@ -42,7 +42,9 @@ Main functionality is to show the logs after APIs execution, UI interactivity ar
 * Host - group by host
 * Time - group by time
 
-Each logs are group with: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar or change logs format between **YAML** and **JSON**.
+Each logs are inside section of: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar 
+
+**Yaml checkbox** on the action-bar is to see the logs format in **YAML**
 
 To download the logs, you can checked the row then click "Download" button.
 
@@ -56,7 +58,9 @@ Each of requests are define using **YAML** file and can having **variable** and 
 
 Each `request definition file` will be loaded in the UI and can be tested, as the files is watched!, when you edit the file and save it, it will automaticaly reflected on the UI.
 
-Parser checkbox on the action bar will help (when checked) to see the end result result, but for random value using fake in dynamic vars, the values can be different during the execution of API call.   
+**Parser checkbox** on the action-bar will help (when checked) to see the end result result, but for random value using fake in dynamic vars, the values can be different during the execution of API call.
+
+**Source checkbox** on the action-bar is to see the source code of request 
 
 ```js
 await RPC.api.fetch('apidemo/u_agent_post') run

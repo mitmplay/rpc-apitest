@@ -7,10 +7,10 @@ async function requests(plain=false) {
         const obj = _rpc_._fn_.toTreeObj(app, _rpc_[app]._request_)
         const {_template_: t} = obj
         if (t) {
-          const [xhr, ori] = await _rpc_.api.request(`${app}/_template_`)
+          const [xhr, ori, src] = await _rpc_.api.request(`${app}/_template_`)
           const envs = Object.keys(ori?.env||{dev:''})
           const env  = envs[0]
-          obj._template_ = {...t, envs, env, xhr, ori}
+          obj._template_ = {...t, envs, env, xhr, ori, src}
         }
         requests1[app] = obj
       }

@@ -160,6 +160,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   const ns = _rpc_[nmspace]
   if (ns) {
     const tp2 = template(ns, name, merge, opt.env|| 'dev')
+    const src = ns._request_src_[name]
     const ori = ns._request_[name]
     if (ori===undefined) {
       return [{},{}]
@@ -183,7 +184,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         xhr2[k] = xhr[k]
       }
     })
-    return [name.includes('_template_') ? xhr : xhr2, ori]
+    return [name.includes('_template_') ? xhr : xhr2, ori, src]
   }
 }
 module.exports = request

@@ -70,11 +70,13 @@ function yml(_rpc_) {
         _mrkdown_: {},
         _openapi_: {},
         _request_: {},
+        _request_src_: {},
       }
     } else if (!_rpc_[app]._openapi_) {
       _rpc_[app]._mrkdown_= {}
       _rpc_[app]._openapi_= {}
       _rpc_[app]._request_= {}
+      _rpc_[app]._request_src_= {}
     }
 
     const str = fs.readFileSync(path, 'utf8')
@@ -83,6 +85,7 @@ function yml(_rpc_) {
       _rpc_[app]._openapi_[name] = obj
     } else {
       _rpc_[app]._request_[name] = obj
+      _rpc_[app]._request_src_[name] = str
     }
 
     // const typ = obj.openapi ? 'openapi' : 'request'

@@ -3,6 +3,7 @@ import { pretty } from '../lib/common';
 const json = {
   req: {},
   options: {
+    showSrc: false,
     autoParsed: false,
   }
 }
@@ -27,9 +28,10 @@ async function requestEnv(json, env) {
     if (run===undefined) {
       await requestEnv(json[id], env)
     } else if (json[id].request) {
-      const [xhr, ori] = await RPC.api.request(run, {env})
+      const [xhr, ori, src] = await RPC.api.request(run, {env})
       json[id].request = pretty(xhr) 
       json[id].ori     = pretty(ori)
+      json[id].src     = pretty(src, true)
     }
   }
 }
@@ -53,7 +55,7 @@ async function _request(path) {
 }
 
 export async function updateReq(path, o) {
-  const [xhr, ori] = o || await _request(path) // if it came from broadcast
+  const [xhr, ori, src] = o || await _request(path) // if it came from broadcast
 
   reqs.update(json => {
     let {req} = json
@@ -65,6 +67,8 @@ export async function updateReq(path, o) {
     if (req[file]) {
       req[file].request = pretty(xhr)
       req[file].ori     = pretty(ori)
+      req[file].src     = pretty(src, true)
+
     }
     return json
   })
@@ -77,9 +81,10 @@ export function clickSummary(evn, json) {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]
     if (run && !request) {
-      const [xhr, ori] = await _request(run)
+      const [xhr, ori, src] = await _request(run)
       json[nspace].request = pretty(xhr)
       json[nspace].ori     = pretty(ori)
+      json[nspace].src     = pretty(src, true)
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
@@ -96,6 +101,7 @@ function collapse(_reqs_) {
     if (req.request) {
       delete req.request
       delete req.ori
+      delete req.src
     }
     if (!/^_[a-zA-Z0-9.-]+$/.test(key)) {
       req._openName = false
@@ -119,10 +125,21 @@ export function autoParsed({currentTarget}) {
   clickTogle(currentTarget, 'autoParsed')
 }
 
+export function showSrc({currentTarget}) {
+  clickTogle(currentTarget, 'showSrc')
+}
+
 function clickTogle(el, key) {
   setTimeout(_ => {
     reqs.update(json => {
       json.options[key] = !el.checked
+      if (!el.checked) {
+        if (key==='showSrc' && !el.checked) {
+          json.options.autoParsed = false
+        } else {
+          json.options.showSrc = false
+        }
+      }
       return json
     })
   })

@@ -60,9 +60,11 @@
   }
 
   function showRequest(nspace) {
-    const {request, ori} = json[nspace]
+    const {request, ori, src} = json[nspace]
     if ($reqs.options.autoParsed) {
       return request
+    } else if ($reqs.options.showSrc) {
+      return src
     } else {
       return ori
     }
