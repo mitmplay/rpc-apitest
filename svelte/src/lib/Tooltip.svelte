@@ -1,12 +1,13 @@
 <script>
   import {ttp, mouseLeave} from '../stores/ttpStore';
+  import {logs} from '../stores/logsStore';
   function style({options:o}) {
     const max = `max-width: calc(100% - ${80+o._x}px)`
     return `top: ${o._y}px;left: ${o._x}px;${max};`
   }
 </script>
 
-{#if $ttp.options.isHovered}
+{#if $logs.options.tips && $ttp.options.isHovered}
   <div class="ttp tooltip" style={style($ttp)}>
     {@html $ttp.options.title}
   </div>
