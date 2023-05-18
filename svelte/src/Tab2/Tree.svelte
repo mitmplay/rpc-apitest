@@ -7,6 +7,7 @@
   import {mouseOver} from '../stores/ttpStore';
   import Tree from './Tree.svelte';
   import Envs from './Envs.svelte';
+  import Slcs from './Slcs.svelte';
 
   function toArray(_json) {
     const arr1 = []
@@ -86,6 +87,8 @@
   </summary>
   {#if json[nspace]?._template_?.envs}
     <Envs ns={nspace}/>
+  {:else if json[nspace]?._template_?.slcs}
+    <Slcs json={json[nspace]._template_} ns={_ns}/>
   {/if}
   {#if json[nspace].run}
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>

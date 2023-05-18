@@ -3,11 +3,12 @@ default:
   headers:
     Application: json
 
-list:
-  greet:
-    - howdy one
-    - howdy two
+select:
+  one:
+    greet: howdy one
+  two:
+    greet: howdy two
 
 dodol:
-  _1: '{...default}'
+  _1: '{default}'
   _2: '{greet}'

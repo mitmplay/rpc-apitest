@@ -47,6 +47,15 @@ export function changeEnv(ns, env) {
   })
 }
 
+export function changeSlc(ns, slc) {
+  setTimeout(async ()=>{
+    reqs.update(json => {
+      json.req[ns]._template_.slc = slc
+      return json
+    })
+  })
+}
+
 async function _request(path) {
   const {req} = get(reqs)
   const nsp = path.split('/').shift()
@@ -85,6 +94,17 @@ export function clickSummary(evn, json) {
       json[nspace].request = pretty(xhr)
       json[nspace].ori     = pretty(ori)
       json[nspace].src     = pretty(src, true)
+    } else if (json[nspace]._template_) {
+      const {_template_} = json[nspace]
+      if (!_template_.ori) {
+        const [xhr, ori, src] = await _request(_template_.run)
+        if (xhr.select) {
+          _template_.slcs = Object.keys(xhr.select)
+        }
+        _template_.xhr = pretty(xhr) 
+        _template_.ori = pretty(ori)
+        _template_.src = pretty(src, true) 
+      }
     }
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')

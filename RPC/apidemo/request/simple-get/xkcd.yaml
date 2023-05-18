@@ -1,4 +1,4 @@
 url: 'https://xkcd.com/info.0.json'
 method: post
 body:
-  _2: '{...dodol}'
+  _2: '{greet}'
