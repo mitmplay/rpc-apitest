@@ -12,6 +12,7 @@ const json = {
     autoShowlog: true,
     autoShowDate: false,
     autoShowElapse: false,
+    tips: false,
     yaml: true,
   }
 }
@@ -129,6 +130,10 @@ export function clickCollapse({activeTab, rowid}) {
 
 export function clickYaml({currentTarget}) {
   clickTogle(currentTarget, 'yaml')
+}
+
+export function clickTips({currentTarget}) {
+  clickTogle(currentTarget, 'tips')
 }
 
 export function autoExpandRequest({currentTarget}) {

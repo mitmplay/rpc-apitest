@@ -1,7 +1,8 @@
 <script>
   import {
     logs, 
-    clickYaml, 
+    clickYaml,
+    clickTips,
     clickGroup, 
     clickCollapse,
     autoExpandRequest,
@@ -11,10 +12,11 @@
   import {download_html} from './download';
   
   $: grp = $logs.options.grouping;
-  $: yml = $logs.options.yaml;
   $: rqs = $logs.options.autoExpandRequest;
   $: hdr = $logs.options.autoExpandRespHdr;
   $: bdy = $logs.options.autoExpandRespBody;
+  $: yml = $logs.options.yaml;
+  $: tip = $logs.options.tips;
 </script>
 
 <div class=action>
@@ -38,8 +40,14 @@
   <label for="checkbkYml">
     <input type="checkbox" id="checkbkYml" on:click={clickYaml}          bind:checked={yml}>Yaml
   </label>
+  |
+  <label for="checkbkTips">
+    <input type="checkbox" id="checkbkTips" on:click={clickTips}          bind:checked={tip}>TTips
+  </label>
 </div>
 
 <style lang="scss">
-
+  [type="checkbox"] {
+    vertical-align: sub;
+  }
 </style>
