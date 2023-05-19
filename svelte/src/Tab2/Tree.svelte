@@ -32,7 +32,8 @@
   }
 
   function enf(req, ns, run) {
-    const opt = {env: req[ns]?._template_?.env}
+    const {env} = req[ns]._template_
+    const opt = env ? {env} : {}
 
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
@@ -41,11 +42,8 @@
         opt.slc = sec._template_.slc
       }
     })
-    if (opt.env==='dev') {
-      delete opt.env
-      if (!opt.slc) {
-        return ''
-      }
+    if (Object.keys(opt).length===0) {
+      return ''
     }
     return `, ${JSON.stringify(opt)}`
   }

@@ -13,7 +13,7 @@
 </script>
 
 <span class="commonlink">
-  <div>
+  <div>slc:
     {#each json.slcs as slc}
       <Checkbox click={chgSlc}  
       bind:group={slcs} value={slc}>{slc}</Checkbox>
@@ -25,7 +25,10 @@
 .commonlink {
   position: relative;
   div {
+    color: cadetblue;
     position: absolute;
+    font-weight: bold;
+    font-size: small;
     width: 400px;
     left: 92px;
     top: -4px;

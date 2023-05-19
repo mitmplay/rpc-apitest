@@ -9,8 +9,11 @@
 </label>
 
 <style lang="scss">
-  [type="checkbox"] {
-    vertical-align: sub;
-    margin: 0 -2px 0 2px;
+  label {
+    font-size: smaller;
+    [type="checkbox"] {
+      vertical-align: sub;
+      margin: 0 -2px 0 2px;
+  }
   }
   </style>

@@ -41,11 +41,18 @@ async function requestEnv(sec, opt) {
 }
 
 export function changeEnv(ns, env) {
+  const sec = get(reqs).req[ns]
+  const {_template_} = sec
+  if (_template_.env!==env) {
+    _template_.env = env
+  } else {
+    delete _template_.env
+    env = false
+  }
   setTimeout(async ()=>{
-    const sec = get(reqs).req[ns]
-    await requestEnv(sec, {env})
+    await requestEnv(sec, env ? {env} : {})
     reqs.update(json => {
-      json.req[ns]._template_.env = env || 'dev'
+      json.req[ns] = sec
       return json
     })
   })
