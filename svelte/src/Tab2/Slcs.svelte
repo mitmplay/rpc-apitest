@@ -8,13 +8,14 @@
     const {value:slc} = e.target
     changeSlc(ns, slc)
   }
+  $: slcs = [$reqs.req[ns]._template_.slc];
 </script>
 
 <span class="commonlink">
   <div>
     {#each json.slcs as slc}
       <Checkbox click={chgSlc}  
-      bind:group={selection} value={slc}>{slc}</Checkbox>
+      bind:group={slcs} value={slc}>{slc}</Checkbox>
     {/each}
   </div>
 </span>
