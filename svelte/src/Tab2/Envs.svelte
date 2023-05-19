@@ -4,7 +4,7 @@
 
   async function chgEnv(e) {
     const {value:env} = e.target
-    await changeEnv(ns, {env})
+    await changeEnv(ns, env)
   }
 </script>
 

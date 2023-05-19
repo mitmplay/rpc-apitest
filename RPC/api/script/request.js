@@ -129,16 +129,17 @@ function template(ns, name, merge, opt) {
       tpl = ns?._request_[`${path}${fileTemplate}`]
     }
     if (tpl) {
+      const {env, slc} = opt
       tpl = JSON.parse(JSON.stringify(tpl))
       // 1st iteration template={} need to parser to it-self
       if (i===0) {
-        if (tpl.env && tpl.env[opt.env]) {
-          tpl = merge(tpl, parser(tpl.env[opt.env], false, tpl))
+        if (tpl.env && tpl.env[env]) {
+          tpl = merge(tpl, parser(tpl.env[env], false, tpl))
         }
         template = merge(template, parser(tpl, ns, tpl))
       } else {
-        if (tpl.select && tpl.select[opt.slc]) {
-          template = merge(tpl, parser(tpl.select[opt.slc], ns, template))
+        if (tpl.select && tpl.select[slc]) {
+          template.env[env] = merge(template.env[env], tpl.select[slc])
         }  
         template = merge(template, parser(tpl, ns, template))
       }
