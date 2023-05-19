@@ -6,13 +6,7 @@
   import Checkbox from '../lib/Checkbox.svelte';
 
   async function chgSlc(e) {
-    let {value:slc} = e.target
-    if (json.slc!==slc) {
-      json.slc = slc
-    } else {
-      delete json.slc
-      slc = false
-    }
+    const {value:slc} = e.target
     changeSlc(_req, _ns, json, slc)
   }
   $: slcs = [json?.slc];

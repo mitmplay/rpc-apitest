@@ -47,12 +47,18 @@ export function changeEnv(ns, env) {
 }
 
 export function changeSlc(req, ns, sec, slc) {
+  if (sec.slc!==slc) {
+    sec.slc = slc
+  } else {
+    delete sec.slc
+    slc = false
+  }
   setTimeout(async ()=>{
-    let obj = req[ns]
-    const {env} = obj._template_
-    sec.run.split('/').slice(1,-1).forEach(k=>obj = obj[k])
+    let sec2 = req[ns]
+    const {env} = sec2._template_
+    sec.run.split('/').slice(1,-1).forEach(k=>sec2 = sec2[k])
 
-    await requestEnv(obj, slc ? {env, slc} : {env})
+    await requestEnv(sec2, slc ? {env, slc} : {env})
     reqs.update(json => {
       json.req[ns] = req[ns]
       return json
