@@ -1,0 +1,6 @@
+url: '{base&}xkcd.com/'
+select:
+  one:
+    greet: howdy one
+  two:
+    greet: howdy two

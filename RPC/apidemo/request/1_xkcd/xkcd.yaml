@@ -1,0 +1,4 @@
+url: '{&}info.0.json'
+method: post
+body:
+  _: '{greet}'
