@@ -22,6 +22,11 @@ export async function init() {
 }
 
 async function requestEnv(sec, opt) {
+  if (/_template_/.test(sec?._template_?.run)) {
+    if (sec._template_.slc) {
+      opt.slc = sec._template_.slc
+    }
+  }
   for (const id in sec) {
     const {run} = sec[id]
     if (run===undefined) {

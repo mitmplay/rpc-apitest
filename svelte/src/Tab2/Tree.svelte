@@ -31,25 +31,43 @@
     return arr
   }
 
-  function enf(req, ns) {
-    const env = req[ns]?._template_?.env
-    if (env && env!=='dev') {
-      return `, {env: '${env}'}`
-    } else {
-      return ''
+  function enf(req, ns, run) {
+    const opt = {env: req[ns]?._template_?.env}
+
+    let sec = req[ns]
+    run.split('/').slice(1,-1).forEach(k=>{
+      sec = sec[k]
+      if (sec._template_.slc) {
+        opt.slc = sec._template_.slc
+      }
+    })
+    if (opt.env==='dev') {
+      delete opt.env
+      if (!opt.slc) {
+        return ''
+      }
     }
+    return `, ${JSON.stringify(opt)}`
   }
 
   async function run(evn, req, ns) {
     const {run} = evn.target.dataset
-    console.log(`await RPC.api.fetch('${run}'${enf(req, ns)})`)
-    let msg
+
     const env = req[ns]?._template_?.env
+    const opt = {}
+
+    let sec = req[ns]
+    run.split('/').slice(1,-1).forEach(k=>{
+      sec = sec[k]
+      if (sec._template_.slc) {
+        opt.slc = sec._template_.slc
+      }
+    })
     if (env) {
-      msg = await RPC.api.fetch(run, {env})
-    } else {
-      msg = await RPC.api.fetch(run)
+      opt.env = env
     }
+    console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
+    let msg = await RPC.api.fetch(run, opt)
     if (typeof msg==='object' && msg!==null) {
       console.log(JSON.stringify(msg, null, 2))
       if ($logs.options.autoShowlog) { //# autoShowlog
@@ -85,7 +103,7 @@
     {#if /_template_/.test(json[nspace].run)}
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
-      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}'{enf($reqs.req, _ns)})</b>
+      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)})</b>
       <a href="#" data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
     {:else}
       {nspace}

@@ -141,7 +141,7 @@ function template(ns, name, merge, opt) {
         if (tpl.select && tpl.select[slc]) {
           template.env[env] = merge(template.env[env], tpl.select[slc])
         }  
-        template = merge(template, parser(tpl, ns, template))
+        template = merge(template, parser(tpl, ns, template, env))
       }
     }
   })

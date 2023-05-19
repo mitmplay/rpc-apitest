@@ -69,10 +69,11 @@ module.exports = async _ => {
     } catch (error) {
       result = error 
     }
+    const msg = `RPC ${payload.method}`
     if (_obj_.argv.verbose) {
-      console.log('executeRpcMethod:', result)
+      console.log(msg, '~>', result)
     } else if (_obj_.argv.devmode) {
-      console.log('executeRpcMethod!')
+      console.log(msg)
     }
     ws.send(JSON.stringify(result))
     const timeout = +(_obj_.argv.timeout || 100)
