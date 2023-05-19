@@ -91,9 +91,10 @@
 
 <div class="copylink">
   json: 
-  [<a href=# data-copy=all  on:click={copyClipboard}>all </a>] 
-  [<a href=# data-copy=resp on:click={copyClipboard}>resp</a>]
-  [<a href=# data-copy=reqs on:click={copyClipboard}>reqs</a>] | cmd:
+  [<a href=# data-copy=reqs on:click={copyClipboard}>req</a>]
+  [<a href=# data-copy=resp on:click={copyClipboard}>res</a>]
+  [<a href=# data-copy=all  on:click={copyClipboard}>req+res</a>] 
+  | cmd:
   <span class="copies">
     <div>
       [<a href=# data-copy=curl on:click={copyClipboard}>curl </a>]

@@ -29,9 +29,9 @@ async function requestEnv(json, env) {
       await requestEnv(json[id], env)
     } else if (json[id].request) {
       const [xhr, ori, src] = await RPC.api.request(run, {env})
-      json[id].request = pretty(xhr) 
-      json[id].ori     = pretty(ori)
-      json[id].src     = pretty(src, true)
+      json[id].request = xhr
+      json[id].ori     = ori
+      json[id].src     = src
     }
   }
 }
@@ -74,9 +74,9 @@ export async function updateReq(path, o) {
       req = req[folder] || {}
     }
     if (req[file]) {
-      req[file].request = pretty(xhr)
-      req[file].ori     = pretty(ori)
-      req[file].src     = pretty(src, true)
+      req[file].request = xhr
+      req[file].ori     = ori
+      req[file].src     = src
 
     }
     return json
@@ -91,9 +91,9 @@ export function clickSummary(evn, json) {
     const {run, request} = json[nspace]
     if (run && !request) {
       const [xhr, ori, src] = await _request(run)
-      json[nspace].request = pretty(xhr)
-      json[nspace].ori     = pretty(ori)
-      json[nspace].src     = pretty(src, true)
+      json[nspace].request = xhr
+      json[nspace].ori     = ori
+      json[nspace].src     = src
     } else if (json[nspace]._template_) {
       const {_template_} = json[nspace]
       if (!_template_.ori) {
@@ -101,9 +101,9 @@ export function clickSummary(evn, json) {
         if (xhr.select) {
           _template_.slcs = Object.keys(xhr.select)
         }
-        _template_.xhr = pretty(xhr) 
-        _template_.ori = pretty(ori)
-        _template_.src = pretty(src, true) 
+        _template_.request = xhr
+        _template_.ori     = ori
+        _template_.src     = src
       }
     }
     reqs.update(_2 => {

@@ -13,7 +13,7 @@ export function pretty(json, src=false) {
       str = hljs.highlight(str, {language: 'yaml'}).value
     }  
   }
-  return str
+  return str || ''
 }
 
 export function toJson(str) {

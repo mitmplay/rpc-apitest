@@ -5,6 +5,7 @@
   import {logs, clickCollapse} from '../stores/logsStore';
   import {reqs, clickSummary}  from '../stores/reqsStore';
   import {mouseOver} from '../stores/ttpStore';
+  import { pretty } from '../lib/common';
   import Tree from './Tree.svelte';
   import Envs from './Envs.svelte';
   import Slcs from './Slcs.svelte';
@@ -60,15 +61,20 @@
     RPC._obj_.run = msg   
   }
 
-  function showRequest(nspace) {
+  function showRequest({options}, nspace) {
+    let _code
     const {request, ori, src} = json[nspace]
-    if ($reqs.options.autoParsed) {
-      return request
-    } else if ($reqs.options.showSrc) {
-      return src
+    if (options.showSrc) {
+      _code = pretty(src || '', true)
     } else {
-      return ori
+      if (options.autoParsed) {
+        _code = request
+      } else {
+        _code = ori
+      }
+      _code = pretty(_code || '')
     }
+    return _code
   }
 
 </script>
@@ -93,9 +99,9 @@
   {#if json[nspace].run}
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
       {#if RPC._obj_?.argv?.json}
-        <pre class="aliceblue"><code class="language-json">{@html showRequest(nspace) || '...'}</code></pre>
+        <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace) || '...'}</code></pre>
       {:else}
-        <pre class="aliceblue"><code class="language-yaml">{@html showRequest(nspace) || '...'}</code></pre>
+        <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace) || '...'}</code></pre>
       {/if}
     </div>
   {:else}

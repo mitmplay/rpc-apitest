@@ -25,7 +25,7 @@
   </label>
   |
   <label for="checkbkTips">
-    <input type="checkbox" id="checkbkTips" on:click={clickTips}          bind:checked={tip}>TTips
+    <input type="checkbox" id="checkbkTips" on:click={clickTips} bind:checked={tip}>TTips
   </label>
 </div>
 
