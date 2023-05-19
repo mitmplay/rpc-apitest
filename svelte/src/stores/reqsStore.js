@@ -1,5 +1,4 @@
 import { writable, get } from 'svelte/store';
-import { pretty } from '../lib/common';
 const json = {
   req: {},
   options: {
@@ -22,35 +21,40 @@ export async function init() {
   return req2
 }
 
-async function requestEnv(json, env) {
-  for (const id in json) {
-    const {run} = json[id]
+async function requestEnv(sec, opt) {
+  for (const id in sec) {
+    const {run} = sec[id]
     if (run===undefined) {
-      await requestEnv(json[id], env)
-    } else if (json[id].request) {
-      const [xhr, ori, src] = await RPC.api.request(run, {env})
-      json[id].request = xhr
-      json[id].ori     = ori
-      json[id].src     = src
+      await requestEnv(sec[id], opt)
+    } else if (sec[id].request) {
+      const [xhr, ori, src] = await RPC.api.request(run, opt)
+      sec[id].request = xhr
+      sec[id].ori     = ori
+      sec[id].src     = src
     }
   }
 }
 
 export function changeEnv(ns, env) {
   setTimeout(async ()=>{
-    const json = get(reqs).req[ns]
-    await requestEnv(json, env)
+    const sec = get(reqs).req[ns]
+    await requestEnv(sec, {env})
     reqs.update(json => {
-      json.req[ns]._template_.env = env
+      json.req[ns]._template_.env = env || 'dev'
       return json
     })
   })
 }
 
-export function changeSlc(ns, slc) {
+export function changeSlc(req, ns, sec, slc) {
   setTimeout(async ()=>{
+    let obj = req[ns]
+    const {env} = obj._template_
+    sec.run.split('/').slice(1,-1).forEach(k=>obj = obj[k])
+
+    await requestEnv(obj, slc ? {env, slc} : {env})
     reqs.update(json => {
-      json.req[ns]._template_.slc = slc
+      json.req[ns] = req[ns]
       return json
     })
   })
@@ -60,7 +64,8 @@ async function _request(path) {
   const {req} = get(reqs)
   const nsp = path.split('/').shift()
   const env = req[nsp]?._template_?.env || 'dev'
-  return await RPC.api.request(path, {env})
+  const slc = req[nsp]?._template_?.slc || ''
+  return await RPC.api.request(path, {env, slc})
 }
 
 export async function updateReq(path, o) {
@@ -77,15 +82,13 @@ export async function updateReq(path, o) {
       req[file].request = xhr
       req[file].ori     = ori
       req[file].src     = src
-
     }
     return json
   })
 }
 
-export function clickSummary(evn, json) {
+export function clickSummary(evn, req, ns, json) {
   const el = evn.currentTarget.parentElement
-  const {req} = get(reqs)
   setTimeout(async _1 => {
     const {nspace,name} = el.dataset
     const {run, request} = json[nspace]
@@ -98,18 +101,19 @@ export function clickSummary(evn, json) {
       const {_template_} = json[nspace]
       if (!_template_.ori) {
         const [xhr, ori, src] = await _request(_template_.run)
-        if (xhr.select) {
-          _template_.slcs = Object.keys(xhr.select)
-        }
         _template_.request = xhr
         _template_.ori     = ori
         _template_.src     = src
+        if (xhr.select) {
+          _template_.slcs = Object.keys(xhr.select)
+        }
       }
     }
+    const root = ns || nspace
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
       json[nspace][name]= open
-      _2.req = req
+      _2.req[root] = req[root]
       return _2
     });
   })

@@ -1,14 +1,21 @@
 <script>
-  export let ns
+  export let _ns
+  export let _req
   export let json
-  import {reqs, changeSlc}  from '../stores/reqsStore';
+  import {changeSlc} from '../stores/reqsStore';
   import Checkbox from '../lib/Checkbox.svelte';
-  let selection = [];
+
   async function chgSlc(e) {
-    const {value:slc} = e.target
-    changeSlc(ns, slc)
+    let {value:slc} = e.target
+    if (json.slc!==slc) {
+      json.slc = slc
+    } else {
+      delete json.slc
+      slc = false
+    }
+    changeSlc(_req, _ns, json, slc)
   }
-  $: slcs = [$reqs.req[ns]._template_.slc];
+  $: slcs = [json?.slc];
 </script>
 
 <span class="commonlink">
@@ -26,7 +33,7 @@
   div {
     position: absolute;
     width: 400px;
-    left: 100px;
+    left: 92px;
     top: -4px;
   }
 }

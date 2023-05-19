@@ -10,7 +10,7 @@ async function requests(plain=false) {
           const [xhr, ori, src] = await _rpc_.api.request(`${app}/_template_`)
           const envs = Object.keys(ori?.env||{dev:''})
           const env  = envs[0]
-          obj._template_ = {...t, envs, env, xhr, ori, src}
+          obj._template_ = {...t, xhr, ori, src, envs, env}
         }
         requests1[app] = obj
       }

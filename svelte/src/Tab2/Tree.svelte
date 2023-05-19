@@ -81,7 +81,7 @@
 
 {#each toArray(json) as nspace}
 <details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
-  <summary on:click={evn => clickSummary(evn, json)}>
+  <summary on:click={evn => clickSummary(evn, _req, _ns, json)}>
     {#if /_template_/.test(json[nspace].run)}
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
@@ -94,7 +94,7 @@
   {#if json[nspace]?._template_?.envs}
     <Envs ns={nspace}/>
   {:else if json[nspace]?._template_?.slcs}
-    <Slcs json={json[nspace]._template_} ns={_ns}/>
+    <Slcs json={json[nspace]._template_} {_req} {_ns}/>
   {/if}
   {#if json[nspace].run}
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
