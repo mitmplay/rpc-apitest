@@ -1,11 +1,11 @@
 xcd: 'xkcd.com/'
-url: '{base&}{xcd}'
+mainurl: '{baseurl}{xcd}'
 
 env:
   dev:
-    url: '{&}dev/'
+    envurl: '{mainurl}dev/'
   qa: 
-    url: '{&}qa/'
+    envurl: '{mainurl}qa/'
 
 default:
   method: get

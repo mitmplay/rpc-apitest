@@ -3,6 +3,6 @@ module.exports = $ => {
   return { // _template_.js
     first: _ => chance.first(),
     xkcd:  _ => chance.integer({ min: 1, max: 700 }),
-    dtnow: _ => `{greet-ed} ${(new Date()).toISOString()}`,
+    dtnow: _ => `${(new Date()).toISOString()}`,
   }
 }

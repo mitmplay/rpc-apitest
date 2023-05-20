@@ -1,17 +1,16 @@
 baseurl: 'https://' # comments
+msg: Hi
 
 env:
   dev:
-    greet: '{baseurl}hello from DEV'
+    greet: '{msg} from DEV'
   qa: 
-    greet: '{baseurl}hello from QA'
-  noreplace: 'no change on vars'
+    greet: '{msg} from QA'
+  noreplace: 'no change on var'
 
 default:
   headers:
     Content-Type: application/json
 
 greet: Hi from non ENV
-greet-ed: hello
-
-mainurl: '{baseurl}woo'
+greet-ed: 'hello {{dtnow}}'

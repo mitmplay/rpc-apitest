@@ -1,4 +1,4 @@
-url: '{&}info.0.json'
+url: '{envurl}info.0.json'
 method: post
 body:
   _: '{greet}'
