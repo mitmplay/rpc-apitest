@@ -1,4 +1,15 @@
-url: '{base&}xkcd.com/'
+xcd: 'xkcd.com/'
+url: '{base&}{xcd}'
+
+env:
+  dev:
+    url: '{&}dev/'
+  qa: 
+    url: '{&}qa/'
+
+default:
+  method: get
+
 select:
   one:
     greet: howdy one

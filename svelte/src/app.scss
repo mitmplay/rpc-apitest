@@ -132,8 +132,12 @@ p.values {
   font-family: monospace;
 }
 
-._hover_:hover {
-  color: red;
+._hover_ {
+  padding: 0 1px;
   cursor: pointer;
-  border-bottom: solid red;
+  border: solid #ffffff00;
+  &:hover {
+    color: red;
+    border: solid red;
+  }
 }

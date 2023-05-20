@@ -58,7 +58,7 @@
               <b>{`${fn}`}</b>
             {:else}
               <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
-              <a href="#" data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
+              <a href="#" class=_hover_ data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
             {/if}
           </summary>  
           <pre><code class="language-js">{@html $rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</code></pre>

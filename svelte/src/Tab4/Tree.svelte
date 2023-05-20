@@ -41,7 +41,7 @@
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
       <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}')</b>
-      <a href="#" data-run={json[nspace].run} on:click={run}>run</a>
+      <a href="#" class=_hover_ data-run={json[nspace].run} on:click={run}>run</a>
     {:else}
       {nspace}
     {/if}
