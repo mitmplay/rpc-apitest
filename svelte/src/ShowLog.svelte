@@ -40,6 +40,7 @@
   &:hover {
     border: solid gray;
     background-color: azure;
+    margin: -2px -7px 0 0;
     ul {
       display: block;
     }

@@ -79,11 +79,13 @@ export function changeSlc(req, ns, sec, slc) {
 }
 
 async function _request(path) {
+  const opt = {}
   const {req} = get(reqs)
   const nsp = path.split('/').shift()
-  const env = req[nsp]?._template_?.env || 'dev'
-  const slc = req[nsp]?._template_?.slc || ''
-  return await RPC.api.request(path, {env, slc})
+  const {env, slc} = req[nsp]?._template_ || {}
+  env && (opt.env = env)
+  slc && (opt.slc = slc)
+  return await RPC.api.request(path, opt)
 }
 
 export async function updateReq(path, o) {

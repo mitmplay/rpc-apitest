@@ -33,19 +33,19 @@
 
   function enf(req, ns, run) {
     const {env} = req[ns]._template_
-    const opt = env ? {env} : {}
+    const opt = env ? [`env:'${env}'`] : []
 
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
       sec = sec[k]
       if (sec._template_.slc) {
-        opt.slc = sec._template_.slc
+        opt.push(`slc:'${sec._template_.slc}'`)
       }
     })
-    if (Object.keys(opt).length===0) {
+    if (opt.length===0) {
       return ''
     }
-    return `, ${JSON.stringify(opt)}`
+    return `, {${opt.join(',')}}`
   }
 
   async function run(evn, req, ns) {
@@ -102,7 +102,7 @@
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
       <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)})</b>
-      <a href="#" data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+      <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
     {:else}
       {nspace}
     {/if}
