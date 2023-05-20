@@ -45,7 +45,7 @@
     if (opt.length===0) {
       return ''
     }
-    return `, {${opt.join(',')}}`
+    return `,{${opt.join(',')}}`
   }
 
   async function run(evn, req, ns) {
