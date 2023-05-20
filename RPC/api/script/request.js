@@ -139,7 +139,11 @@ function template(ns, name, merge, opt) {
         template = merge(template, parser(tpl, ns, tpl))
       } else {
         if (tpl.select && tpl.select[slc]) {
-          template.env[env] = merge(template.env[env], tpl.select[slc])
+          if (env) {
+            template.env[env] = merge(template.env[env], tpl.select[slc])
+          } else {
+            template = merge(template, tpl.select[slc])
+          }
         }  
         template = merge(template, parser(tpl, ns, template, env))
       }
@@ -171,7 +175,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     }
     let xhr = JSON.parse(JSON.stringify(ori))
     if (tp2) {
-      const {url, headers, body, env='dev'} = opt
+      const {url, headers, body, env} = opt
       if (tp2.default) {
         if (!name.includes('_template_')) {
           xhr = merge(tp2.default, xhr)
