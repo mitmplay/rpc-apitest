@@ -5,7 +5,7 @@
 </script>
 <label>
   <input type="checkbox" on:click={click} bind:group value={value}>
-	<slot />
+	<span class=_hover_><slot /></span>
 </label>
 
 <style lang="scss">
@@ -14,6 +14,7 @@
     [type="checkbox"] {
       vertical-align: sub;
       margin: 0 -2px 0 2px;
+      cursor: pointer;
   }
   }
   </style>

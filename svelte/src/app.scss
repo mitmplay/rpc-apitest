@@ -131,3 +131,10 @@ p.values {
   background: lightgrey;
   font-family: monospace;
 }
+
+._hover_:hover {
+  color: red;
+  font-weight: bolder;
+  border-bottom: solid red;
+  cursor: pointer;
+}
