@@ -4,14 +4,15 @@ mainurl: '{baseurl}{xcd}'
 env:
   dev:
     envurl: '{mainurl}dev/'
+    slc:
+      one:
+        greet: howdy one
+      two:
+        greet: howdy two
+
   qa: 
     envurl: '{mainurl}qa/'
 
+select: '{slc}'
 default:
   method: get
-
-select:
-  one:
-    greet: howdy one
-  two:
-    greet: howdy two

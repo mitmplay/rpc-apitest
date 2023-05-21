@@ -21,6 +21,20 @@ export async function init() {
   return req2
 }
 
+function syncStor(template, run, xhr, ori, src) {
+  if (/_template_/.test(run)) {
+    if (xhr.select!==undefined && typeof xhr.select!=='string') {
+      template.slcs = Object.keys(xhr.select)
+    } else {
+      delete template.slcs
+      template.slc = ''
+    }
+  }
+  template.request = xhr
+  template.ori     = ori
+  template.src     = src
+}
+
 async function requestEnv(sec, opt) {
   if (/_template_/.test(sec?._template_?.run)) {
     if (sec._template_.slc) {
@@ -33,9 +47,7 @@ async function requestEnv(sec, opt) {
       await requestEnv(sec[id], opt)
     } else if (sec[id].request) {
       const [xhr, ori, src] = await RPC.api.request(run, opt)
-      sec[id].request = xhr
-      sec[id].ori     = ori
-      sec[id].src     = src
+      syncStor(sec[id], run, xhr, ori, src)
     }
   }
 }
@@ -99,9 +111,7 @@ export async function updateReq(path, o) {
       req = req[folder] || {}
     }
     if (req[file]) {
-      req[file].request = xhr
-      req[file].ori     = ori
-      req[file].src     = src
+      syncStor(req[file], path, xhr, ori, src) 
     }
     return json
   })
@@ -121,12 +131,7 @@ export function clickSummary(evn, req, ns, json) {
       const {_template_} = json[nspace]
       if (!_template_.ori) {
         const [xhr, ori, src] = await _request(_template_.run)
-        _template_.request = xhr
-        _template_.ori     = ori
-        _template_.src     = src
-        if (xhr.select) {
-          _template_.slcs = Object.keys(xhr.select)
-        }
+        syncStor(_template_, _template_.run, xhr, ori, src)
       }
     }
     const root = ns || nspace

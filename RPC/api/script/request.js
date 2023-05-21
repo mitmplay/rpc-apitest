@@ -181,17 +181,25 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     }
     let xhr = JSON.parse(JSON.stringify(ori))
     if (tp2) {
-      const {url, headers, body, env} = opt
+      const {url, headers, body, env, slc} = opt
       if (tp2.default) {
         if (!name.includes('_template_')) {
           xhr = merge(tp2.default, xhr)
         }
       }
-      if (tp2.env && opt.env) {
-        const envs = tp2.env[opt.env]
-        if (typeof envs!=='string') {
-          for (const id in envs) {
-            tp2[id] = startParsing(envs[id], ns, tp2)
+      if (tp2.env && env) {
+        const list = tp2.env[env]
+        if (typeof list!=='string') {
+          for (const id in list) {
+            tp2[id] = startParsing(list[id], ns, tp2)
+          }
+        }  
+      }
+      if (tp2.select && slc) {
+        const list = tp2.select[slc]
+        if (typeof list!=='string') {
+          for (const id in list) {
+            tp2[id] = startParsing(list[id], ns, tp2)
           }
         }  
       }
