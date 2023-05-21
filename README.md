@@ -137,7 +137,7 @@ body: {{now}}            // request_post.yaml
 
 <details><summary><b>_template_.yaml</b></summary>
 
-### Example of `_template_.yaml`
+### Example of ROOT `_template_.yaml`
 ```yaml
 baseurl: http://baseurl.com
 
@@ -159,6 +159,15 @@ greet-ed: hello
 mainurl: '{baseurl}/woo'
 date: '{{dtnow}}'
 ```
+### Example after ROOT `_template_.yaml`
+
+```yaml
+select:
+  one:
+    greet: howdy one
+  two:
+    greet: howdy two
+```
 **env:** on the root \_template\_ will determine which var will be taken presedence over regular one. the **Active Env** is visible on the UI as it show on the right-side of **the root \_template\_**. you can see var getting overwrittern by checking the `Parser` option on action-bar. Example below on `greet` var the posibility of values getting overwritten:
 ```yaml
 # env: dev
@@ -169,7 +178,12 @@ greet: 'http://baseurl.com/hello from QA'
 
 # env: noreplace
 greet: 'Hi from non ENV'
+
+# select: one
+greet: howdy one
 ``` 
+**select:**/(**slc**) if selection is set, it will take precedence over (**env**) as show in last example when select set to **one** the greet value change to 'howdy one'.
+
 **default:** on the root \_template\_ will be used on request definition
 ```yaml
 # test.yaml

@@ -43,9 +43,9 @@
       }
     })
     if (opt.length===0) {
-      return ''
+      return `'`
     }
-    return `,{${opt.join(',')}}`
+    return `',{${opt.join(',')}}`
   }
 
   async function run(evn, req, ns) {
@@ -64,17 +64,23 @@
     if (env) {
       opt.env = env
     }
-    console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
-    let msg = await RPC.api.fetch(run, opt)
-    if (typeof msg==='object' && msg!==null) {
-      console.log(JSON.stringify(msg, null, 2))
-      if ($logs.options.autoShowlog) { //# autoShowlog
-        clickCollapse({activeTab:1, rowid: msg.rowid})
-      }
+    const arr = await RPC.api.request('apidemo/1_xkcd/xkcd', opt)
+    const msg = JSON.stringify(arr[0], null, 2)
+    if (msg.match(/undefined/)) {
+      alert(`WARNING: Request having UNDEFINED parsed !\n${msg}`)
     } else {
-      console.log(msg)
+      console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
+      let msg = await RPC.api.fetch(run, opt)
+      if (typeof msg==='object' && msg!==null) {
+        console.log(JSON.stringify(msg, null, 2))
+        if ($logs.options.autoShowlog) { //# autoShowlog
+          clickCollapse({activeTab:1, rowid: msg.rowid})
+        }
+      } else {
+        console.log(msg)
+      }
+      RPC._obj_.run = msg   
     }
-    RPC._obj_.run = msg   
   }
 
   function showRequest({options}, nspace) {
@@ -89,6 +95,9 @@
         _code = ori
       }
       _code = pretty(_code || '')
+      if (_code.match(/(hljs-string).+undefined/)) {
+        _code = _code.replace(/(hljs-string).+undefined/, p1=> `undefined ${p1}`)
+      }
     }
     return _code
   }
@@ -101,7 +110,7 @@
     {#if /_template_/.test(json[nspace].run)}
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
-      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)})</b>
+      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
       <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
     {:else}
       {nspace}
