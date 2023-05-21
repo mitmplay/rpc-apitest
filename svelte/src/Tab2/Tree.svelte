@@ -38,7 +38,7 @@
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
       sec = sec[k]
-      if (sec._template_.slc) {
+      if (sec?._template_?.slc) {
         opt.push(`slc:'${sec._template_.slc}'`)
       }
     })

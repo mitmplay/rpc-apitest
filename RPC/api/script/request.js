@@ -94,10 +94,10 @@ function parser(ori, xhr, ns, tp2, opt={}) {
       xhr[key] = parser(ori, value1, ns, tp2, opt)
       continue
     }
-    // interpolation key with '-' and '.' separator
-    value1 = interpolate(fncRegx, value1, tp2, '', key, ns)
-    value1 = interpolate(varRegx, value1, tp2, '', key)
-    if (typeof value==='string' && value1.match(/undefined/)) {
+    // interpolation key with '-' and '.' separator 
+    value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
+    value1 = interpolate(varRegx, value1, tp2, opt.env, key)
+    if (`${value1}`.match(/undefined/)) {
       continue
     }
     if (value1._spread_) {
