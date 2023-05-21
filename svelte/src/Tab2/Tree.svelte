@@ -64,7 +64,7 @@
     if (env) {
       opt.env = env
     }
-    const arr = await RPC.api.request('apidemo/1_xkcd/xkcd', opt)
+    const arr = await RPC.api.request(run, opt)
     const msg = JSON.stringify(arr[0], null, 2)
     if (msg.match(/undefined/)) {
       alert(`WARNING: Request having UNDEFINED parsed !\n${msg}`)
