@@ -90,7 +90,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     } 
     if (value1===undefined) {
       continue
-    } else if (typeof value1==='object' && value1!==null) { // recursive parser
+    } else if (typeof value1!=='string') { // recursive parser - do-not change!
       xhr[key] = parser(ori, value1, ns, tp2, opt)
       continue
     }
