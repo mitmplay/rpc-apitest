@@ -10,6 +10,7 @@
   import Envs from './Envs.svelte';
   import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
+  import Copy from './Copy.svelte';
 
   function toArray(_json) {
     const arr1 = []
@@ -146,6 +147,7 @@
     <Slcs json={json[nspace]._template_} {_req} {_ns}/>
   {/if}
   {#if json[nspace].run}
+    <Copy json={json[nspace].request}/>
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
       {#if RPC._obj_?.argv?.json}
         <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace) || '...'}</code></pre>
