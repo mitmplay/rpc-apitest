@@ -117,7 +117,7 @@ function startParsing(xp1, ns, xp2, opt) {
   const tp1 = JSON.parse(JSON.stringify(xp1))
   const tp2 = JSON.parse(JSON.stringify(xp2))
   const rtn = parser(tp1, tp1, ns, tp2, opt)
-  console.log(JSON.stringify(rtn,0,2))
+  // console.log(JSON.stringify(rtn,0,2))
   return rtn
 }
 

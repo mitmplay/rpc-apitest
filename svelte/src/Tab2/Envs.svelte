@@ -7,14 +7,14 @@
     const {value:env} = e.target
     await changeEnv(ns, env)
   }
-  $: envs = [$reqs.req[ns]._template_.env];
+  $: _envs = [$reqs.req[ns]._template_._env];
 </script>
 
 <span class="commonlink">
   <div>env:
-    {#each $reqs.req[ns]._template_.envs as env}
+    {#each $reqs.req[ns]._template_._envs as env}
       <Checkbox click={chgEnv}  
-      bind:group={envs} value={env}>{env}</Checkbox>
+      bind:group={_envs} value={env}>{env}</Checkbox>
     {/each}
   </div>
 </span>

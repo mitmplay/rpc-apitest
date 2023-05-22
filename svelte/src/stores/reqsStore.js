@@ -21,29 +21,35 @@ export async function init() {
   return req2
 }
 
-function syncStor(template, run, xhr, ori, src) {
+function syncStor(sec, run, xhr, ori, src) {
   if (/_template_/.test(run)) {
     if (typeof xhr.select==='object' && xhr.select!==null) {
-      template.slcs = Object.keys(xhr.select)
+      sec._slcs = Object.keys(xhr.select)
     } else {
-      delete template.slcs
-      template.slc = ''
+      delete sec._slcs
+      sec._slc = ''
+    }
+  } else {
+    if (!sec._runs && typeof ori.run==='object' && ori.run!==null) {
+      sec._runs = Object.keys(ori.runs)
+    } else {
+      sec._runs = []
     }
   }
-  template.request = xhr
-  template.ori     = ori
-  template.src     = src
+  sec.request = xhr
+  sec.ori     = ori
+  sec.src     = src
 }
 
 async function requestEnv(sec, opt) {
   if (/_template_/.test(sec?._template_?.run)) {
-    if (sec._template_.slc) {
-      opt.slc = sec._template_.slc
+    if (sec._template_._slc) {
+      opt.slc = sec._template_._slc
     }
   }
   for (const id in sec) {
     const {run} = sec[id]
-    if (run===undefined) {
+    if (run===undefined && typeof sec[id]==='object' && sec[id]!==null) {
       await requestEnv(sec[id], opt)
     } else if (sec[id].request) {
       const [xhr, ori, src] = await RPC.api.request(run, opt)
@@ -55,10 +61,10 @@ async function requestEnv(sec, opt) {
 export function changeEnv(ns, env) {
   const sec = get(reqs).req[ns]
   const {_template_} = sec
-  if (_template_.env!==env) {
-    _template_.env = env
+  if (_template_._env!==env) {
+    _template_._env = env
   } else {
-    delete _template_.env
+    delete _template_._env
     env = false
   }
   setTimeout(async ()=>{
@@ -71,15 +77,15 @@ export function changeEnv(ns, env) {
 }
 
 export function changeSlc(req, ns, sec, slc) {
-  if (sec.slc!==slc) {
-    sec.slc = slc
+  if (sec._slc!==slc) {
+    sec._slc = slc
   } else {
-    delete sec.slc
+    delete sec._slc
     slc = false
   }
   setTimeout(async ()=>{
     let sec2 = req[ns]
-    const {env} = sec2._template_
+    const {_env:env} = sec2._template_
     sec.run.split('/').slice(1,-1).forEach(k=>sec2 = sec2[k])
 
     await requestEnv(sec2, slc ? {env, slc} : {env})
@@ -88,6 +94,10 @@ export function changeSlc(req, ns, sec, slc) {
       return json
     })
   })
+}
+
+export function changeRun(req, ns, sec, slc) {
+  // new implementation
 }
 
 async function _request(path) {
@@ -134,6 +144,15 @@ export function clickSummary(evn, req, ns, json) {
         syncStor(_template_, _template_.run, xhr, ori, src)
       }
     }
+    for (const key in json[nspace]) {
+      const sec = json[nspace][key]
+      if (!sec._runs && sec.run) {
+        if (!sec._runs && !/_template_/.test(sec.run)) {
+          const [xhr, ori, src] = await _request(sec.run)
+          syncStor(sec, sec.run, xhr, ori, src)
+        }
+      }
+    }
     const root = ns || nspace
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
@@ -149,6 +168,7 @@ function collapse(_reqs_) {
     const req = _reqs_[key]
     if (req.request) {
       delete req.request
+      delete req._runs
       delete req.ori
       delete req.src
     }

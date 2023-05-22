@@ -9,14 +9,14 @@
     const {value:slc} = e.target
     changeSlc(_req, _ns, json, slc)
   }
-  $: slcs = [json?.slc];
+  $: _slcs = [json?._slc];
 </script>
 
 <span class="commonlink">
   <div>slc:
-    {#each json.slcs as slc}
+    {#each json._slcs as slc}
       <Checkbox click={chgSlc}  
-      bind:group={slcs} value={slc}>{slc}</Checkbox>
+      bind:group={_slcs} value={slc}>{slc}</Checkbox>
     {/each}
   </div>
 </span>

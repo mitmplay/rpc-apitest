@@ -1,3 +1,9 @@
+runs:
+  run1:
+    greet: 'run1'
+  run2:
+    greet: 'run2'
+
 url: '{envurl}info.0.json'
 method: post
 body:

@@ -8,6 +8,7 @@
   import { pretty } from '../lib/common';
   import Tree from './Tree.svelte';
   import Envs from './Envs.svelte';
+  import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
 
   function toArray(_json) {
@@ -38,8 +39,8 @@
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
       sec = sec[k]
-      if (sec?._template_?.slc) {
-        opt.push(`slc:'${sec._template_.slc}'`)
+      if (sec?._template_?._slc) {
+        opt.push(`slc:'${sec._template_._slc}'`)
       }
     })
     if (opt.length===0) {
@@ -51,14 +52,14 @@
   async function run(evn, req, ns) {
     const {run} = evn.target.dataset
 
-    const env = req[ns]?._template_?.env
+    const env = req[ns]?._template_?._env
     const opt = {}
 
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
       sec = sec[k]
-      if (sec._template_.slc) {
-        opt.slc = sec._template_.slc
+      if (sec._template_._slc) {
+        opt.slc = sec._template_._slc
       }
     })
     if (env) {
@@ -92,7 +93,8 @@
       if (options.autoParsed) {
         _code = request
       } else {
-        _code = ori
+        const {env, runs, ...ori2} = ori || {}
+        _code = ori2
       }
       _code = pretty(_code || '')
       if (_code.match(/(hljs-string).+undefined/)) {
@@ -111,14 +113,20 @@
       <b>{`${json[nspace].run.split('/').pop()}`}</b>
     {:else if json[nspace].run}
       <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
-      <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+      {#if json[nspace]?._runs}
+        <Runs json={json[nspace]} {_req} {_ns}>
+          <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+        </Runs>
+      {:else}
+        <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+      {/if}
     {:else}
       {nspace}
     {/if}
   </summary>
-  {#if json[nspace]?._template_?.envs}
+  {#if json[nspace]?._template_?._envs}
     <Envs ns={nspace}/>
-  {:else if json[nspace]?._template_?.slcs}
+  {:else if json[nspace]?._template_?._slcs}
     <Slcs json={json[nspace]._template_} {_req} {_ns}/>
   {/if}
   {#if json[nspace].run}
