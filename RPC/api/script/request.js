@@ -144,18 +144,15 @@ function template(ns, name, opt) {
       if (i===0) {
         // parse to it-self
         parsed = startParsing(tpl, ns, tpl, {env})
+        template = merge(template, parsed)
       } else {
         // merged & parse to it-self
         template = merge(tpl, template)
         template = startParsing(template, ns, template, {env})
-        if (tpl.select && tpl.select[slc]) {
-          template = merge(template,tpl.select[slc])
-          parsed = startParsing(tpl, ns, template, opt)
-        } else {
-          parsed = startParsing(tpl, ns, template)
+        if (template.select && template.select[slc]) {
+          template = merge(template,template.select[slc])
         }
       }
-      template = merge(template, parsed)
     }
   })
   return template
@@ -173,7 +170,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
   const {merge} = _rpc_._fn_
   const ns = _rpc_[nmspace]
   if (ns) {
-    const tp2 = template(ns, name, opt)
+    let tp2 = template(ns, name, opt)
     const src = ns._request_src_[name]
     const ori = ns._request_[name]
     if (ori===undefined) {
@@ -183,27 +180,29 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     if (tp2) {
       const {url, headers, body, env, slc} = opt
       if (tp2.default) {
+        // merge default to request
         if (!name.includes('_template_')) {
           xhr = merge(tp2.default, xhr)
         }
       }
       if (tp2.env && env) {
-        const list = tp2.env[env]
-        if (typeof list!=='string') {
-          for (const id in list) {
-            tp2[id] = startParsing(list[id], ns, tp2)
-          }
+        // parse tp_env & merge to template
+        const tp_env = tp2.env[env]
+        if (typeof tp_env!=='string') {
+          let parsed = startParsing(tp_env, ns, tp2)
+          tp2 = merge(tp2, parsed)
         }  
       }
       if (tp2.select && slc) {
-        const list = tp2.select[slc]
-        if (typeof list!=='string') {
-          for (const id in list) {
-            tp2[id] = startParsing(list[id], ns, tp2)
-          }
+        // parse tp_slc & merge to template
+        const tp_slc = tp2.select[slc]
+        if (typeof tp_slc!=='string') {
+          let parsed = startParsing(tp_slc, ns, tp2)
+          tp2 = merge(tp2, parsed)
         }  
       }
-      const prs = startParsing(xhr, ns, tp2, opt)
+      // Parse request from template
+      prs = startParsing(xhr, ns, tp2)
       xhr = merge(xhr, prs)
       if (url || headers || body) {
         xhr = merge(xhr, startParsing({url, headers, body}, ns, tp2, env))
