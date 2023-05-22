@@ -93,8 +93,12 @@
       if (options.autoParsed) {
         _code = request
       } else {
-        const {env, runs, ...ori2} = ori || {}
-        _code = ori2
+        if (nspace!=='_template_') {
+          const {env, runs, ...ori2} = ori || {}
+          _code = ori2
+        } else {
+          _code = ori
+        }
       }
       _code = pretty(_code || '')
       if (_code.match(/(hljs-string).+undefined/)) {
