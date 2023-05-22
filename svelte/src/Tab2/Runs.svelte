@@ -3,12 +3,12 @@
   export let _req
   export let json
   import {changeRun} from '../stores/reqsStore';
-  import Checkbox from '../lib/Checkbox.svelte';
 
   async function chgRun(e) {
     const {value:_run} = e.target
     changeRun(_req, _ns, json, _run)
   }
+  
   $: _runs = [json?._run];
 </script>
 

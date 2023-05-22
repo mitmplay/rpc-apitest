@@ -30,7 +30,7 @@ function syncStor(sec, run, xhr, ori, src) {
       sec._slc = ''
     }
   } else {
-    if (!sec._runs && typeof ori.run==='object' && ori.run!==null) {
+    if (!sec._runs && typeof ori.runs==='object' && ori.runs!==null) {
       sec._runs = Object.keys(ori.runs)
     } else {
       sec._runs = []
