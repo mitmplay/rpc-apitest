@@ -87,7 +87,7 @@ function parser(xhr, ns, tp2, opt={}) {
     let value1 = opt.env && _env(xhr, opt.env, key) || xhr[key]
     if (value1===undefined) {
       continue
-    } else if (typeof value1!=='string') { // recursive parser
+    } else if (typeof value1==='object' && value1!==null) { // recursive parser
       const sec = {env:'env',select:'slc'}[key]
       if (sec) {
         const valuex = value1[opt[sec]]

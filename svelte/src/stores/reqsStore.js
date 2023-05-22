@@ -23,7 +23,7 @@ export async function init() {
 
 function syncStor(template, run, xhr, ori, src) {
   if (/_template_/.test(run)) {
-    if (xhr.select!==undefined && typeof xhr.select!=='string') {
+    if (typeof xhr.select==='object' && xhr.select!==null) {
       template.slcs = Object.keys(xhr.select)
     } else {
       delete template.slcs

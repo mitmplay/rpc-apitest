@@ -90,7 +90,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     } 
     if (value1===undefined) {
       continue
-    } else if (typeof value1!=='string') { // recursive parser
+    } else if (typeof value1==='object' && value1!==null) { // recursive parser
       xhr[key] = parser(ori, value1, ns, tp2, opt)
       continue
     }
@@ -188,7 +188,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       if (tp2.env && env) {
         // parse tp_env & merge to template
         const tp_env = tp2.env[env]
-        if (typeof tp_env!=='string') {
+        if (typeof tp_env==='object' && tp_env!==null) {
           let parsed = startParsing(tp_env, ns, tp2)
           tp2 = merge(tp2, parsed)
         }  
@@ -196,7 +196,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       if (tp2.select && slc) {
         // parse tp_slc & merge to template
         const tp_slc = tp2.select[slc]
-        if (typeof tp_slc!=='string') {
+        if (typeof tp_slc==='object' && tp_slc!==null) {
           let parsed = startParsing(tp_slc, ns, tp2)
           tp2 = merge(tp2, parsed)
         }  
