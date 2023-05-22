@@ -50,7 +50,7 @@
   }
 
   async function run(evn, req, ns) {
-    const {run, _run} = evn.target.dataset
+    const {run, _run} = evn.target.parentElement.dataset
     const _env = req[ns]?._template_?._env
 
     const opt = {}
@@ -134,7 +134,7 @@
         <a href="#" class=_hover_ 
         data-run={json[nspace].run} 
         data-_run={json[nspace]._run || ''} 
-        on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+        on:click={e=>run(e, $reqs.req, _ns)}><b>run</b></a>
       {/if}
     {:else}
       {nspace}

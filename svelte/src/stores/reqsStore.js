@@ -110,10 +110,10 @@ export function changeRun(req, ns, sec, _run) {
 
     // get the last slc
     sec.run.split('/').slice(1).forEach(k=>{
-      if (sec2._slc) {
-        opt.slc = sec2._slc
-      }
       sec2 = sec2[k]
+      if (sec2?._template_?._slc) {
+        opt.slc = sec2?._template_?._slc
+      }
     })
 
     if (sec2._run) {
