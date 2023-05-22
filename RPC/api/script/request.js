@@ -178,7 +178,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     }
     let xhr = JSON.parse(JSON.stringify(ori))
     if (tp2) {
-      const {url, headers, body, env, slc} = opt
+      const {url, headers, body, env, slc, run} = opt
       if (tp2.default) {
         // merge default to request
         if (!name.includes('_template_')) {
@@ -191,7 +191,14 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         if (typeof tp_env==='object' && tp_env!==null) {
           let parsed = startParsing(tp_env, ns, tp2)
           tp2 = merge(tp2, parsed)
-        }  
+        }
+        if (xhr.runs && run) {
+          const xh_runs = xhr.runs[run]
+          if (typeof xh_runs==='object' && xh_runs!==null) {
+            let parsed = startParsing(xh_runs, ns, tp2)
+            tp2 = merge(tp2, parsed)
+          }  
+        }
       }
       if (tp2.select && slc) {
         // parse tp_slc & merge to template
@@ -200,6 +207,13 @@ async function request(req='apidemo/u_agent_post', opt={}) {
           let parsed = startParsing(tp_slc, ns, tp2)
           tp2 = merge(tp2, parsed)
         }  
+      }
+      if (xhr.runs && run) {
+        const xh_runs = xhr.runs[run]
+        if (typeof xh_runs==='object' && xh_runs!==null) {
+          let parsed = startParsing(xh_runs, ns, tp2)
+          tp2 = merge(tp2, parsed)
+        }
       }
       // Parse request from template
       prs = startParsing(xhr, ns, tp2)

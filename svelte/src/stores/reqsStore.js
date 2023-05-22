@@ -30,7 +30,7 @@ function syncStor(sec, run, xhr, ori, src) {
       sec._slc = ''
     }
   } else {
-    if (!sec._runs && typeof ori.runs==='object' && ori.runs!==null) {
+    if (typeof ori.runs==='object' && ori.runs!==null) {
       sec._runs = Object.keys(ori.runs)
     } else {
       sec._runs = []
@@ -96,8 +96,37 @@ export function changeSlc(req, ns, sec, slc) {
   })
 }
 
-export function changeRun(req, ns, sec, slc) {
-  // new implementation
+export function changeRun(req, ns, sec, _run) {
+  if (sec._run!==_run) {
+    sec._run = _run
+  } else {
+    delete sec._run
+    _run = false
+  }
+  setTimeout(async ()=>{
+    let sec2 = req[ns]
+    const {_env:env} = sec2._template_
+    const opt = {env}
+
+    // get the last slc
+    sec.run.split('/').slice(1).forEach(k=>{
+      if (sec2._slc) {
+        opt.slc = sec2._slc
+      }
+      sec2 = sec2[k]
+    })
+
+    if (sec2._run) {
+      opt.run = sec2._run
+    }
+
+    const [xhr, ori, src] = await RPC.api.request(sec.run, opt)
+    syncStor(sec, _run, xhr, ori, src)
+    reqs.update(json => {
+      json.req[ns] = req[ns]
+      return json
+    })
+  })
 }
 
 async function _request(path) {
@@ -168,7 +197,7 @@ function collapse(_reqs_) {
     const req = _reqs_[key]
     if (req.request) {
       delete req.request
-      delete req._runs
+      // delete req._runs
       delete req.ori
       delete req.src
     }

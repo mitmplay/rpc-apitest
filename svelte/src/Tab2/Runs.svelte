@@ -12,7 +12,7 @@
   $: _runs = [json?._run];
 </script>
 
-<span class="commonlink">.
+<span class="commonlink">
   <div class=runlist>
     <slot />
     <ul>
@@ -33,7 +33,7 @@
   position: relative;
   .runlist {
     position: absolute;
-    top: 0;
+    top: -5px;
     left: 0;
     // margin-left: 300px;
     // margin-top: 4px;
@@ -42,6 +42,7 @@
       display: none;
       list-style: none;
       padding: 0;
+      margin: 0;
     }
     &:hover {
       border: solid rgb(73, 9, 9);
@@ -49,6 +50,18 @@
       // margin: -2px -7px 0 0;
       ul {
         display: block;
+      }
+    }
+    label {
+      display: flex;
+      padding-right: 2px;
+      &:hover {
+        background: yellow;
+        border: solid red;
+        cursor: pointer;
+      }
+      input {
+        vertical-align: sub;
       }
     }
   }

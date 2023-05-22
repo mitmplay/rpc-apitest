@@ -50,10 +50,12 @@
   }
 
   async function run(evn, req, ns) {
-    const {run} = evn.target.dataset
+    const {run, _run} = evn.target.dataset
+    const _env = req[ns]?._template_?._env
 
-    const env = req[ns]?._template_?._env
     const opt = {}
+    _env && (opt.env = _env)
+    _run && (opt.run = _run)
 
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
@@ -62,9 +64,7 @@
         opt.slc = sec._template_._slc
       }
     })
-    if (env) {
-      opt.env = env
-    }
+
     const arr = await RPC.api.request(run, opt)
     const msg = JSON.stringify(arr[0], null, 2)
     if (msg.match(/undefined/)) {
@@ -119,10 +119,22 @@
       <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
       {#if json[nspace]?._runs}
         <Runs json={json[nspace]} {_req} {_ns}>
-          <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+          <div class=_hover_ 
+          data-run={json[nspace].run} 
+          data-_run={json[nspace]._run || ''} 
+          on:click={e=>run(e, $reqs.req, _ns)}>
+            {#if json[nspace]?._run}
+              <i>&gt;{json[nspace]?._run}</i>
+            {:else}
+              <b>run</b>
+            {/if}
+          </div>
         </Runs>
       {:else}
-        <a href="#" class=_hover_ data-run={json[nspace].run} on:click={e=>run(e, $reqs.req, _ns)}>run</a>
+        <a href="#" class=_hover_ 
+        data-run={json[nspace].run} 
+        data-_run={json[nspace]._run || ''} 
+        on:click={e=>run(e, $reqs.req, _ns)}>run</a>
       {/if}
     {:else}
       {nspace}
