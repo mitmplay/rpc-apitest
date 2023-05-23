@@ -47,16 +47,16 @@
         str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
       }
       str += `  '${json.url}'`
-      if (window.isSecureContext && navigator.clipboard) {
-        await navigator.clipboard.writeText(str);
-      } else {
-        unsecuredCopy(str);
-      }
-      ttip = 'ok, copy to clipboard!'
-      setTimeout(()=>{
-        ttip = ''
-      }, 1000)
-    } 
+    }
+    if (window.isSecureContext && navigator.clipboard) {
+      await navigator.clipboard.writeText(str);
+    } else {
+      unsecuredCopy(str);
+    }
+    ttip = 'ok, copy to clipboard!'
+    setTimeout(()=>{
+      ttip = ''
+    }, 1000)
   }
   function unsecuredCopy(text) {
     const textArea = document.createElement("textarea");
