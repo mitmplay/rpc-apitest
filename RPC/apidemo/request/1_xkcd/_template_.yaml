@@ -4,6 +4,7 @@ mainurl: '{baseurl}{xcd}'
 env:
   dev:
     envurl: '{mainurl}dev/'
+    greet: '{msg} from DEVVVV'
     slc:
       one:
         greet: howdy one

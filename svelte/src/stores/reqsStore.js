@@ -132,10 +132,17 @@ export function changeRun(req, ns, sec, _run) {
 async function _request(path) {
   const opt = {}
   const {req} = get(reqs)
-  const nsp = path.split('/').shift()
-  const {env, slc} = req[nsp]?._template_ || {}
-  env && (opt.env = env)
-  slc && (opt.slc = slc)
+  const arr = path.split('/')
+  const tp1 = arr.shift()
+  const tp2 = arr.shift()
+  if (tp1) {
+    const {_env} = req[tp1]?._template_ || {}
+    _env && (opt.env = _env)  
+    if (tp2) {
+      const {_slc} = req[tp1][tp2]?._template_ || {}
+      _slc && (opt.slc = _slc)
+    }  
+  }
   return await RPC.api.request(path, opt)
 }
 
