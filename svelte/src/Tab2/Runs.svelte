@@ -54,6 +54,7 @@
     }
     label {
       display: flex;
+      font-size: smaller;
       padding-right: 2px;
       &:hover {
         background: yellow;

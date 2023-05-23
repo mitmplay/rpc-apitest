@@ -103,7 +103,7 @@
         }
       }
       _code = pretty(_code || '')
-      const rgx_undef1 = /(hljs-string).+({[\w&;]+})/g
+      const rgx_undef1 = /(hljs-string).+({[\w&.;-]+})/g
       const rgx_undef2 = /(hljs-string).+(undefined)/g
       if (_code.match(rgx_undef1)) {
         _code = _code.replace(rgx_undef1, p1=> `undefined ${p1}`)

@@ -25,8 +25,7 @@
   div {
     color: darkmagenta;
     position: absolute;
-    font-weight: bold;
-    font-size: small;
+    font-size: smaller;
     width: 400px;
     left: 92px;
     top: -4px;
