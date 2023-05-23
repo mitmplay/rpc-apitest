@@ -60,9 +60,9 @@
     _run && (opt.run = _run)
 
     let sec = req[ns]
-    run.split('/').slice(1,-1).forEach(k=>{
+    run.split('/').slice(1,3).forEach(k=>{ //# getting slc correct-way
       sec = sec[k]
-      if (sec._template_._slc) {
+      if (sec?._template_?._slc) {
         opt.slc = sec._template_._slc
       }
     })
@@ -103,9 +103,12 @@
         }
       }
       _code = pretty(_code || '')
-      const rgx_endef = /(hljs-string).+(undefined||\{\w+\})/
-      if (_code.match(rgx_endef)) {
-        _code = _code.replace(rgx_endef, p1=> `undefined ${p1}`)
+      const rgx_undef1 = /(hljs-string).+({\w+})/
+      const rgx_undef2 = /(hljs-string).+(undefined)/
+      if (_code.match(rgx_undef1)) {
+        _code = _code.replace(rgx_undef1, p1=> `undefined ${p1}`)
+      } else if (_code.match(rgx_undef2)) {
+        _code = _code.replace(rgx_undef2, p1=> `undefined ${p1}`)
       }
     }
     return _code
