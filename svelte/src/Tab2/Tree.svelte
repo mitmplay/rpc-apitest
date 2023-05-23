@@ -51,6 +51,7 @@
   }
 
   async function run(evn, req, ns) {
+    evn.preventDefault()
     const {run, _run} = evn.target.parentElement.dataset
     const _env = req[ns]?._template_?._env
 
@@ -68,8 +69,8 @@
 
     const arr = await RPC.api.request(run, opt)
     const msg = JSON.stringify(arr[0], null, 2)
-    if (msg.match(/undefined/)) {
-      alert(`WARNING: Request having UNDEFINED parsed !\n${msg}`)
+    if (msg.match(/(undefined|\{\w+\})/)) {
+      alert(`WARNING: Request having UN-parsed !\n${msg}`)
     } else {
       console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
       let msg = await RPC.api.fetch(run, opt)
@@ -102,8 +103,9 @@
         }
       }
       _code = pretty(_code || '')
-      if (_code.match(/(hljs-string).+undefined/)) {
-        _code = _code.replace(/(hljs-string).+undefined/, p1=> `undefined ${p1}`)
+      const rgx_endef = /(hljs-string).+(undefined||\{\w+\})/
+      if (_code.match(rgx_endef)) {
+        _code = _code.replace(rgx_endef, p1=> `undefined ${p1}`)
       }
     }
     return _code
