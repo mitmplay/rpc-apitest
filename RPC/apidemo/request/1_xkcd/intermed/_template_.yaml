@@ -6,9 +6,9 @@ env:
     envurl: '{mainurl}dev/'
     greet: '{msg} from DEVVVV'
     slc:
-      one:
+      s~one:
         greet: howdy one
-      two:
+      s~two:
         greet: howdy two
 
   qa: 

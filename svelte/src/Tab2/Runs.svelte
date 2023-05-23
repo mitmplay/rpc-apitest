@@ -35,8 +35,6 @@
     position: absolute;
     top: -5px;
     left: 0;
-    // margin-left: 300px;
-    // margin-top: 4px;
     z-index: 1;
     ul {
       display: none;

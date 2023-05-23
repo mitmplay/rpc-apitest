@@ -163,9 +163,11 @@ date: '{{dtnow}}'
 
 ```yaml
 select:
-  one:
+  w-me:
+    me: 'its me'
+  s~one:
     greet: howdy one
-  two:
+  s~two:
     greet: howdy two
 ```
 **env:** on the root \_template\_ will determine which var will be taken presedence over regular one. the **Active Env** is visible on the UI as it show on the right-side of **the root \_template\_**. you can see var getting overwrittern by checking the `Parser` option on action-bar. Example below on `greet` var the posibility of values getting overwritten:
@@ -182,7 +184,7 @@ greet: 'Hi from non ENV'
 # select: one
 greet: howdy one
 ``` 
-**select:**/(**slc**) if selection is set, it will take precedence over (**env**) as show in last example when select set to **one** the greet value change to 'howdy one'.
+**select:**/(**slc**) if selection is set, it will take precedence over (**env**) as show in last example when select set to **s~one** the greet value change to 'howdy one'. **text with tilde** is identified for unique selection.
 
 **default:** on the root \_template\_ will be used on request definition
 ```yaml

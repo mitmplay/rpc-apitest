@@ -6,7 +6,13 @@
   import {changeSlc} from '../stores/reqsStore';
 
   async function chgSlc(e) {
+    const {value} = e.target
+    const arrV = value.split('~')
     setTimeout(()=>{
+      if (arrV.length>1) {
+        selection = selection.filter(v=>!v.match(`${arrV[0]}~`))
+        selection.push(value)
+      }
       changeSlc(_req, _ns, json, selection)
     })
   }
@@ -24,7 +30,8 @@
       {#each json._slcs as slc}
       <li>
         <label>
-          <input type="checkbox" on:click={chgSlc} bind:group={selection} value={slc} />{slc}
+          <input type="checkbox" on:click={chgSlc} bind:group={selection} value={slc} />
+          <span>{slc}</span>
         </label>
       </li>
       {/each}
@@ -50,6 +57,9 @@
       margin: 0;
       label {
         display: flex;
+        span {
+          margin-top: 2px;
+        }
       }
     }
     &:hover {
