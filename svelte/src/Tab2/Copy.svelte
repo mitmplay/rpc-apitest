@@ -103,6 +103,7 @@
   z-index: 1000;
 }
 span.copies {
+  top: -2px;
   border: 1px solid white;
   position: absolute;
   text-align: center;
