@@ -1,5 +1,6 @@
 baseurl: 'https://' # comments
 msg: Hi
+greet: Hi from non ENV
 
 env:
   dev:
@@ -12,5 +13,4 @@ default:
   headers:
     Content-Type: application/json
 
-greet: Hi from non ENV
 greet-ed: 'hello {{dtnow}}'

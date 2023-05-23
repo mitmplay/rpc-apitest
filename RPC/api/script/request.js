@@ -147,7 +147,7 @@ function template(ns, name, opt) {
         template = merge(template, parsed)
       } else {
         // merged & parse to it-self
-        template = merge(tpl, template)
+        template = merge(template, tpl)
         template = startParsing(template, ns, template, {env})
         if (template.select && template.select[slc]) {
           template = merge(template,template.select[slc])
