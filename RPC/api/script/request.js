@@ -202,11 +202,13 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       }
       if (tp2.select && slc) {
         // parse tp_slc & merge to template
-        const tp_slc = tp2.select[slc]
-        if (typeof tp_slc==='object' && tp_slc!==null) {
-          let parsed = startParsing(tp_slc, ns, tp2)
-          tp2 = merge(tp2, parsed)
-        }  
+        for (const name of slc) {
+          const tp_slc = tp2.select[name]
+          if (typeof tp_slc==='object' && tp_slc!==null) {
+            let parsed = startParsing(tp_slc, ns, tp2)
+            tp2 = merge(tp2, parsed)
+          }  
+        }
       }
       if (xhr.runs && run) {
         const xh_runs = xhr.runs[run]

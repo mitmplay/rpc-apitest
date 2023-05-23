@@ -2,35 +2,73 @@
   export let _ns
   export let _req
   export let json
+  import {onMount} from 'svelte';
   import {changeSlc} from '../stores/reqsStore';
-  import Checkbox from '../lib/Checkbox.svelte';
 
   async function chgSlc(e) {
-    const {value:slc} = e.target
-    changeSlc(_req, _ns, json, slc)
+    setTimeout(()=>{
+      changeSlc(_req, _ns, json, selection)
+    })
   }
-  $: _slcs = [json?._slc];
+  let selection = [];
+  onMount(() => {
+    selection = json?._slc || []
+  })
 </script>
 
 <span class="commonlink">
-  <div>slc:
-    {#each json._slcs as slc}
-      <Checkbox click={chgSlc}  
-      bind:group={_slcs} value={slc}>{slc}</Checkbox>
-    {/each}
+  <div class=slclist>
+    <span>select:</span>
+    <span class=msg>&nbsp;{json?._slc||''}</span>
+    <ul>
+      {#each json._slcs as slc}
+      <li>
+        <label>
+          <input type="checkbox" on:click={chgSlc} bind:group={selection} value={slc} />{slc}
+        </label>
+      </li>
+      {/each}
+    </ul>
   </div>
 </span>
 
 <style lang="scss">
 .commonlink {
   position: relative;
+  .slclist {
+    position: absolute;
+    margin-left: 2px;
+    z-index: 1;
+    top: -1px;
+    span.msg {
+      position: absolute;
+    }
+    ul {
+      display: none;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      label {
+        display: flex;
+      }
+    }
+    &:hover {
+      border: solid #dbdbdb;
+      background-color: #f0ffffd6;
+      ul {
+        display: block;
+      }
+    }
+  }
   div {
     color: blue;
     position: absolute;
     font-size: smaller;
-    width: 400px;
+    padding: 0 4px 0 2px;
     left: 92px;
-    top: -4px;
+    input {
+      vertical-align: sub;
+    }
   }
 }
 </style>

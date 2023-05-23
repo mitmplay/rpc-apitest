@@ -41,7 +41,7 @@
     run.split('/').slice(1,-1).forEach(k=>{
       sec = sec[k]
       if (sec?._template_?._slc) {
-        opt.push(`slc:'${sec._template_._slc}'`)
+        opt.push(`slc:'${sec._template_._slc.join("','")}'`)
       }
     })
     if (opt.length===0) {
@@ -60,7 +60,7 @@
     _run && (opt.run = _run)
 
     let sec = req[ns]
-    run.split('/').slice(1,3).forEach(k=>{ //# getting slc correct-way
+    run.split('/').slice(1,-1).forEach(k=>{ //# getting slc correct-way
       sec = sec[k]
       if (sec?._template_?._slc) {
         opt.slc = sec._template_._slc
