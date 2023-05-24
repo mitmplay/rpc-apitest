@@ -27,8 +27,8 @@
     position: absolute;
     font-size: smaller;
     width: 400px;
-    left: 92px;
-    top: -4px;
+    left: 35px;
+    top: -2px;
   }
 }
 </style>

@@ -44,9 +44,8 @@
   position: relative;
   .slclist {
     position: absolute;
-    margin-left: 2px;
-    z-index: 1;
-    top: -1px;
+    margin: 0;
+    top: -2px;
     span.msg {
       position: absolute;
     }
@@ -61,6 +60,7 @@
       }
       label {
         display: flex;
+        font-size: smaller;
         span {
           margin-top: 2px;
           padding-right: 2px;
@@ -69,7 +69,7 @@
     }
     &:hover {
       border: solid #dbdbdb;
-      background-color: #f0ffffd6;
+      background-color: #ffffffd6;
       ul {
         display: block;
       }
@@ -80,7 +80,8 @@
     position: absolute;
     font-size: smaller;
     padding: 0 4px 0 2px;
-    left: 92px;
+    left: 35px;
+    top: -2px;
     input {
       vertical-align: sub;
     }
