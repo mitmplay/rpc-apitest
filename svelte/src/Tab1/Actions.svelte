@@ -2,7 +2,6 @@
   import {
     logs, 
     clickYaml,
-    clickTips,
     clickGroup, 
     clickCollapse,
     autoExpandRequest,
@@ -16,16 +15,17 @@
   $: hdr = $logs.options.autoExpandRespHdr;
   $: bdy = $logs.options.autoExpandRespBody;
   $: yml = $logs.options.yaml;
-  $: tip = $logs.options.tips;
+
 </script>
 
 <div class=action>
   <button on:click={clickCollapse}>[-]</button>
   <button on:click={e=>download_html(e, $logs)}>Download</button>
   |
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="all"  value="1">All</label>
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="host" value="2">Host</label>
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="time" value="3">Time</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="all"    value="1">All</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="domain" value="4">Api</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="host"   value="2">Host</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="time"   value="3">Date</label>
   |
   <label for="checkbkRqs">
     <input type="checkbox" id="checkbkRqs" on:click={autoExpandRequest}  bind:checked={rqs}>Reqs
@@ -39,10 +39,6 @@
   |
   <label for="checkbkYml">
     <input type="checkbox" id="checkbkYml" on:click={clickYaml}          bind:checked={yml}>Yaml
-  </label>
-  |
-  <label for="checkbkTips">
-    <input type="checkbox" id="checkbkTips" on:click={clickTips}          bind:checked={tip}>TTips
   </label>
 </div>
 

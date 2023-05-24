@@ -3,12 +3,15 @@ const json = {
   logs: {},
   logs2: {},
   logs3: {},
+  logs4: {},
   options: {
     activeTab: 1,
     grouping: '1', //# 1:all, 2:Host, 3:Time
     autoExpandRequest: true,
     autoExpandRespHdr: false,
     autoExpandRespBody: true,
+    hideHost: false,
+    showttips: false,
     autoShowlog: true,
     autoShowDate: false,
     autoShowElapse: false,
@@ -23,11 +26,13 @@ export function updateLogs(newLogs) {
   const _logs = {}
   const _logs2= {}
   const _logs3= {}
+  const _logs4= {}
   logs.update(json => {
     for (const id in newLogs) {
       _logs[id] = json.logs[id] || newLogs[id]
       // group by host
-      const {host} = _logs[id]
+      const {host, request, created=''} = _logs[id]
+      const domain = request.match(/:\/\/([^/]+)/)[1]
       if (!_logs2[host]) {
         _logs2[host] = {
           id: host,
@@ -36,7 +41,7 @@ export function updateLogs(newLogs) {
       }
       _logs2[host].logs[id] = _logs[id]
       // group by date
-      const date = (new Date(_logs[id]?.created)).toISOString().replace(/T.+/,'')
+      const date = (new Date(created)).toISOString().replace(/T.+/,'')
       if (!_logs3[date]) {
         _logs3[date] = {
           id: date,
@@ -44,11 +49,19 @@ export function updateLogs(newLogs) {
         }
       }
       _logs3[date].logs[id] = _logs[id]
+      if (domain && !_logs4[domain]) {
+        _logs4[domain] = {
+          id: domain,
+          logs: {}
+        }
+      }
+      _logs4[domain].logs[id] = _logs[id]
     }
 
     json.logs  = _logs
     json.logs2 = _logs2
     json.logs3 = _logs3
+    json.logs4 = _logs4
     window.json= json
     return json
   });
@@ -132,10 +145,6 @@ export function clickYaml({currentTarget}) {
   clickTogle(currentTarget, 'yaml')
 }
 
-export function clickTips({currentTarget}) {
-  clickTogle(currentTarget, 'tips')
-}
-
 export function autoExpandRequest({currentTarget}) {
   clickTogle(currentTarget, 'autoExpandRequest')
 }
@@ -148,8 +157,16 @@ export function autoExpandRespBody({currentTarget}) {
   clickTogle(currentTarget, 'autoExpandRespBody')
 }
 
+export function hideHost({currentTarget}) {
+  clickTogle(currentTarget, 'hideHost')
+}
+
+export function showttips({currentTarget}) {
+  clickTogle(currentTarget, 'hideHost')
+}
+
 export function autoShowlog({currentTarget}) {
-  clickTogle(currentTarget, 'autoShowlog')
+  clickTogle(currentTarget, 'showttips')
 }
 
 export function autoShowDate({currentTarget}) {

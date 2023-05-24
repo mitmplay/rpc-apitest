@@ -7,11 +7,9 @@
   } from '../stores/reqsStore';
   import {
     logs,
-    clickTips,
   } from '../stores/logsStore';
   $: ssrc = $reqs.options.showSrc;
   $: prsd = $reqs.options.autoParsed;
-  $: tip = $logs.options.tips;
 </script>
 
 <div class=action>
@@ -22,10 +20,6 @@
   </label>
   <label for="checkbkSrc">
     <input type="checkbox" id="checkbkSrc" on:click={showSrc} bind:checked={ssrc}>Source
-  </label>
-  |
-  <label for="checkbkTips">
-    <input type="checkbox" id="checkbkTips" on:click={clickTips} bind:checked={tip}>TTips
   </label>
 </div>
 

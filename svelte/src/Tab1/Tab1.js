@@ -4,7 +4,11 @@ export function toArray(json) {
     json[id]._id = id
     l.push(json[id])
   }
-  return l
+  return l.sort( (a, b) => {
+    if (a.id < b.id) return -1;    
+    if (a.id > b.id) return 1;
+    return 0;
+  })
 }
 
 export function no1({id}, ln=3) {
@@ -33,12 +37,12 @@ const _m = {
   connect:'conn',
   options:'optn',
 }
-export function req({request}, str) {
+export function req({request}, str, {hideHost:h}) {
   const [c, m, u] = str.split(',')
   try {
     const o   = JSON.parse(request)
     const url = o[u].replace(/\?.+/,'...')
-    return `${_m[o[m]]}${c}${url}`     
+    return `${_m[o[m]]}${c}${h?url.replace(/^https:\/\/[^\/]+/,''):url}`
   } catch (error) {
     return ''
   }

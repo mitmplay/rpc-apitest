@@ -17,11 +17,12 @@
     <slot />
     <ul>
       {#each json._runs as run}
-      <li>
+      <li class=run-options>
         <label>
           <input type="checkbox"
-           on:click={chgRun} bind:group={_runs} value={run}>{run}
+           on:click={chgRun} bind:group={_runs} value={run}>{run}&nbsp;
         </label>
+        <!-- <span class=run-time>&nbsp;~&gt;&nbsp;</span> -->
       </li>
       {/each}
     </ul>  
@@ -35,7 +36,6 @@
     position: absolute;
     top: -5px;
     left: 0;
-    z-index: 1;
     ul {
       display: none;
       list-style: none;
@@ -43,11 +43,22 @@
       margin: 0;
     }
     &:hover {
+      z-index: 1;
       border: solid rgb(73, 9, 9);
       background-color: azure;
       // margin: -2px -7px 0 0;
       ul {
         display: block;
+      }
+    }
+    .run-options {
+      display: flex;
+      .run-time {
+        color: red;
+        &:hover {
+          background: cyan;
+          border: solid 1px red;
+        }
       }
     }
     label {
