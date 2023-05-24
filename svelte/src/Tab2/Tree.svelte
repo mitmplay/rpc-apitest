@@ -132,7 +132,7 @@
             {#if json[nspace]?._run}
               <i>&gt;{json[nspace]?._run}</i>
             {:else}
-              <b>run</b>
+              <b>run<i>{json[nspace]?._runs.length>0 ? '*' : ''}</i></b>
             {/if}
           </div>
         </Runs>

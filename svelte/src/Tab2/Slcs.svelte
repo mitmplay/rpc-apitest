@@ -6,10 +6,10 @@
   import {changeSlc} from '../stores/reqsStore';
 
   async function chgSlc(e) {
-    const {value} = e.target
+    const {checked, value} = e.target
     const arrV = value.split('~')
     setTimeout(()=>{
-      if (arrV.length>1) {
+      if (checked && arrV.length>1) {
         selection = selection.filter(v=>!v.match(`${arrV[0]}~`))
         selection.push(value)
       }
@@ -55,10 +55,15 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      li:hover {
+        background: yellow;
+        border: solid 1px red;
+      }
       label {
         display: flex;
         span {
           margin-top: 2px;
+          padding-right: 2px;
         }
       }
     }
