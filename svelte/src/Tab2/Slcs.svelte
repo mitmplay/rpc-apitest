@@ -43,6 +43,7 @@
 .commonlink {
   position: relative;
   .slclist {
+    z-index: 1;
     position: absolute;
     margin: 0;
     top: -2px;

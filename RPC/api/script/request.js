@@ -79,8 +79,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   if (xhr.body===undefined) delete xhr.body
   if (xhr.headers===undefined) delete xhr.headers
 
-  const {merge} = rpc()._fn_
-  for (const key in xhr) {
+  const set_object = (key) => {
     let value1 = xhr[key]
     if (opt.env) {
       const evalue =_env(xhr, opt.env, key)
@@ -89,25 +88,40 @@ function parser(ori, xhr, ns, tp2, opt={}) {
       }
     } 
     if (value1===undefined) {
-      continue
+      return
     } else if (typeof value1!=='string') { // recursive parser - do-not change!
       xhr[key] = parser(ori, value1, ns, tp2, opt)
-      continue
+      return
     }
     // interpolation key with '-' and '.' separator 
     value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
     value1 = interpolate(varRegx, value1, tp2, opt.env, key)
     if (`${value1}`.match(/undefined/)) {
-      continue
+      return
     }
     if (value1._spread_) {
-      delete xhr[key]
-      for (const id in value1.values) {
-        xhr[id] = value1.values[id]
+      const {values} = value1
+      if (Array.isArray(xhr)) {
+        xhr.splice(key, 1, ...values)
+      } else {
+        delete xhr[key]
+        for (const id in values) {
+          xhr[id] = values[id]
+        }  
       }
     } else {
       xhr[key] = value1
     }
+  }
+
+  if (Array.isArray(xhr)) {
+    xhr.forEach((v,key) => {
+      set_object(key)
+    })
+  } else {
+    for (const key in xhr) {
+      set_object(key)
+    }  
   }
   return xhr
 }
