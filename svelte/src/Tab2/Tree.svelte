@@ -34,20 +34,17 @@
   }
 
   function enf(req, ns, run) {
-    const {env} = req[ns]._template_
-    const opt = env ? [`env:'${env}'`] : []
+    const {_env} = req[ns]._template_
 
+    let _slc= []
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{
       sec = sec[k]
       if (sec?._template_?._slc) {
-        opt.push(`slc:'${sec._template_._slc.join("','")}'`)
+        _slc = sec._template_._slc
       }
     })
-    if (opt.length===0) {
-      return `'`
-    }
-    return `',{${opt.join(',')}}`
+    return _env||_slc?.length ? `',.`: `'`
   }
 
   async function run(evn, req, ns) {
