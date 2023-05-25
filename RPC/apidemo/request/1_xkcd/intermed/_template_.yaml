@@ -15,5 +15,3 @@ env:
     envurl: '{mainurl}qa/'
 
 select: '{slc}'
-default:
-  method: get

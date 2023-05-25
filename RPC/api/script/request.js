@@ -200,7 +200,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       if (tp2.default) {
         // merge default to request
         if (!name.includes('_template_')) {
-          xhr = merge(tp2.default, xhr)
+          xhr = merge(xhr, tp2.default)
         }
       }
       if (tp2.env && env) {
@@ -220,13 +220,21 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       }
       if (tp2.select && slc) {
         // parse tp_slc & merge to template
+        let xhr2 = {}
         for (const name of slc) {
           const tp_slc = tp2.select[name]
           if (typeof tp_slc==='object' && tp_slc!==null) {
             let parsed = startParsing(tp_slc, ns, tp2)
-            tp2 = merge(tp2, parsed)
-          }  
+            xhr2 = merge(xhr2, parsed)
+          }
         }
+        if (xhr2.default) {
+          if (!name.includes('_template_')) {
+            xhr = merge(xhr, xhr2.default)
+          }
+          delete xhr2.default
+        }
+        tp2 = merge(tp2, xhr2)
       }
       if (xhr.runs && run) {
         const xh_runs = xhr.runs[run]

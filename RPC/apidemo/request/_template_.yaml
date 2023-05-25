@@ -5,11 +5,15 @@ greet: Hi from non ENV
 env:
   dev:
     greet: '{msg} from DEV'
+    default:
+      headers:
+        X-Type: xtype
   qa: 
     greet: '{msg} from QA'
   noreplace: 'no change on var'
 
 default:
+  method: get
   headers:
     Content-Type: application/json
 

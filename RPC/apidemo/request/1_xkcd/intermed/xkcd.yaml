@@ -5,7 +5,7 @@ runs:
     greet: 'run2'
 
 url: '{envurl}info.0.json'
-method: post
+
 body:
   _1: '{greet}'
   _2: '{greet-ed}'
