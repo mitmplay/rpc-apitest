@@ -90,7 +90,11 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     if (value1===undefined) {
       return
     } else if (typeof value1!=='string') { // recursive parser - do-not change!
-      xhr[key] = parser(ori, value1, ns, tp2, opt)
+      const result = parser(ori, value1, ns, tp2, opt)
+      xhr[key] = {
+        ...xhr[key],
+        ...result,
+      }
       return
     }
     // interpolation key with '-' and '.' separator 
