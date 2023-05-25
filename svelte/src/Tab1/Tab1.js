@@ -4,16 +4,18 @@ export function toArray(json) {
     json[id]._id = id
     l.push(json[id])
   }
-  return l.sort( (a, b) => {
-    if (a.id < b.id) return -1;    
-    if (a.id > b.id) return 1;
-    return 0;
-  })
+  return l
 }
 
 export function no1({id}, ln=3) {
   id = ''+ id 
   return id.padStart(ln, ' ')
+}
+
+export function sortID(a,b) {
+  if (a.id < b.id) return -1;    
+  if (a.id > b.id) return 1;
+  return 0;
 }
 
 export function date({created}) {
