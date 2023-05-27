@@ -84,7 +84,7 @@
   }
 
   function showRequest({options}, nspace) {
-    let _code
+    let _code = {}
     const {request, ori, src} = json[nspace]
     if (options.showSrc) {
       _code = pretty(src || '', true)
@@ -96,12 +96,16 @@
           const {env, runs, ...ori2} = ori || {}
           _code = ori2
         } else {
-          _code = ori
+          for (const key in ori) {
+            if (key[0]!=='_') {
+              _code[key] = ori[key]
+            }
+          }
         }
       }
-      _code = pretty(_code || '')
-      const rgx_undef1 = /(hljs-string).+({[\w&.;-]+})/g
-      const rgx_undef2 = /(hljs-string).+(undefined)/g
+      _code = pretty(_code || '') //hljs-string">&quot;{
+      const rgx_undef1 = /(hljs-string)">&quot;{[\w&.:;-]+}/g
+      const rgx_undef2 = /(hljs-string).+undefined/g
       if (_code.match(rgx_undef1)) {
         _code = _code.replace(rgx_undef1, p1=> `undefined ${p1}`)
       } else if (_code.match(rgx_undef2)) {

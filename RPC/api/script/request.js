@@ -37,6 +37,11 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       v = v.replace(/&/g, key)
       value1 = value1.replace(old, `{${v}}`)
     }
+    const [id, vl] = v.split(':')
+    if (vl) {
+      value1 = {}
+      value1[id] = vl.match(/^\d+$/) ? +vl : vl
+    }
     let spread = false
     if (v.match(/(^\.{3})\w+/)) {
       v = v.replace(/^\.{3}/, '')
@@ -75,7 +80,7 @@ function interpolate(regx, value1, tp2, env, key, ns) {
   return value1
 }
 
-const varRegx = /\{([\w-.&]+)\}/g
+const varRegx = /\{([\w-.&:{]+)\}+/g
 const fncRegx = /\{\{([\w-.&]+)\}\}/g
 function parser(ori, xhr, ns, tp2, opt={}) {
   if (xhr.url===undefined) delete xhr.url
