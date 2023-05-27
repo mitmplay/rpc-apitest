@@ -38,9 +38,10 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       value1 = value1.replace(old, `{${v}}`)
     }
     const [id, vl] = v.split(':')
+    let value2
     if (vl) {
-      value1 = {}
-      value1[id] = vl.match(/^\d+$/) ? +vl : vl
+      value2 = {}
+      value2[id] = vl
     }
     let spread = false
     if (v.match(/(^\.{3})\w+/)) {
@@ -48,7 +49,6 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       spread = true
     }
     const arr = v.split('.')
-    let value2 
     if (tp1) {
       if (v.includes('chance.')) {
         const fname = arr[1]
@@ -70,7 +70,7 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       if (match.length===1 && str===value1.trim()) {
         value1 = value2
       } else {
-        value1 = value1.replace(str, value2)
+        value1 = value1.replace(str, `${value2}`)
       }
       if (`${value1}`.includes('{&}')) {
         value1 = value1.replace('{&}', '')
@@ -101,7 +101,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     } else if (value1!==null && typeof value1==='object') { // recursive parser - do-not change!
       if (!Array.isArray(value1) || (value1.length && `${value1[0]}`.includes('{...'))) {
         const result = parser(ori, value1, ns, tp2, opt)
-        if (Array.isArray(result)) {
+        if (typeof xhr[key]!=='object' || Array.isArray(result)) {
           xhr[key] = result
         } else {
           xhr[key] = {
