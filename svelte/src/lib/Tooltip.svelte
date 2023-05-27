@@ -7,7 +7,7 @@
   }
 </script>
 
-{#if $logs.options.tips && $ttp.options.isHovered}
+{#if $logs.options.showttips && $ttp.options.isHovered}
   <div class="ttp tooltip" style={style($ttp)}>
     {@html $ttp.options.title}
   </div>

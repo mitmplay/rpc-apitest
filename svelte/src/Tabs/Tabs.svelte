@@ -45,6 +45,7 @@
     border-top: 0;
   }
   .slot {
+    z-index: 2;
     position: fixed;
     right: 18px;
   }

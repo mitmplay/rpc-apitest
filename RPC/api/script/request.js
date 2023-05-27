@@ -66,7 +66,10 @@ function interpolate(regx, value1, tp2, env, key, ns) {
         value1 = value2
       } else {
         value1 = value1.replace(str, value2)
-      }  
+      }
+      if (`${value1}`.includes('{&}')) {
+        value1 = value1.replace('{&}', '')
+      }
     }
   })
   return value1
@@ -79,6 +82,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   if (xhr.body===undefined) delete xhr.body
   if (xhr.headers===undefined) delete xhr.headers
 
+  const arr = []
   const set_object = (key) => {
     let value1 = xhr[key]
     if (opt.env) {
@@ -89,24 +93,36 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     } 
     if (value1===undefined) {
       return
-    } else if (typeof value1!=='string') { // recursive parser - do-not change!
-      const result = parser(ori, value1, ns, tp2, opt)
-      xhr[key] = {
-        ...xhr[key],
-        ...result,
-      }
-      return
+    } else if (value1!==null && typeof value1==='object') { // recursive parser - do-not change!
+      if (!Array.isArray(value1) || (value1.length && `${value1[0]}`.includes('{...'))) {
+        const result = parser(ori, value1, ns, tp2, opt)
+        if (Array.isArray(result)) {
+          xhr[key] = result
+        } else {
+          xhr[key] = {
+            ...xhr[key],
+            ...result,
+          }  
+        }
+        return  
+      } 
     }
     // interpolation key with '-' and '.' separator 
-    value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
-    value1 = interpolate(varRegx, value1, tp2, opt.env, key)
+    if (typeof value1==='string') {
+      value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
+      value1 = interpolate(varRegx, value1, tp2, opt.env, key)  
+    }
     if (`${value1}`.match(/undefined/)) {
       return
     }
     if (value1._spread_) {
       const {values} = value1
       if (Array.isArray(xhr)) {
-        xhr.splice(key, 1, ...values)
+        if (!Array.isArray(values)) {
+          arr.push(value1)
+        } else {
+          values.forEach(x=>arr.push(x))
+        }
       } else {
         delete xhr[key]
         for (const id in values) {
@@ -114,14 +130,17 @@ function parser(ori, xhr, ns, tp2, opt={}) {
         }  
       }
     } else {
-      xhr[key] = value1
+      if (Array.isArray(xhr)) {
+        arr.push(value1)
+      } else {
+        xhr[key] = value1
+      }
     }
   }
 
   if (Array.isArray(xhr)) {
-    xhr.forEach((v,key) => {
-      set_object(key)
-    })
+    xhr.forEach((v,i) => set_object(i))
+    arr.forEach((v,i) => (xhr[i] = v))
   } else {
     for (const key in xhr) {
       set_object(key)
@@ -200,7 +219,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       if (tp2.default) {
         // merge default to request
         if (!name.includes('_template_')) {
-          xhr = merge(xhr, tp2.default)
+          xhr = merge(tp2.default, xhr) //# donot change the order!
         }
       }
       if (tp2.env && env) {
@@ -230,7 +249,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         }
         if (xhr2.default) {
           if (!name.includes('_template_')) {
-            xhr = merge(xhr, xhr2.default)
+            xhr = merge(xhr2.default, xhr) //# donot change the order!
           }
           delete xhr2.default
         }

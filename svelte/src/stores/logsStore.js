@@ -162,11 +162,11 @@ export function hideHost({currentTarget}) {
 }
 
 export function showttips({currentTarget}) {
-  clickTogle(currentTarget, 'hideHost')
+  clickTogle(currentTarget, 'showttips')
 }
 
 export function autoShowlog({currentTarget}) {
-  clickTogle(currentTarget, 'showttips')
+  clickTogle(currentTarget, 'autoShowlog')
 }
 
 export function autoShowDate({currentTarget}) {
