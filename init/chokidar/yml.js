@@ -19,9 +19,8 @@ function yml(_rpc_) {
     }
     const {request} = RPC.api
     if (method.includes('_template_')) {
-      const folders = method.split(/[:/]/).slice(1,-1)
+      const [app, ...folders] = method.split(/[:/]/).slice(1,-1)
       const pth = folders.join('/')
-      const app = folders.shift()
       const requests = RPC[app]._request_
       const keys = Object.keys(requests).map(x=>{
         if (x.includes('_template_')) {
@@ -34,14 +33,16 @@ function yml(_rpc_) {
         if (id.includes('-template-')) {
           path = id.replace(/-template-$/,'_template_')
         }
-        if (folders.length==0 || path.includes(pth)) {
+        if (path.includes(pth)) {
           const path2 = `${app}/${path}`
           const method2 = `request:${path2}`
-          if (folders.length==0 || method!==method2) {
-            const reqs = await request(path2)
+          const reqs = await request(path2)
+          if (argv.verbose) { 
             console.log(method2, reqs)
-            _broadcast2(method2, reqs)
+          } else {
+            console.log(method2)
           }
+          _broadcast2(method2, reqs)
         }
       }
     } else {
