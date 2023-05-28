@@ -129,9 +129,11 @@ export function changeRun(req, ns, sec, _run) {
   })
 }
 
-async function _request(path) {
+async function _request(path, rpc=true) {
   let {req} = get(reqs)
-  const [ns,...slcs] = path.split('/').slice(0,-1)
+  const apath = path.split('/')
+  const file = apath.pop()
+  const [ns,...slcs] = apath
 
   req = req[ns]
   const env = req?._template_?._env
@@ -141,11 +143,21 @@ async function _request(path) {
     const slc = req?._template_?._slc
     slc && (opt.slc = slc)
   }
-  return await RPC.api.request(path, opt)
+  if (rpc || req[file]?._openName) {
+    return await RPC.api.request(path, opt)
+  } else {
+    delete req[file].request
+    delete req[file].ori
+    delete req[file].src
+    return []
+  }
 }
 
-export async function updateReq(path, o) {
-  const [xhr, ori, src] = o || await _request(path) // if it came from broadcast
+export async function updateReq(path) {
+  const [xhr, ori, src] = await _request(path, false) // if it came from broadcast
+  if (!xhr) {
+    return
+  }
 
   reqs.update(json => {
     let {req} = json
@@ -156,13 +168,9 @@ export async function updateReq(path, o) {
     }
     const sec = req[file] 
     if (sec) {
-      if (!o) {
-        sec.request = xhr
-        sec.ori     = ori
-        sec.src     = src  
-      } else {
-        syncStor(sec, path, xhr, ori, src)
-      }
+      sec.request = xhr
+      sec.ori     = ori
+      sec.src     = src  
     }
     return json
   })
@@ -189,7 +197,10 @@ export function clickSummary(evn, req, ns, json) {
       const sec = json[nspace][key]
       if (!sec._runs && sec.run) {
         if (!sec._runs && !/_template_/.test(sec.run)) {
-          const [xhr, ori, src] = await _request(sec.run)
+          const [xhr, ori, src] = await _request(sec.run, false)
+          if (!xhr) {
+            continue
+          }
           syncStor(sec, sec.run, xhr, ori, src)
         }
       }
