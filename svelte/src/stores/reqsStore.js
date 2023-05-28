@@ -25,7 +25,7 @@ function syncStor(sec, run, xhr, ori, src) {
   if (/_template_/.test(run)) {
     if (typeof xhr.select==='object' && xhr.select!==null) {
       sec._slcs = Object.keys(xhr.select)
-    } else {
+    } else { //# why need to delete?
       delete sec._slcs
       sec._slc = ''
     }
@@ -130,16 +130,17 @@ export function changeRun(req, ns, sec, _run) {
 }
 
 async function _request(path) {
-  const opt = {}
-  const {req} = get(reqs)
-  const [ns,sl] = path.split('/')
-  const _env = req[ns]?._template_?._env
+  let {req} = get(reqs)
+  const [ns,...slcs] = path.split('/').slice(0,-1)
 
-  _env && (opt.env = _env)
-  if (sl) {
-    const _slc = req[ns][sl]?._template_?.slc
-    _slc && (opt.slc = _slc)
-  }  
+  req = req[ns]
+  const env = req?._template_?._env
+  const opt = env ? {env} : {}
+  for (const id of slcs) {
+    req = req[id]
+    const slc = req?._template_?._slc
+    slc && (opt.slc = slc)
+  }
   return await RPC.api.request(path, opt)
 }
 
@@ -153,8 +154,15 @@ export async function updateReq(path, o) {
     for (const folder of folders) {
       req = req[folder] || {}
     }
-    if (req[file]) {
-      syncStor(req[file], path, xhr, ori, src) 
+    const sec = req[file] 
+    if (sec) {
+      if (!o) {
+        sec.request = xhr
+        sec.ori     = ori
+        sec.src     = src  
+      } else {
+        syncStor(sec, path, xhr, ori, src)
+      }
     }
     return json
   })

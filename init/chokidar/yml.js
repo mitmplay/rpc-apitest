@@ -36,13 +36,15 @@ function yml(_rpc_) {
         if (path.includes(pth)) {
           const path2 = `${app}/${path}`
           const method2 = `request:${path2}`
-          const reqs = await request(path2)
-          if (argv.verbose) { 
-            console.log(method2, reqs)
-          } else {
-            console.log(method2)
-          }
-          _broadcast2(method2, reqs)
+          // cannot, as state on each users is different on: env / select
+          // const reqs = await request(path2)
+          // if (argv.verbose) { 
+          //   console.log(method2, reqs)
+          // } else {
+          //   console.log(method2)
+          // }
+          // _broadcast2(method2, reqs)
+          _broadcast2(method2, '')
         }
       }
     } else {

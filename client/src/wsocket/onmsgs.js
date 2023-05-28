@@ -11,6 +11,9 @@ function onmsgs(ws) {
       const {method: sd, params: pr} = pending
       if (pr?.length) {
         msg.sd = `${sd}('${pr[0]}',.)`
+        if (RPC._obj_.argv.verbose) {
+          msg.pr = pr[1]
+        }
       } else {
         msg.sd = `${sd}(...)`
       }
