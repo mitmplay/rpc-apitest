@@ -153,7 +153,9 @@
     <Slcs json={json[nspace]._template_} {_req} {_ns}/>
   {/if}
   {#if json[nspace].run}
-    <Copy json={json[nspace].request}/>
+    {#if !/_template_/.test(json[nspace].run)}
+      <Copy json={json[nspace].request}/>
+    {/if}
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
       {#if RPC._obj_?.argv?.json}
         <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace) || '...'}</code></pre>
