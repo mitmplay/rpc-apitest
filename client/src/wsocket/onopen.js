@@ -2,16 +2,20 @@ const rpc = require('jsonrpc-lite')
 const log = require('./_log' )
 
 // Helper function to generate unique request IDs
-let requestId = 1
-function generateRequestId() {
-  return (requestId++) + ''
+const t64 = 'Wabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZh'
+const nanoid = (size = 8) => {
+  let id = ''
+  while (size-- > 0) {
+    id += t64[Math.random() * 64 | 0]
+  }
+  return id
 }
 
 function onopen(ws) {
   const {pendingRequests}= ws
   // Helper function to send a JSON-RPC request over the WebSocket
   function sendRequest(method, params) {
-    let id = generateRequestId()
+    let id = nanoid()
     const arr = params.slice(-1)
     const req = rpc.request(id, method, params)
     if (/(^api\.|\.api_)/.test(method)) {
@@ -24,7 +28,7 @@ function onopen(ws) {
     ws.send(JSON.stringify(req))
     return new Promise((resolve, reject) => {
       // Store the request ID and resolve/reject functions in the pending requests Map
-      pendingRequests.set(id, { resolve, reject })
+      pendingRequests.set(id, { resolve, reject, method, params, logged: 0})
     })
   }
   window.sendRequest = sendRequest
@@ -49,7 +53,7 @@ function onopen(ws) {
   ws.onopen = async data => {
     console.log('Websocket open...')
     setTimeout(()=>{
-      if (window.RPC._obj_.argv.devmode) {
+      if (window.RPC._obj_?.argv?.devmode) {
         if (!window.RPC.apitest) {
           window.RPC.apitest = {}
         }

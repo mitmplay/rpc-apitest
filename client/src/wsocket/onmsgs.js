@@ -4,6 +4,23 @@ function onmsgs(ws) {
     const {data} = message
     const payload = JSON.parse(data)
     const {id, result, error, broadcast:method} = payload
+    const pending = pendingRequests.get(id)
+    const msg = {id}
+
+    if (pending) {
+      const {method: sd, params: pr} = pending
+      if (pr?.length) {
+        msg.sd = `${sd}('${pr[0]}',.)`
+      } else {
+        msg.sd = `${sd}(...)`
+      }
+    } else {
+      msg.bc = method
+    }
+    if (RPC._obj_.argv.verbose) {
+      msg.result = result
+    }
+    const show = !(msg.bc && msg.id)
     try {
       if (method) {
         const func = RPC._broadcast_[method.split(':')[0]]
@@ -17,6 +34,7 @@ function onmsgs(ws) {
             exfunc= false
           }
         }
+    
         if (exfunc) {
           let t_executed = 0
           for (const f in fany) {
@@ -29,17 +47,15 @@ function onmsgs(ws) {
             }
           }
           if (t_executed) {
-            const {_obj_: {argv}} = RPC
-            const json = {'RPC any-fn': method}
-            if (argv.verbose) {
-              json.result = result
-            }
-            console.log(json)
+            msg.ex = true
           }
         }
       }
-      const pending = pendingRequests.get(id)
+      if (show) {
+        console.log(msg)
+      }
       if (pending) {
+        pending.logged += 1
         pendingRequests.delete(id)
         const { resolve, reject } = pending
         error ? reject(error) : resolve(result)  
