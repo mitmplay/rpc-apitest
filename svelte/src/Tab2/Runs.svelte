@@ -4,8 +4,9 @@
   export let json
   import {changeRun} from '../stores/reqsStore';
 
-  async function chgRun(e) {
-    const {value:_run} = e.target
+  async function chgRun(evn) {
+    evn.stopPropagation()
+    const {value:_run} = evn.target
     changeRun(_req, _ns, json, _run)
   }
   

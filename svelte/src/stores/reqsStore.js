@@ -25,9 +25,7 @@ function syncStor(sec, run, xhr, ori, src) {
   if (/_template_/.test(run)) {
     if (typeof xhr.select==='object' && xhr.select!==null) {
       sec._slcs = Object.keys(xhr.select)
-    } else { //# why need to delete?
-      delete sec._slcs
-      sec._slc = ''
+      sec._slc  = []
     }
   } else {
     if (typeof ori.runs==='object' && ori.runs!==null) {
@@ -167,11 +165,7 @@ export async function updateReq(path) {
       req = req[folder] || {}
     }
     const sec = req[file] 
-    if (sec) {
-      sec.request = xhr
-      sec.ori     = ori
-      sec.src     = src  
-    }
+    syncStor(sec, sec.run, xhr, ori, src)
     return json
   })
 }
@@ -180,17 +174,15 @@ export function clickSummary(evn, req, ns, json) {
   const el = evn.currentTarget.parentElement
   setTimeout(async _1 => {
     const {nspace,name} = el.dataset
-    const {run, request} = json[nspace]
-    if (run && !request) {
-      const [xhr, ori, src] = await _request(run)
-      json[nspace].request = xhr
-      json[nspace].ori     = ori
-      json[nspace].src     = src
-    } else if (json[nspace]._template_) {
-      const {_template_} = json[nspace]
-      if (!_template_.ori) {
-        const [xhr, ori, src] = await _request(_template_.run)
-        syncStor(_template_, _template_.run, xhr, ori, src)
+    const sec = json[nspace]
+    if (sec.run && !sec.request) {
+      const [xhr, ori, src] = await _request(sec.run)
+      syncStor(sec, sec.run, xhr, ori, src)
+    } else if (sec._template_) {
+      const {_template_: tpl} = sec
+      if (!tpl.ori) {
+        const [xhr, ori, src] = await _request(tpl.run)
+        syncStor(tpl, tpl.run, xhr, ori, src)
       }
     }
     for (const key in json[nspace]) {
