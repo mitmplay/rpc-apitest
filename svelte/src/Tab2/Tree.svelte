@@ -83,24 +83,39 @@
     }
   }
 
+  function _novar(_ori) {
+    for (const key in _ori) {
+      if (key[0]==='_') {
+        delete _ori[key]
+      } else if (typeof _ori[key]==='object') {
+        if (_ori[key]!==null || !Array.isArray(_ori[key])) {
+          _novar(_ori[key])
+        }
+      }
+    }
+    return _ori
+  }
+
   function showRequest({options}, nspace) {
     let _code = {}
     const {request, ori, src} = json[nspace]
     if (options.showSrc) {
       _code = pretty(src || '', true)
     } else {
-      if (options.autoParsed) {
-        _code = request
+      if (options.autoParsed && request) {
+        const _ori1 = JSON.parse(JSON.stringify(request))
+        const _ori2 = _novar(_ori1)
+        _code = _ori2
       } else {
         if (nspace!=='_template_') {
-          const {env, runs, ...ori2} = ori || {}
-          _code = ori2
-        } else {
-          for (const key in ori) {
-            if (key[0]!=='_') {
-              _code[key] = ori[key]
-            }
-          }
+          const {env, runs, ...orix} = ori || {}
+          const _ori1 = JSON.parse(JSON.stringify(orix))
+          const _ori2 = _novar(_ori1)
+          _code = _ori2
+        } else if (ori){
+          const _ori1 = JSON.parse(JSON.stringify(ori))
+          const _ori2 = _novar(_ori1)
+          _code = _ori2
         }
       }
       _code = pretty(_code || '') //hljs-string">&quot;{
