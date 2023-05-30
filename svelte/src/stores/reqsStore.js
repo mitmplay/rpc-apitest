@@ -144,6 +144,9 @@ async function _request(path, rpc=true) {
   }
   if (rpc || req[file]?._openName) {
     return await RPC.api.request(path, opt)
+  } else if (!req[file]) {
+    req[file] = { run: path}
+    return []
   } else {
     delete req[file].request
     delete req[file].ori
@@ -152,7 +155,23 @@ async function _request(path, rpc=true) {
   }
 }
 
-export async function updateReq(path) {
+export async function updateReq(path, opt={}) {
+  if (opt.del) {
+    reqs.update(json => {
+      let {req} = json
+      const folders = path.split('/')
+      const file = folders.pop().replace(/\.yaml$/, '')
+      for (const folder of folders) {
+        req = req[folder] || {}
+      }
+      if (req[file]) {
+        delete req[file]
+      }
+      return json
+    })
+    return
+  }
+
   const [xhr, ori, src] = await _request(path, false) // if it came from broadcast
   if (!xhr) {
     return

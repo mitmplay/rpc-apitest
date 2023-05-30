@@ -13,7 +13,7 @@ function yml(_rpc_) {
 
   const broadcast = async (method, obj) => {
     const RPC = rpc()
-    const _broadcast2 = RPC._fn_._broadcast2
+    const {_broadcast2} = RPC._fn_
     if (initToggle || !_broadcast2) {
       return
     }
@@ -36,14 +36,6 @@ function yml(_rpc_) {
         if (path.includes(pth)) {
           const path2 = `${app}/${path}`
           const method2 = `request:${path2}`
-          // cannot, as state on each users is different on: env / select
-          // const reqs = await request(path2)
-          // if (argv.verbose) { 
-          //   console.log(method2, reqs)
-          // } else {
-          //   console.log(method2)
-          // }
-          // _broadcast2(method2, reqs)
           _broadcast2(method2, '')
         }
       }
@@ -84,7 +76,9 @@ function yml(_rpc_) {
 
     const str = fs.readFileSync(path, 'utf8')
     const obj = YAML.parse(str)
-    if (obj.openapi) {
+    if (obj===null) {
+      return
+    } else if (obj.openapi) {
       _rpc_[app]._openapi_[name] = obj
     } else {
       _rpc_[app]._request_[name] = obj
@@ -99,7 +93,7 @@ function yml(_rpc_) {
         timeout = setTimeout(initEnd, 1000)
       }
       const method = `${typ}:${app}/${name}`
-      broadcast(method, obj)
+      broadcast(method, {})
     }
   }
 
@@ -109,8 +103,27 @@ function yml(_rpc_) {
     initToggle = 1
   }
 
+  function removeYAML(path, msg, broadcast) {
+    const RPC = rpc()
+    const {_broadcast2} = RPC._fn_
+    let [app, typ, name] = xpath(path)
+    name = name.replace(/\.yaml$/, '')
+    if (_rpc_[app]._openapi_[name]) {
+      delete _rpc_[app]._openapi_[name]
+    }
+    if (_rpc_[app]._request_[name]) {
+      delete _rpc_[app]._request_[name]
+    }
+    console.log(msg,  JSON.stringify({app, typ, name}))
+    if (!argv.test) { 
+      const method = `${typ}:${app}/${name}`
+      _broadcast2(method, {del: true})
+      initToggle = 0
+    }
+  }
+
   function remove (path, msg) {
-    console.log('removeYAML', path)
+    removeYAML(path, msg, broadcast)
   }
 
   // Initialize watcher.
