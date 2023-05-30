@@ -73,7 +73,7 @@
       let msg = await RPC.api.fetch(run, opt)
       if (typeof msg==='object' && msg!==null) {
         console.log(JSON.stringify(msg, null, 2))
-        if ($logs.options.autoShowlog) { //# autoShowlog
+        if (msg.rowid && $logs.options.autoShowlog) { //# autoShowlog
           clickCollapse({activeTab:1, rowid: msg.rowid})
         }
       } else {

@@ -129,7 +129,8 @@ export function changeRun(req, ns, sec, _run) {
 }
 
 async function _request(path, rpc=true) {
-  let {req} = get(reqs)
+  let json = get(reqs)
+  let {req} = json
   const apath = path.split('/')
   const file = apath.pop()
   const [ns,...slcs] = apath
@@ -146,6 +147,9 @@ async function _request(path, rpc=true) {
     return await RPC.api.request(path, opt)
   } else if (!req[file]) {
     req[file] = { run: path}
+    reqs.update(x => {
+      return json
+    })
     return []
   } else {
     delete req[file].request
