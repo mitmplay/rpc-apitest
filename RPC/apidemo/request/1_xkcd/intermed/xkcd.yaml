@@ -5,7 +5,8 @@ runs:
     greet: 'run2'
 
 url: '{envurl}info.0.json'
-
+method: post
 body:
+  wow: kereen
   _1: '{greet}'
   _2: '{greet-ed}'

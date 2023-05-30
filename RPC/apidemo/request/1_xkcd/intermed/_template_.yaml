@@ -5,7 +5,7 @@ env:
   dev:
     envurl: '{mainurl}dev/'
     greet: '{msg} from BBBC'
-    slc:
+    _slc:
       s~one:
         greet: howdy one
       s~two:
@@ -14,4 +14,4 @@ env:
   qa: 
     envurl: '{mainurl}qa/'
 
-select: '{slc}'
+select: '{_slc}'

@@ -83,17 +83,24 @@
     }
   }
 
-  function _novar(_ori) {
-    for (const key in _ori) {
-      if (key[0]==='_') {
-        delete _ori[key]
-      } else if (typeof _ori[key]==='object') {
-        if (_ori[key]!==null || !Array.isArray(_ori[key])) {
-          _novar(_ori[key])
+  function _novar(_ori_, _init_='^') {
+    const showvar = ['^.headers','^.body']
+    const _deepno = (_ori, _up) => {
+      const fvar = x=>x===_up.slice(0,x.length)
+      for (const key in _ori) {
+        const arr = showvar.filter(fvar)
+        if (key[0]==='_' && !arr.length) {
+          // console.log({_up, key})
+          delete _ori[key]
+        } else if (typeof _ori[key]==='object') {
+          if (_ori[key]!==null || !Array.isArray(_ori[key])) {
+            _deepno(_ori[key], `${_up}.${key}`)
+          }
         }
       }
     }
-    return _ori
+    _deepno(_ori_, _init_)
+    return _ori_
   }
 
   function showRequest({options}, nspace) {

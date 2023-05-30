@@ -26,7 +26,7 @@ function syncStor(sec, run, xhr, ori, src) {
     if (typeof xhr.select==='object' && xhr.select!==null) {
       sec._slcs = Object.keys(xhr.select)
     } else {
-      sec._slcs = []
+      delete sec._slcs
     }
   } else {
     if (typeof ori.runs==='object' && ori.runs!==null) {
