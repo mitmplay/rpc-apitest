@@ -1,12 +1,14 @@
 <script>
   import {
     logs,
+    limithdr,
     hideHost,
     showttips,
     autoShowlog,
     autoShowDate,
     autoShowElapse,
   } from './stores/logsStore';
+  $: lhdr = $logs.options.limithdr;
   $: host = $logs.options.hideHost;
   $: tips = $logs.options.showttips;
   $: slog = $logs.options.autoShowlog;
@@ -15,10 +17,15 @@
 </script>
 
 <div class="commonlink">
-  <label for="checkbkShowlog">
-    <input type="checkbox" id="checkbkShowlog" on:click={autoShowlog} bind:checked={slog}>Show-Logs
+  <label for="checkbkLmthdr">
+    <input type="checkbox" id="checkbkLmthdr" on:click={limithdr} bind:checked={lhdr}>Limit Header
   </label>
   <ul>
+    <li>
+      <label for="checkbkShowlog">
+        <input type="checkbox" id="checkbkShowlog" on:click={autoShowlog} bind:checked={slog}>Show-Logs
+      </label>
+    </li>
     <li>
       <label for="checkbkDate">
         <input type="checkbox" id="checkbkDate" on:click={autoShowDate} bind:checked={sdte}>Show date
@@ -33,9 +40,11 @@
           <input type="checkbox" id="checkbkDomain" on:click={hideHost} bind:checked={host}>Hide domain
         </label>
       </li>
-      <label for="checkbkTips">
-        <input type="checkbox" id="checkbkTips" on:click={showttips} bind:checked={tips}>Show TTips
-      </label>    
+      <li>
+        <label for="checkbkTips">
+          <input type="checkbox" id="checkbkTips" on:click={showttips} bind:checked={tips}>Show TTips
+        </label>  
+      </li>
       </ul>  
 </div>
 

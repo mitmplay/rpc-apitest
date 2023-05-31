@@ -10,9 +10,10 @@ const json = {
     autoExpandRequest: true,
     autoExpandRespHdr: false,
     autoExpandRespBody: true,
+    limithdr: true,
     hideHost: false,
     showttips: false,
-    autoShowlog: true,
+    autoShowlog: false,
     autoShowDate: false,
     autoShowElapse: false,
     tips: false,
@@ -159,6 +160,10 @@ export function autoExpandRespBody({currentTarget}) {
 
 export function hideHost({currentTarget}) {
   clickTogle(currentTarget, 'hideHost')
+}
+
+export function limithdr({currentTarget}) {
+  clickTogle(currentTarget, 'limithdr')
 }
 
 export function showttips({currentTarget}) {
