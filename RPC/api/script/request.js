@@ -1,6 +1,6 @@
 const aReq = ['url', 'method', 'headers', 'body']
 
-function _env(ob, env, key) {
+function _env(ob, key, env='') {
   const tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined
   return tp3
 }
@@ -16,7 +16,7 @@ function nested1(arr, tp1) {
 
 function nested2(arr, tp2, env) {
   key = arr.shift()
-  const tp3 = _env(tp2, env, key) //# || tp2[key]
+  const tp3 = _env(tp2, key, env) //# || tp2[key]
   if (arr.length) {
     return tp3 && nested2(arr, tp3) || nested2(arr, tp2[key])
   } else {
@@ -93,7 +93,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   const set_object = (key) => {
     let value1 = xhr[key]
     if (opt.env) {
-      const evalue =_env(xhr, opt.env, key)
+      const evalue =_env(xhr, key, opt.env)
       if (evalue) {
         value1 = evalue
       }
@@ -183,7 +183,7 @@ function template(ns, name, opt) {
     }
     if (tpl) {
       let parsed;
-      const {env, slc} = opt
+      const {env='', slc={}} = opt
       tpl = JSON.parse(JSON.stringify(tpl))
       if (i===0) {
         // parse to it-self

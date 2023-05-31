@@ -24,11 +24,33 @@
   async function run(evn) {
     const {RPC} = window
     const {nspace,fn} = evn.target.dataset
-    console.log(`await RPC.${nspace}.${fn}()`)
+    console.log(`await RPC['${nspace}'].${fn}()`)
     const msg = await RPC[nspace][fn]()
     if (typeof msg==='object' && msg!==null) {
+      if ($logs.options.limithdr) {
+        const {request, response} = msg
+        if (request) {
+          const {headers: rq_hdr} = request
+          for (const id1 in rq_hdr) {
+            if (rq_hdr[id1].length>80) {
+              rq_hdr[id1] = `${rq_hdr[id1].substr(0,85-id1.length)}...`
+            }
+          }
+        }
+        if (response) {
+          const {headers: rs_hdr} = response
+          for (const id2 in rs_hdr) {
+            if (rs_hdr[id2].length>80) {
+              rs_hdr[id2] = `${rs_hdr[id2].substr(0,85-id2.length)}...`
+            }
+          }
+        }
+      }
+      if (msg?.request?.body) {
+        msg.request.body = JSON.parse(msg.request.body)
+      }
       console.log(JSON.stringify(msg, null, 2))
-      if ($logs.options.autoShowlog && msg.rowid) { //# autoShowlog
+      if (msg.rowid && $logs.options.autoShowlog) { //# autoShowlog
         clickCollapse({activeTab:1, rowid: msg.rowid})
       }
     } else {

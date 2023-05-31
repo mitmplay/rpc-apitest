@@ -38,8 +38,9 @@ const req = function(request, opt={}) {
         }
         console.log(JSON.stringify(resp, null, 2))
         const {apilog, hostlookup} = fn()._fn_
-        const ipAddress = opt.senderIp.replace(/^[:f]+/, '')
+        let ipAddress = opt?.senderIp || 'no-ip'
         try {
+          ipAddress = ipAddress.replace(/^[:f]+/, '')
           opt.host = await hostlookup(ipAddress)          
         } catch (error) {
           opt.host = ipAddress
