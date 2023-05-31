@@ -68,26 +68,34 @@
 
     const arr = await RPC.api.request(run, opt)
     const msg = JSON.stringify(arr[0], null, 2)
-    if (msg.match(/(undefined|\{\w+\})/)) {
+    if (msg.match(/\{[\w&]+\}/)) {
       alert(`WARNING: Request having UN-parsed !\n${msg}`)
     } else {
       console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
       let msg = await RPC.api.fetch(run, opt)
       if ($logs.options.limithdr) {
-        const {headers: rq_hdr} = msg.request
-        for (const id1 in rq_hdr) {
-          if (rq_hdr[id1].length>80) {
-            rq_hdr[id1] = `${rq_hdr[id1].substr(0,85-id1.length)}...`
+        const {request, response} = msg
+        if (request) {
+          const {headers: rq_hdr} = request
+          for (const id1 in rq_hdr) {
+            if (rq_hdr[id1].length>80) {
+              rq_hdr[id1] = `${rq_hdr[id1].substr(0,85-id1.length)}...`
+            }
           }
         }
-        const {headers: rs_hdr} = msg.response
-        for (const id2 in rs_hdr) {
-          if (rs_hdr[id2].length>80) {
-            rs_hdr[id2] = `${rs_hdr[id2].substr(0,85-id2.length)}...`
+        if (response) {
+          const {headers: rs_hdr} = response
+          for (const id2 in rs_hdr) {
+            if (rs_hdr[id2].length>80) {
+              rs_hdr[id2] = `${rs_hdr[id2].substr(0,85-id2.length)}...`
+            }
           }
         }
       }
       if (typeof msg==='object' && msg!==null) {
+        if (msg?.request?.body) {
+          msg.request.body = JSON.parse(msg.request.body)
+        }
         console.log(JSON.stringify(msg, null, 2))
         if (msg.rowid && $logs.options.autoShowlog) { //# autoShowlog
           clickCollapse({activeTab:1, rowid: msg.rowid})

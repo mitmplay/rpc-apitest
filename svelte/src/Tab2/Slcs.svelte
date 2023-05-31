@@ -69,6 +69,7 @@
       }
     }
     &:hover {
+      z-index: 2;
       border: solid #dbdbdb;
       background-color: #ffffffd6;
       ul {
