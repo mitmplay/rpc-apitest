@@ -40,10 +40,12 @@ function syncStor(sec, run, xhr, ori, src) {
   sec.src     = src
 }
 
+//# opt.slc is an object for uniq adding 
+//# will translate to array before rpc call
 async function requestEnv(sec, opt) {
   if (/_template_/.test(sec?._template_?.run)) {
     if (sec._template_._slc) {
-      opt.slc = sec._template_._slc
+      sec._template_._slc.forEach(x => opt.slc[x]=true)
     }
   }
   for (const id in sec) {
@@ -51,7 +53,9 @@ async function requestEnv(sec, opt) {
     if (run===undefined && typeof sec[id]==='object' && sec[id]!==null) {
       await requestEnv(sec[id], opt)
     } else if (sec[id].request) {
-      const [xhr, ori, src] = await RPC.api.request(run, opt)
+      const {env} = opt
+      const slc = Object.keys(opt.slc)
+      const [xhr, ori, src] = await RPC.api.request(run, {env, slc})
       syncStor(sec[id], run, xhr, ori, src)
     }
   }
@@ -67,7 +71,8 @@ export function changeEnv(ns, env) {
     env = false
   }
   setTimeout(async ()=>{
-    await requestEnv(sec, env ? {env} : {})
+    const slc = {}
+    await requestEnv(sec, env ? {env, slc} : {slc})
     reqs.update(json => {
       json.req[ns] = sec
       return json
@@ -83,11 +88,16 @@ export function changeSlc(req, ns, sec, slc) {
     slc = false
   }
   setTimeout(async ()=>{
+    const slc = {}
     let sec2 = req[ns]
     const {_env:env} = sec2._template_
-    sec.run.split('/').slice(1,-1).forEach(k=>sec2 = sec2[k])
-
-    await requestEnv(sec2, slc ? {env, slc} : {env})
+    sec.run.split('/').slice(1,-1).forEach(k=>{
+      sec2 = sec2[k]
+      if (sec2._template_._slc) {
+        sec2._template_._slc.forEach(x => slc[x]=true)
+      }
+    })
+    await requestEnv(sec2, {env, slc})
     reqs.update(json => {
       json.req[ns] = req[ns]
       return json

@@ -56,12 +56,14 @@
     _env && (opt.env = _env)
     _run && (opt.run = _run)
 
+    const slc = {}
     let sec = req[ns]
     run.split('/').slice(1,-1).forEach(k=>{ //# getting slc correct-way
       sec = sec[k]
       if (sec?._template_?._slc) {
-        opt.slc = sec._template_._slc
+        sec._template_._slc.forEach(v=>slc[v]=true)
       }
+      opt.slc = Object.keys(slc)
     })
 
     const arr = await RPC.api.request(run, opt)
