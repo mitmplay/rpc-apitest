@@ -111,7 +111,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
             ...result,
           }  
         }
-        return  
+        return xhr
       } 
     }
     // interpolation key with '-' and '.' separator 
@@ -263,11 +263,8 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         tp2 = merge(tp2, xhr2)
       }
       if (xhr.runs && run) {
-        const xh_runs = xhr.runs[run]
-        if (typeof xh_runs==='object' && xh_runs!==null) {
-          let parsed = startParsing(xh_runs, ns, tp2)
-          tp2 = merge(tp2, parsed)
-        }
+        const runs = startParsing(xhr.runs, ns, tp2)
+        tp2 = merge(tp2, runs[run])
       }
       // Parse request from template
       prs = startParsing(xhr, ns, tp2)
@@ -276,13 +273,13 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         xhr = merge(xhr, startParsing({url, headers, body}, ns, tp2, env))
       }
     }
-    const xhr2 = {}
-    aReq.forEach(k => {
-      if (xhr[k]) {
-        xhr2[k] = xhr[k]
-      }
-    })
-    return [name.includes('_template_') ? xhr : xhr2, ori, src]
+    let xhr2 = {}
+    if (opt.var) {
+      const {url, method, headers, body, ...vars} = xhr
+      xhr2 = {...vars}  
+    }
+    aReq.forEach(k => (xhr[k] && (xhr2[k] = xhr[k])))
+    return [ name.includes('_template_') ? xhr : xhr2, ori, src]
   }
 }
 module.exports = request

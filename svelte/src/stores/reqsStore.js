@@ -2,8 +2,9 @@ import { writable, get } from 'svelte/store';
 const json = {
   req: {},
   options: {
-    showSrc: false,
     autoParsed: false,
+    showRvar: false,
+    showSrc: false,
   }
 }
 export const reqs = writable(json);
@@ -53,9 +54,9 @@ async function requestEnv(sec, opt) {
     if (run===undefined && typeof sec[id]==='object' && sec[id]!==null) {
       await requestEnv(sec[id], opt)
     } else if (sec[id].request) {
-      const {env} = opt
-      const slc = Object.keys(opt.slc)
-      const [xhr, ori, src] = await RPC.api.request(run, {env, slc})
+      opt.var = true
+      opt.slc = Object.keys(opt.slc)
+      const [xhr, ori, src] = await RPC.api.request(run, opt) //{env, slc})
       syncStor(sec[id], run, xhr, ori, src)
     }
   }
@@ -128,7 +129,7 @@ export function changeRun(req, ns, sec, _run) {
     if (sec2._run) {
       opt.run = sec2._run
     }
-
+    opt.var = true
     const [xhr, ori, src] = await RPC.api.request(sec.run, opt)
     syncStor(sec, _run, xhr, ori, src)
     reqs.update(json => {
@@ -154,6 +155,7 @@ async function _request(path, rpc=true) {
     slc && (opt.slc = slc)
   }
   if (rpc || req[file]?._openName) {
+    opt.var = true
     return await RPC.api.request(path, opt)
   } else if (!req[file]) {
     req[file] = { run: path}
@@ -276,17 +278,21 @@ export function showSrc({currentTarget}) {
   clickTogle(currentTarget, 'showSrc')
 }
 
+export function showRvar({currentTarget}) {
+  clickTogle(currentTarget, 'showRvar')
+}
+
 function clickTogle(el, key) {
   setTimeout(_ => {
     reqs.update(json => {
-      json.options[key] = !el.checked
-      if (!el.checked) {
-        if (key==='showSrc' && !el.checked) {
-          json.options.autoParsed = false
-        } else {
-          json.options.showSrc = false
-        }
+      if (key==='showSrc' && !el.checked) {
+        json.options.autoParsed = false
+        json.options.showRvar   = false
       }
+      if (key!=='showSrc' && !el.checked) {
+        json.options.showSrc    = false
+      }
+      json.options[key] = !el.checked
       return json
     })
   })

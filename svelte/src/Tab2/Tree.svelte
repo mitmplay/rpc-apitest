@@ -129,25 +129,19 @@
 
   function showRequest({options}, nspace) {
     let _code = {}
+    const {autoParsed, showRvar, showSrc} = options
     const {request, ori, src} = json[nspace]
-    if (options.showSrc) {
+    if (showSrc) {
       _code = pretty(src || '', true)
     } else {
-      if (options.autoParsed && request) {
-        const _ori1 = JSON.parse(JSON.stringify(request))
-        const _ori2 = _novar(_ori1)
-        _code = _ori2
+      let _tmp = (autoParsed ? request : ori)||{}
+      if (showRvar) {
+        _code = _tmp
+      } else if (nspace==='_template_') {
+        _code = _novar(JSON.parse(JSON.stringify(_tmp)))
       } else {
-        if (nspace!=='_template_') {
-          const {env, runs, ...orix} = ori || {}
-          const _ori1 = JSON.parse(JSON.stringify(orix))
-          const _ori2 = _novar(_ori1)
-          _code = _ori2
-        } else if (ori){
-          const _ori1 = JSON.parse(JSON.stringify(ori))
-          const _ori2 = _novar(_ori1)
-          _code = _ori2
-        }
+        const {url, method, headers, body} = _tmp
+        _code = {url, method, headers, body}
       }
       _code = pretty(_code || '') //hljs-string">&quot;{
     }
