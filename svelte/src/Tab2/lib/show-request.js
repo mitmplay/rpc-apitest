@@ -39,8 +39,9 @@ export function showRequest({options}, nspace, json) {
     _code = pretty(_code || '') //hljs-string">&quot;{
   }
   const rgx_vars = /(hljs-string)">&(quot|#x27);{[\w&.:;-]+}/g
-  const rgx_rsv1 = /(hljs-attr)">(env|runs|select|default):/g
+  const rgx_rsv1 = /(hljs-attr)">(env|select|default):/g
   const rgx_rsv2 = /(hljs-attr)">(url|body|method|headers):/g
+  const rgx_rsv3 = /(hljs-attr)">(runs|validation):/g
   if (_code.match(rgx_vars)) {
     _code = _code.replace(rgx_vars, p1=> `undefined ${p1}`)
   }
@@ -49,6 +50,9 @@ export function showRequest({options}, nspace, json) {
   }
   if (_code.match(rgx_rsv2)) {
     _code = _code.replace(rgx_rsv2, p1=> `rsvword2 ${p1}`)
+  }
+  if (_code.match(rgx_rsv3)) {
+    _code = _code.replace(rgx_rsv3, p1=> `rsvword3 ${p1}`)
   }
   return _code
 }
