@@ -39,11 +39,12 @@ export function showRequest({options}, nspace, json) {
     _code = pretty(_code || '') //hljs-string">&quot;{
   }
   const rgx_undef1 = /(hljs-string)">&(quot|#x27);{[\w&.:;-]+}/g
-  const rgx_undef2 = /(hljs-string).+undefined/g
+  const rgx_undef2 = /(hljs-attr)">(url|env|body|runs|method|select|headers|default):/g
   if (_code.match(rgx_undef1)) {
     _code = _code.replace(rgx_undef1, p1=> `undefined ${p1}`)
-  } else if (_code.match(rgx_undef2)) {
-    _code = _code.replace(rgx_undef2, p1=> `undefined ${p1}`)
+  }
+  if (_code.match(rgx_undef2)) {
+    _code = _code.replace(rgx_undef2, p1=> `resvword ${p1}`)
   }
   return _code
 }
