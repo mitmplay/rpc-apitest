@@ -147,8 +147,15 @@ p.values {
   border: solid 1px;
 }
 
-.resvword {
+.rsvword1 {
   color: rgb(128, 0, 128);
+  font-weight: bold;
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.rsvword2 {
+  color: rgb(27, 66, 110);
   font-weight: bold;
   font-style: italic;
   text-decoration: underline;

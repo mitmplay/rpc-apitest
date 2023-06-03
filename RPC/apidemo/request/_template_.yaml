@@ -17,4 +17,4 @@ default:
   headers:
     Content-Type: application/json
 
-greet-ed: 'hello {{dtnow}}'
+greet-ed: 'hello {{chance.address}} - {{dtnow}}'

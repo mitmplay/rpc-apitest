@@ -1,7 +1,12 @@
 const aReq = ['url', 'method', 'headers', 'body']
 
 function _env(ob, key, env='') {
-  const tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined
+  let tp3
+  try {
+    tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined    
+  } catch (error) {
+    console.log(error)
+  }
   return tp3
 }
 
@@ -30,14 +35,21 @@ function interpolate(regx, value1, tp2, env, key, ns) {
     return value1
   }
   const tp1 = ns && ns._template_ && ns._template_()
-  match = match.map(x=>(tp1 ? x.slice(2,-2) : x.slice(1,-1)))
   match.forEach((v,i) => {
-    if (v.match('&')) { // ua: {&-tpl} => ua: {ua-tpl}
-      const old = `{${v}}`
-      v = v.replace(/&/g, key)
-      value1 = value1.replace(old, `{${v}}`)
+    let x = v
+    let xfn = false
+    if (v.match(/^{{[\w.]+}}$/)) {
+      x = v.slice(2,-2)
+      xfn = true
+    } else {
+      x = v.slice(1,-1)
     }
-    const [id, vl] = v.split(':')
+    if (x.match('&')) { // ua: {&-tpl} => ua: {ua-tpl}
+      const old = `{${x}}`
+      x = x.replace(/&/g, key)
+      value1 = value1.replace(old, `{${x}}`)
+    }
+    const [id, vl] = x.split(':')
     let value2
     if (vl) {
       value2 = {}
@@ -46,29 +58,29 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       return value1
     }
     let spread = false
-    if (v.match(/(^\.{3})\w+/)) {
-      v = v.replace(/^\.{3}/, '')
+    if (x.match(/(^\.{3})\w+/)) {
+      x = x.replace(/^\.{3}/, '')
       spread = true
     }
-    const arr = v.split('.')
-    if (tp1) {
-      if (v.includes('chance.')) {
+    const arr = x.split('.')
+    if (xfn) {
+      if (x.includes('chance.')) {
         const fname = arr[1]
         const {chance:c} = rpc()._lib_
         value2 = c[fname] && (fname==='version' ? c.VERSION : c[fname]())
-      } else {
+      } else if (tp1) {
         value2 = nested1(arr, tp1)
       }
     } else {
       value2 = nested2(arr, tp2, env)
     }
-    if (spread && `{...${v}}`===value1.trim()) {
+    if (spread && `{...${x}}`===value1.trim()) {
       value1 = {
         _spread_: true,
         values: value2
       }
     } else {
-      const str = tp1 ? `{{${v}}}` : `{${v}}`
+      const str = xfn ? `{{${x}}}` : `{${x}}`
       if (match.length===1 && str===value1.trim()) {
         value1 = value2
       } else {
@@ -119,7 +131,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
       value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
       value1 = interpolate(varRegx, value1, tp2, opt.env, key)  
     }
-    if (`${value1}`.match(/undefined/)) {
+    if (value1===undefined) {
       return
     }
     if (value1._spread_) {
