@@ -2,159 +2,18 @@
   export let _ns
   export let _req
   export let json
-  import {logs, clickCollapse} from '../stores/logsStore';
-  import {reqs, clickSummary}  from '../stores/reqsStore';
-  import {mouseOver} from '../stores/ttpStore';
-  import { pretty } from '../lib/common';
+  import {enf}         from './lib/enf';
+  import {run}         from './lib/run';
+  import {toArray}     from './lib/to-array';
+  import {showRequest} from './lib/show-request';
+  import {reqs, clickSummary} from '../stores/reqsStore';
+  import {logs}               from '../stores/logsStore';
+  import {mouseOver}          from '../stores/ttpStore';
   import Tree from './Tree.svelte';
   import Envs from './Envs.svelte';
   import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
   import Copy from './Copy.svelte';
-
-  function toArray(_json) {
-    const arr1 = []
-    const arr2 = []
-    const arr3 = []
-    for (const key in _json) {
-      if (/_template_/.test(key)) {
-        arr1.push(key)
-      } else if (_json[key].run) {
-        arr3.push(key)
-      } else if (!/^_/.test(key) ) {
-        arr2.push(key)
-      }
-    }
-    const arr = [
-      ...arr1.sort(),
-      ...arr2.sort(),
-      ...arr3.sort(),
-    ]
-    return arr
-  }
-
-  function enf(req, ns, run) {
-    const {_env} = req[ns]._template_
-
-    let _slc= []
-    let sec = req[ns]
-    run.split('/').slice(1,-1).forEach(k=>{
-      sec = sec[k]
-      if (sec?._template_?._slc) {
-        _slc = sec._template_._slc
-      }
-    })
-    return _env||_slc?.length ? `',.`: `'`
-  }
-
-  async function run(evn, req, ns) {
-    evn.preventDefault()
-    const {run, _run} = evn.target.parentElement.dataset
-    const _env = req[ns]?._template_?._env
-
-    const opt = {}
-    _env && (opt.env = _env)
-    _run && (opt.run = _run)
-
-    const slc = {}
-    let sec = req[ns]
-    run.split('/').slice(1,-1).forEach(k=>{ //# getting slc correct-way
-      sec = sec[k]
-      if (sec?._template_?._slc) {
-        sec._template_._slc.forEach(v=>slc[v]=true)
-      }
-      opt.slc = Object.keys(slc)
-    })
-
-    const arr = await RPC.api.request(run, opt)
-    const msg = JSON.stringify(arr[0], null, 2)
-    if (msg.match(/\{[\w&]+\}/)) {
-      alert(`WARNING: Request having UN-parsed !\n${msg}`)
-    } else {
-      console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
-      let msg = await RPC.api.fetch(run, opt)
-      if (typeof msg==='object' && msg!==null) {
-        if ($logs.options.limithdr) {
-          const {request, response} = msg
-          if (request) {
-            const {headers: rq_hdr} = request
-            for (const id1 in rq_hdr) {
-              if (rq_hdr[id1].length>80) {
-                rq_hdr[id1] = `${rq_hdr[id1].substr(0,85-id1.length)}...`
-              }
-            }
-          }
-          if (response) {
-            const {headers: rs_hdr} = response
-            for (const id2 in rs_hdr) {
-              if (rs_hdr[id2].length>80) {
-                rs_hdr[id2] = `${rs_hdr[id2].substr(0,85-id2.length)}...`
-              }
-            }
-          }
-        }
-        if (msg?.request?.body) {
-          msg.request.body = JSON.parse(msg.request.body)
-        }
-        console.log(JSON.stringify(msg, null, 2))
-        if (msg.rowid && $logs.options.autoShowlog) { //# autoShowlog
-          clickCollapse({activeTab:1, rowid: msg.rowid})
-        }
-      } else {
-        console.log(msg)
-      }
-      RPC._obj_.run = msg   
-    }
-  }
-
-  function _novar(_ori_, _init_='^') {
-    const showvar = ['^.headers','^.body']
-    const _deepno = (_ori, _up) => {
-      const fvar = x=>x===_up.slice(0,x.length)
-      for (const key in _ori) {
-        const arr = showvar.filter(fvar)
-        if (key[0]==='_' && !arr.length) {
-          // console.log({_up, key})
-          delete _ori[key]
-        } else if (typeof _ori[key]==='object') {
-          if (_ori[key]!==null || !Array.isArray(_ori[key])) {
-            _deepno(_ori[key], `${_up}.${key}`)
-          }
-        }
-      }
-    }
-    _deepno(_ori_, _init_)
-    return _ori_
-  }
-
-  function showRequest({options}, nspace) {
-    let _code = {}
-    const {autoParsed, showRvar, showSrc} = options
-    const {request, ori, src} = json[nspace]
-    if (showSrc) {
-      _code = pretty(src || '', true)
-    } else {
-      let _tmp = (autoParsed ? request : ori)||{}
-      if (showRvar) {
-        _code = _tmp
-      } else if (nspace==='_template_') {
-        _code = _novar(JSON.parse(JSON.stringify(_tmp)))
-      } else {
-        const {url, method, headers, body} = _tmp
-        _code = {url, method, headers, body}
-      }
-      _code = pretty(_code || '') //hljs-string">&quot;{
-    }
-    const rgx_undef1 = /(hljs-string)">&(quot|#x27);{[\w&.:;-]+}/g
-    const rgx_undef2 = /(hljs-string).+undefined/g
-    if (_code.match(rgx_undef1)) {
-      _code = _code.replace(rgx_undef1, p1=> `undefined ${p1}`)
-    } else if (_code.match(rgx_undef2)) {
-      _code = _code.replace(rgx_undef2, p1=> `undefined ${p1}`)
-    }
-    return _code
-  }
-
 </script>
 
 {#each toArray(json) as nspace}
@@ -169,7 +28,7 @@
           <div class=_hover_ 
           data-run={json[nspace].run} 
           data-_run={json[nspace]._run || ''} 
-          on:click={e=>run(e, $reqs.req, _ns)}>
+          on:click={e=>run(e, _ns, $reqs.req, $logs)}>
             {#if json[nspace]?._run}
               <i>&gt;{json[nspace]?._run}</i>
             {:else}
@@ -181,7 +40,7 @@
         <a href="#" class=_hover_ 
         data-run={json[nspace].run} 
         data-_run={json[nspace]._run || ''} 
-        on:click={e=>run(e, $reqs.req, _ns)}><b>run</b></a>
+        on:click={e=>run(e, _ns, $reqs.req, $logs)}><b>run</b></a>
       {/if}
     {:else}
       {nspace}
@@ -198,9 +57,9 @@
     {/if}
     <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
       {#if RPC._obj_?.argv?.json}
-        <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace) || '...'}</code></pre>
+        <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
       {:else}
-        <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace) || '...'}</code></pre>
+        <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
       {/if}
     </div>
   {:else}

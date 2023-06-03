@@ -94,7 +94,7 @@ export function changeSlc(req, ns, sec, slc) {
     const {_env:env} = sec2._template_
     sec.run.split('/').slice(1,-1).forEach(k=>{
       sec2 = sec2[k]
-      if (sec2._template_._slc) {
+      if (sec2?._template_?._slc) {
         sec2._template_._slc.forEach(x => slc[x]=true)
       }
     })
