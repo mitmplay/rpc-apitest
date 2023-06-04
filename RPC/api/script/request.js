@@ -1,5 +1,3 @@
-// const aReq = ['url', 'method', 'headers', 'body', 'validate']
-
 function _env(ob, key, env='') {
   let tp3
   try {
@@ -21,7 +19,7 @@ function nested1(arr, tp1) {
 
 function nested2(arr, tp2, env) {
   key = arr.shift()
-  const tp3 = _env(tp2, key, env) //# || tp2[key]
+  const tp3 = _env(tp2, key, env) // || tp2[key]
   if (arr.length) {
     return tp3 && nested2(arr, tp3) || nested2(arr, tp2[key])
   } else {
@@ -169,7 +167,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
 }
 
 function startParsing(xp1, ns, xp2, opt) {
-  //parse vars in xp1 and find value on xp2
+  // parse vars in xp1 and find value on xp2
   const tp1 = JSON.parse(JSON.stringify(xp1))
   const tp2 = JSON.parse(JSON.stringify(xp2))
   const rtn = parser(tp1, tp1, ns, tp2, opt)
@@ -275,8 +273,15 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         tp2 = merge(tp2, xhr2)
       }
       if (xhr.runs && run) {
-        const runs = startParsing(xhr.runs, ns, tp2)
-        tp2 = merge(tp2, runs[run])
+        const json = startParsing(xhr.runs, ns, tp2)
+        const {runs, url, method, headers, body, validate, ...vars} = json[run]
+        const obj = {url, method, headers, body, validate}
+        const tgt = {}
+        for (const id in obj) {
+          obj[id]!==undefined && (tgt[id] = obj[id])
+        }
+        xhr = merge(xhr, tgt)
+        tp2 = merge(tp2, vars)
       }
       // Parse request from template
       prs = startParsing(xhr, ns, tp2)
@@ -292,7 +297,6 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     } else {
       xhr2 = {validate, url, method, headers, body}
     }
-    // aReq.forEach(k => (xhr[k] && (xhr2[k] = xhr[k])))
     return [ name.includes('_template_') ? xhr : xhr2, ori, src]
   }
 }

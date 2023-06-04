@@ -4,23 +4,25 @@ _schemas:
       ua: true
       er: true
   schema_response:
-    browser_family: true
-    client: true
-    device: true
-    os:
-      name: true
-      platform: true 
-      version: true
-    os_family: false
-    user_agent: true
+    body:
+      browser_family: true
+      client: true
+      device: true
+      os:
+        name: true
+        platform: true 
+        version: true
+      os_family: false
+      user_agent: true
 
+_validate:
+  schemas: '{_&}'
+  request: 'schema_request'
+  response:
+    200: 'schema_response'
+    201: true
+      
 default:
-  validate:
-    schemas: '{_&}'
-    before_call: 'schema_request'
-    after_call:
-      200: 'schema_response'
-      201: true
   url: "https://api.apicagent.com/"
   headers:
     Content-Type: application/json

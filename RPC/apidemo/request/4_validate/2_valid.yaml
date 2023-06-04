@@ -1,0 +1,12 @@
+runs:
+  no-validate:
+    validate: ''
+  resp-validate:
+    validate:
+      schemas: '{_&}'
+      response:
+        200: 'schema_response'
+        201: true
+
+validate: '{_&}'
+method: post

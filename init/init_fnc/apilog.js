@@ -41,7 +41,7 @@ async function apilog(request, resp_hdr, response, opt={}) {
   }
 
   if (validate) {
-    const json = _validate({reqs, rspcode, resp_hdr, response, validate})
+    const json = _validate({reqs, rspcode, resp_hdr, resp_body: response, validate})
     validate.result = json
     payload.validate = JSON.stringify(validate, null, 2)
     if (json.invalid) {

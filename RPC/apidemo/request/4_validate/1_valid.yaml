@@ -1,5 +1,1 @@
-runs:
-  no-validate:
-    validate: none
-
 method: post
