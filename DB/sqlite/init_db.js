@@ -47,6 +47,8 @@ module.exports = async () => {
     t.text      ('request'  )
     t.text      ('resp_hdr' )
     t.text      ('response' )
+    t.text      ('validate' )
+    t.integer   ('invalid'  ) //# 0: valid 1:invalid-before 2: invalid-after 3: both
     t.text      ('notes'    )
     t.string    ('x_tag', 99)
     t.timestamp ('created'  ).notNull()
@@ -70,6 +72,9 @@ module.exports = async () => {
       rspcode: '200',
       request: '{request: 0}',
       response:'{response: 1}',
+      resp_hdr: '{}',
+      validate: '{}',
+      invalid: 0,
       notes:   'Sample notes',
       x_tag:   '12345_67890',
       created: ts,

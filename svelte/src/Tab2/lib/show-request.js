@@ -24,7 +24,7 @@ const rgx_var1 = /(hljs-string)">&(quot|#x27);{[\w&.:;-]+}/g
 const rgx_var2 = /(hljs-string)">.*undefined/g
 const rgx_rsv1 = /(hljs-attr)">(env|select|default):/g
 const rgx_rsv2 = /(hljs-attr)">(url|body|method|headers):/g
-const rgx_rsv3 = /(hljs-attr)">(runs|validation):/g
+const rgx_rsv3 = /(hljs-attr)">(runs|validate):/g
 
 export function showRequest({options}, nspace, json) {
   let _code = {}
@@ -39,8 +39,8 @@ export function showRequest({options}, nspace, json) {
     } else if (nspace==='_template_') {
       _code = _novar(JSON.parse(JSON.stringify(_tmp)))
     } else {
-      const {url, method, headers, body} = _tmp
-      _code = {url, method, headers, body}
+      const {validate, url, method, headers, body} = _tmp
+      _code = {validate, url, method, headers, body}
     }
     _code = pretty(_code || '') //hljs-string">&quot;{
   }

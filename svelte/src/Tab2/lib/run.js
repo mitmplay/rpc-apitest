@@ -16,7 +16,7 @@ export async function run(evn, ns, req, logs) {
   const {run, _run} = evn.target.parentElement.dataset
   const _env = req[ns]?._template_?._env
 
-  const opt = {}
+  const opt = {var: true}
   _env && (opt.env = _env)
   _run && (opt.run = _run)
 

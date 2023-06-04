@@ -33,6 +33,7 @@
 <style lang="scss">
 .commonlink {
   position: relative;
+  white-space: nowrap;
   .runlist {
     position: absolute;
     top: -5px;

@@ -1,0 +1,28 @@
+_schemas:
+  schema_request:
+    body:
+      ua: true
+      er: true
+  schema_response:
+    browser_family: true
+    client: true
+    device: true
+    os:
+      name: true
+      platform: true 
+      version: true
+    os_family: false
+    user_agent: true
+
+default:
+  validate:
+    schemas: '{_&}'
+    before_call: 'schema_request'
+    after_call:
+      200: 'schema_response'
+      201: true
+  url: "https://api.apicagent.com/"
+  headers:
+    Content-Type: application/json
+  body:
+    ua: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0"

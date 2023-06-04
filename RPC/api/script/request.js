@@ -1,4 +1,4 @@
-const aReq = ['url', 'method', 'headers', 'body']
+// const aReq = ['url', 'method', 'headers', 'body', 'validate']
 
 function _env(ob, key, env='') {
   let tp3
@@ -286,11 +286,13 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       }
     }
     let xhr2 = {}
+    const {url, method, headers, body, validate, ...vars} = xhr
     if (opt.var) {
-      const {url, method, headers, body, ...vars} = xhr
-      xhr2 = {...vars}  
+      xhr2 = {...vars, validate, url, method, headers, body}  
+    } else {
+      xhr2 = {validate, url, method, headers, body}
     }
-    aReq.forEach(k => (xhr[k] && (xhr2[k] = xhr[k])))
+    // aReq.forEach(k => (xhr[k] && (xhr2[k] = xhr[k])))
     return [ name.includes('_template_') ? xhr : xhr2, ori, src]
   }
 }

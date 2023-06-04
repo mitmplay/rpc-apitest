@@ -16,7 +16,9 @@ async function fetch(xhr=def_req, opt) {
       xhr = await api.openapi(xhr, opt)
     } else {
       const [parsed] = await api.request(xhr, opt)
-      xhr = parsed
+      const {url, method, headers, body} = parsed
+      xhr = {url, method, headers, body}
+      opt.validate = parsed.validate
     }
   }
   opt.senderIp = this.senderIp
