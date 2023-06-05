@@ -30,7 +30,9 @@
           data-_run={json[nspace]._run || ''} 
           on:click={e=>run(e, _ns, $reqs.req, $logs)}>
             {#if json[nspace]?._run}
-              <i>&gt;{json[nspace]?._run}</i>
+              <i>
+                &gt;{json[nspace]?._run[0]+(json[nspace]?._run.length>1?',.':'')}
+              </i>
             {:else}
               <b>run<i>{json[nspace]?._runs.length>0 ? '(*)' : ''}</i></b>
             {/if}
@@ -73,6 +75,7 @@
     white-space: inherit;
   }
   i {
+    white-space: nowrap;
     color:crimson;
   }
   b {

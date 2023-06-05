@@ -2,15 +2,25 @@
   export let _ns
   export let _req
   export let json
+  import {onMount} from 'svelte';
   import {changeRun} from '../stores/reqsStore';
 
-  async function chgRun(evn) {
-    evn.stopPropagation()
-    const {value:_run} = evn.target
-    changeRun(_req, _ns, json, _run)
+  async function chgRun(e) {
+    e.stopPropagation()
+    const {checked, value} = e.target
+    const arrV = value.split('~')
+    setTimeout(()=>{
+      if (checked && arrV.length>1) {
+        runs = runs.filter(v=>!v.match(`${arrV[0]}~`))
+        runs.push(value)
+      }
+      changeRun(_req, _ns, json, runs)
+    })
   }
-  
-  $: _runs = [json?._run];
+  let runs = [];
+  onMount(() => {
+    runs = json?._run || []
+  })
 </script>
 
 <span class="commonlink">
@@ -21,7 +31,7 @@
       <li class=run-options>
         <label>
           <input type="checkbox"
-           on:click={chgRun} bind:group={_runs} value={run}>{run}&nbsp;
+           on:click={chgRun} bind:group={runs} value={run}>{run}&nbsp;
         </label>
         <!-- <span class=run-time>&nbsp;~&gt;&nbsp;</span> -->
       </li>

@@ -274,14 +274,16 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       }
       if (xhr.runs && run) {
         const json = startParsing(xhr.runs, ns, tp2)
-        const {runs, url, method, headers, body, validate, ...vars} = json[run]
-        const obj = {url, method, headers, body, validate}
-        const tgt = {}
-        for (const id in obj) {
-          obj[id]!==undefined && (tgt[id] = obj[id])
+        for (const name of run) {
+          const {runs, url, method, headers, body, validate, ...vars} = json[name]
+          const obj = {url, method, headers, body, validate}
+          const tgt = {}
+          for (const id in obj) {
+            obj[id]!==undefined && (tgt[id] = obj[id])
+          }
+          xhr = merge(xhr, tgt)
+          tp2 = merge(tp2, vars)
         }
-        xhr = merge(xhr, tgt)
-        tp2 = merge(tp2, vars)
       }
       // Parse request from template
       prs = startParsing(xhr, ns, tp2)
