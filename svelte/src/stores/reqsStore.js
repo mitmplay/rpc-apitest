@@ -54,9 +54,9 @@ async function requestEnv(sec, opt) {
     if (run===undefined && typeof sec[id]==='object' && sec[id]!==null) {
       await requestEnv(sec[id], opt)
     } else if (sec[id].request) {
-      opt.var = true
-      opt.slc = Object.keys(opt.slc)
-      const [xhr, ori, src] = await RPC.api.request(run, opt) //{env, slc})
+      const slc = Object.keys(opt.slc) // slc translate to array
+      const opt2 = {...opt, slc, var: true} // before rpc call
+      const [xhr, ori, src] = await RPC.api.request(run, opt2)
       syncStor(sec[id], run, xhr, ori, src)
     }
   }
