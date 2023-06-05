@@ -1,16 +1,17 @@
-_all_records:
+_records1:
+  body:
+    -@:
+      id: true
+      userId: true
+      title: true 
+
+_records2:
   body:
     -@:
       id: true
       userId: true
       title: true 
       body: true
-
-_validate:
-  schemas:
-    all_records: '{_&}'
-  response:
-    200: 'all_records'
 
 default:
   method: get

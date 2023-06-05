@@ -54,6 +54,18 @@
           {/if}  
         </div>
       </details>
+      {#if row.invalid!==null}
+        <details data-id={row._id} data-name=openVld open={row.openVld}>
+          <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Validate</summary>
+          <div class="ttp" data-typ="validate">
+            {#if yaml}
+              <pre><code class="language-yaml">{@html toYaml(row.validate)}</code></pre>
+            {:else}
+              <pre><code class="language-json">{@html toJson(row.validate)}</code></pre>
+            {/if}
+          </div>
+        </details>
+      {/if}
       <details data-id={row._id} data-name=openHdr open={row.openHdr}>
         <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
         <div class="ttp" data-typ="resp-header" on:mouseover={mouseOver}>

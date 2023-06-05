@@ -1,2 +1,14 @@
-validate: '{_&}'
+runs:
+  validate~1:
+    validate: 
+      schemas:
+        records: '{_&1}'
+      response:
+        200: 'records'
+  validate~2:
+    validate: 
+      schemas:
+        records: '{_&2}'
+      response:
+        200: 'records'
 url: '{baseurl}/posts'
