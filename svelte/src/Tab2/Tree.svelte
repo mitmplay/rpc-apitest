@@ -14,6 +14,10 @@
   import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
   import Copy from './Copy.svelte';
+
+  function arrLength(arr) {
+    return (Array.isArray(arr)? arr.length : 0)
+  }
 </script>
 
 {#each toArray(json) as nspace}
@@ -27,9 +31,9 @@
         <Runs json={json[nspace]} {_req} {_ns}>
           <div class=_hover_ 
           data-run={json[nspace].run} 
-          data-_run={json[nspace]._run || ''} 
+          data-_run={json[nspace]._run}
           on:click={e=>run(e, _ns, $reqs.req, $logs)}>
-            {#if json[nspace]?._run}
+            {#if arrLength(json[nspace]?._run)}
               <i>
                 &gt;{json[nspace]?._run[0]+(json[nspace]?._run.length>1?',.':'')}
               </i>

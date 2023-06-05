@@ -1,14 +1,7 @@
 runs:
-  validate~1:
-    validate: 
-      schemas:
-        records: '{_&1}'
-      response:
-        200: 'records'
+  validate~1: '{_validate}'
   validate~2:
-    validate: 
-      schemas:
-        records: '{_&2}'
-      response:
-        200: 'records'
+    _1: '{..._validate}'
+    _2: '{..._body~-@}'
+
 url: '{baseurl}/posts'

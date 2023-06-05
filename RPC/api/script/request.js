@@ -56,7 +56,7 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       return value1
     }
     let spread = false
-    if (x.match(/(^\.{3})\w+/)) {
+    if (x.match(/(^\.{3})[@\w~-]+/)) {
       x = x.replace(/^\.{3}/, '')
       spread = true
     }
@@ -91,14 +91,14 @@ function interpolate(regx, value1, tp2, env, key, ns) {
   })
   return value1
 }
-
-const varRegx = /\{([\w-_ .&:{]+)\}+/g
-const fncRegx = /\{\{([\w-.&]+)\}\}/g
+// interpolation key with '-' and '.' separator 
+const varRegx = /\{([\w_ .&:{@~-]+)\}+/g
+const fncRegx = /\{\{([\w.&-]+)\}\}/g
 function parser(ori, xhr, ns, tp2, opt={}) {
   if (xhr.url===undefined) delete xhr.url
   if (xhr.body===undefined) delete xhr.body
   if (xhr.headers===undefined) delete xhr.headers
-
+  const {merge} = rpc()._fn_
   const arr = []
   const set_object = (key) => {
     let value1 = xhr[key]
@@ -124,7 +124,6 @@ function parser(ori, xhr, ns, tp2, opt={}) {
         return xhr
       } 
     }
-    // interpolation key with '-' and '.' separator 
     if (typeof value1==='string') {
       value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
       value1 = interpolate(varRegx, value1, tp2, opt.env, key)  
@@ -141,10 +140,32 @@ function parser(ori, xhr, ns, tp2, opt={}) {
           values.forEach(x=>arr.push(x))
         }
       } else {
+        let [_,path] = xhr[key].split('~')
         delete xhr[key]
-        for (const id in values) {
-          xhr[id] = values[id]
-        }  
+        if (path) {
+          path = path.slice(0,-1)
+          const tmp = JSON.parse(JSON.stringify(xhr))
+          const recv = deep => {
+            for (const key in deep) {
+              const src = deep[key]
+              if (path===key) {
+                deep[key] = merge(src, values)
+                return
+              } else if (!Array.isArray(src) && typeof src==='object') {
+                recv(src)
+              }
+            }
+          }
+          recv(tmp)
+          for (const id in tmp) {
+            xhr[id] = tmp[id]
+          }
+        } else {
+          const tmp = merge(xhr, values)
+          for (const id in tmp) {
+            xhr[id] = tmp[id]
+          }  
+        }
       }
     } else {
       if (Array.isArray(xhr)) {

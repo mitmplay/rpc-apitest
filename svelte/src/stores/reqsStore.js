@@ -110,8 +110,8 @@ export function changeRun(req, ns, sec, _run) {
   if (sec._run!==_run) {
     sec._run = _run
   } else {
-    delete sec._run
-    _run = false
+    sec._run = []
+    _run = []
   }
   setTimeout(async ()=>{
     let sec2 = req[ns]
@@ -126,7 +126,7 @@ export function changeRun(req, ns, sec, _run) {
       }
     })
 
-    if (sec2._run) {
+    if (sec2._run.length) {
       opt.run = sec2._run
     }
     opt.var = true
