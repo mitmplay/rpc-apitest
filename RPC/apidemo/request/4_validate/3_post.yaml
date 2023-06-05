@@ -1,0 +1,6 @@
+url: https://reqres.in/api/users
+method: post
+body:
+  name: morpheus
+  job: leader
+  
