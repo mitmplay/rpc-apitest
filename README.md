@@ -1,6 +1,6 @@
 # RPC Apitest
 
-RPC Apitest - an Isomorphic way to test APIs, from Web, Browser Console or Nodejs Debugger. one of the key feature is authoring request with nested YAML templating. environment and default request can be define on the main/root template and shared that values across same namespace. 
+RPC Apitest - an Isomorphic Rest-client to test API from Web, Nodejs or Browser Console. One of key feature is authoring request with YAML nested templating. Env. can be set on root template, next YAML nested can have opt. selection, either unique or multi-select, and before run/execution of request, opt. selection can be set if needed to override what template provide. The templating shared that values across same tree.
 
 # Installation
 ```js
@@ -31,27 +31,28 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 rpc-apitest -dos
 # Tabs - The Web UI
 The Web UI consist of five tabs:
 * Logs - Show the saved logs after APIs execution
-* Request - The request definition, having run link 
-* (RPC) Script - The script def, also having run link
+* Request - The request definition, and run/execute 
+* Script (rpc) - Script definition, and run/execute
 * OpenApi - Open Api definition with sample request
 * Docs - Documents in Markdown format
 
 ## Logs Tab
 Main functionality is to show the logs after APIs execution, UI interactivity are wired using web-socket, all web-socket connection having Logs auto refresh after each execution(run). There are three type of list (in descending order ): 
 * All - No grouping
-* Host - group by host
-* Time - group by time
+* Api - group by api-host
+* Host - group by usr host
+* Date - group by date
 
-Each logs are inside section of: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar 
+Each logs are inside section of: **Request**, **Response Hdr** & **Response Body**, you can set to auto-expand by checking the checkbox on the action-bar. additional section: **Validate** will appear if request call included Validate definition. 
 
 **Yaml checkbox** on the action-bar is to see the logs format in **YAML**
 
 To download the logs, you can checked the row then click "Download" button.
 
-Row also having option to display  **date** or **elapsed** (how long API will response), the option are hidden as a popup on the right top screen under checkbox config "**Show Logs**". the "**Show Logs**" config is auto-change to first tab after API execution.  
+Row also having option to show/hide  **host**, **date** & **elapsed** (how long API will response), the option are hidden as a popup on the right top screen under checkbox config "**Limit Header**". the "**Show Logs**" config is auto-change to first tab after API execution.  
 
 ## Request Tab
-Each of requests are define using **YAML** file and can having **variable** and **dynamic-var**, this vars are mostly define in template, and the parser will identify vars by seeing words inside curly-braches `{static-var}` & `{{dynamic-var}}` and to search the value it will use templates:
+Each of requests are define using **YAML** file and can having **variable** and **dynamic-var**, this vars are mostly define in template, and the parser will identify vars by seeing words inside curly-braces `{static-var}` hosted in `\_template\_.yaml` & `{{dynamic-var}}` in `\_template\_` and to search the value it will use templates:
 
 * `{static-var}` => `_template_.yaml`
 * `{{dynamic-var}}` => `_template_.js`
@@ -68,7 +69,9 @@ await RPC.api.fetch('apidemo/u_agent_post') run
 <details><summary><b>Parser</b></summary>
 
 ## Parser
+Capability of RPC-Apitest to interprate specific string rules (world inside curly-braces) as variable and during parsing, some rules having different meaning on how replacement behave: 
 ### Simple
+if the world inside curly-braces contains "strings" chars without dots.
 ```js
 greet: Hello        // _template_.yaml
 
@@ -78,6 +81,7 @@ body: {greet}       // request_post.yaml
 => body: Hello      // result
 ```
 ### Nested
+meaning two-things 1) the definition is nested and want to access specific value, the world inside curly-braces need to reach the nested using "dots" separator -OR- 2) its a simple parser way with result of replacement will be nested.
 ```js
 greet:              // _template_.yaml
   nice: Hi Alice
@@ -94,6 +98,7 @@ body: {greet}       // request_post.yaml
      nice: Hi Alice // result
 ```
 ### Shorthand `{&}`
+Ampersand will denotate the current key, ie: below show how it works during the parser
 ```js 
 greet:              // _template_.yaml
   body: Howdy John
@@ -105,6 +110,7 @@ body: {greet.&}     // request_post.yaml
 => body: Howdy John // result
 ```
 ### Spread
+Basic meaning is to replace the key with the nested values
 ```js
 names:              // _template_.yaml
   first: John
@@ -170,7 +176,7 @@ select:
   s~two:
     greet: howdy two
 ```
-**env:** on the root \_template\_ will determine which var will be taken presedence over regular one. the **Active Env** is visible on the UI as it show on the right-side of **the root \_template\_**. you can see var getting overwrittern by checking the `Parser` option on action-bar. Example below on `greet` var the posibility of values getting overwritten:
+**env:** on the root \_template\_ will determine which var will be taken presedence over regular one. the **Active Env** is visible on the UI as it show on the right-side of **the root \_template\_**. you can see var getting replaced by checking the `Parser` option on action-bar. Example below on `greet` var the posibility of values getting replaced:
 ```yaml
 # env: dev
 greet: 'http://baseurl.com/hello from DEV'
@@ -193,7 +199,7 @@ url: '{baseurl}/hello'
 ```
 Parsed values:
 ```yaml
-url: ''http://baseurl.com/hello'
+url: 'http://baseurl.com/hello'
 headers:
   method: get
   Content-Type: application/json

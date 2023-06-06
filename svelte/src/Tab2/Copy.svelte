@@ -2,22 +2,6 @@
   export let json;
 
   let ttip = ''
-  /*
-  wget --no-check-certificate --quiet \
-  --method GET \
-  --timeout=0 \
-  --header '' \
-   'https://xkcd.com/info.0.json'
-
-
- wget --no-check-certificate --quiet \
-  --method POST \
-  --timeout=0 \
-  --header 'lol: lel' \
-  --header 'Content-Type: text/plain' \
-  --body-data '{"woow": "kereen"}' \
-   'https://xkcd.com/info.0.json'  
-  */
 
   async function copyClipboard(e) {
     const {copy} = e.target.dataset
@@ -36,17 +20,17 @@
       }
       str += `  --compressed`
     } else if (copy==='wget') {
-      str = `wget --no-check-certificate --quiet \\
+      str = `wget --no-check-certificate \\
   --method ${json.method.toUpperCase()} \\
   --timeout=0 \\
 `
       for (const key in json.headers) {
-        str += `  --header '${key} ${json.headers[key]}' \\\n`
+        str += `  --header '${key}: ${json.headers[key]}' \\\n`
       }
       if (['put', 'post'].includes(json.method)) {
         str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
       }
-      str += `  '${json.url}'`
+      str += `-qO- '${json.url}'`
     }
     if (window.isSecureContext && navigator.clipboard) {
       await navigator.clipboard.writeText(str);
