@@ -131,8 +131,8 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     if (value1===undefined) {
       return
     }
-    if (value1._spread_) {
-      const {values} = value1
+    const {_spread_, values} = value1
+    if (_spread_ && values!==undefined) { //# todo: need to check
       if (Array.isArray(xhr)) {
         if (!Array.isArray(values)) {
           arr.push(value1)
