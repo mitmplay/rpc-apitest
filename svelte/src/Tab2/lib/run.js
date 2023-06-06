@@ -13,26 +13,24 @@ function wraplongheaders(json) {
 
 export async function run(evn, ns, req, logs) {
   evn.preventDefault()
-  let {run, _run} = evn.target.parentElement.dataset
+  let {run} = evn.target.parentElement.dataset
   const _env = req[ns]?._template_?._env
-
-  if (typeof _run==='string') {
-    _run = [_run]
-  }
 
   const opt = {var: true}
   _env && (opt.env = _env)
-  _run && (opt.run = _run)
 
   const slc = {}
   let sec = req[ns]
-  run.split('/').slice(1,-1).forEach(k=>{ //# getting slc correct-way
+  const path = run.split('/').slice(1)
+  const file = path.pop()
+  path.forEach(k=>{ //# getting slc correct-way
     sec = sec[k]
     if (sec?._template_?._slc) {
       sec._template_._slc.forEach(v=>slc[v]=true)
     }
     opt.slc = Object.keys(slc)
   })
+  opt.run = sec[file]._run
 
   const arr = await RPC.api.request(run, opt)
   const msg = JSON.stringify(arr[0], null, 2)
