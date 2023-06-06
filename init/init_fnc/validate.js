@@ -1,26 +1,30 @@
 function checkMissingFields(payload, schemas, path, result) {
-  for (const id in schemas) {
-    const schemas2 = schemas[id]
-    const payload2 = payload[id]
-
-    if (path!=='.' && schemas2 && payload2===undefined) {
-      result.missing_fields.push(`${path.slice(1)}${id}`)
-      result.invalid = result.errid
-    }
-    if (schemas2!==null && typeof schemas2==='object') { // recursive 
-      if (Array.isArray(payload2)) {
-        if (schemas2['-@']) {
-          for (const id2 in payload2) {
-            checkMissingFields(payload2[id2], schemas2['-@'], `${path}-@.`, result)
+  try {
+    for (const id in schemas) {
+      const schemas2 = schemas[id]
+      const payload2 = payload[id]
+  
+      if (path!=='.' && schemas2 && payload2===undefined) {
+        result.missing_fields.push(`${path.slice(1)}${id}`)
+        result.invalid = result.errid
+      }
+      if (schemas2!==null && typeof schemas2==='object') { // recursive 
+        if (Array.isArray(payload2)) {
+          if (schemas2['-@']) {
+            for (const id2 in payload2) {
+              checkMissingFields(payload2[id2], schemas2['-@'], `${path}-@.`, result)
+            }
+          } else {
+            result.missing_fields.push(`${path.slice(1)}-@`)
+            result.invalid = result.errid    
           }
         } else {
-          result.missing_fields.push(`${path.slice(1)}-@`)
-          result.invalid = result.errid    
+          checkMissingFields(payload2, schemas2, `${path}${id}.`, result)
         }
-      } else {
-        checkMissingFields(payload2, schemas2, `${path}${id}.`, result)
       }
-    }
+    }      
+  } catch (error) {
+    console.log(error)
   }
   return result
 }
@@ -54,8 +58,8 @@ function checkUnknownFields(payload, schemas, path, result) {
 
 function validate({reqs, rspcode, resp_hdr, resp_body, validate}) {
   const {request='', response=''} = validate
-  let reqs_schema = request[reqs.method] || request
-  let resp_schema = response[rspcode]    || response
+  let reqs_schema = request[reqs.method]
+  let resp_schema = response[rspcode]
 
   if (reqs_schema && typeof reqs_schema==='string') {
     reqs_schema = validate.schemas[reqs_schema]

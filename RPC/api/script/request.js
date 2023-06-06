@@ -297,8 +297,11 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         tp2 = merge(tp2, xhr2)
       }
       if (xhr.runs && run) {
-        const xtp2 = merge(xhr, tp2) // parsing both!
-        const json = startParsing(xhr.runs, ns, xtp2)
+        let {runs, url, method, headers, body, validate, ...vars} = xhr
+
+        vars = startParsing(vars, ns, tp2)
+        const vtp2 = merge(vars, tp2) // parsing both!
+        const json = startParsing(xhr.runs, ns, vtp2)
         for (const name of run) {
           const {runs, url, method, headers, body, validate, ...vars} = json[name]
           const obj = {url, method, headers, body, validate}
