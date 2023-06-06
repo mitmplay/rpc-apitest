@@ -8,8 +8,12 @@
     await changeEnv(ns, env)
   }
   $: _envs = [$reqs.req[ns]._template_._env];
+  function env(obj) {
+    return obj && obj.length
+  }
 </script>
 
+{#if env($reqs.req[ns]._template_._envs)}
 <span class="commonlink">
   <div>env:
     {#each $reqs.req[ns]._template_._envs as env}
@@ -18,6 +22,7 @@
     {/each}
   </div>
 </span>
+{/if}
 
 <style lang="scss">
 .commonlink {

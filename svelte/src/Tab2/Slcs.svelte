@@ -45,6 +45,7 @@
   .slclist {
     z-index: 1;
     position: absolute;
+    white-space: nowrap;
     margin: 0;
     top: -2px;
     span.msg {
