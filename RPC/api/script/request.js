@@ -71,6 +71,9 @@ function interpolate(regx, value1, tp2, env, key, ns) {
       }
     } else {
       value2 = nested2(arr, tp2, env)
+      if (value2===undefined) {
+        return value1 // target var not available
+      }
     }
     if (spread && `{...${x}}`===value1.trim()) {
       value1 = {
@@ -132,7 +135,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
       return
     }
     const {_spread_, values} = value1
-    if (_spread_ && values!==undefined) { //# todo: need to check
+    if (_spread_ && values!==undefined) { //# undefined - handled on ln:75
       if (Array.isArray(xhr)) {
         if (!Array.isArray(values)) {
           arr.push(value1)
