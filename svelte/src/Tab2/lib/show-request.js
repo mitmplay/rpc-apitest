@@ -44,6 +44,7 @@ export function showRequest({options}, nspace, json) {
     }
     _code = pretty(_code || '') //hljs-string">&quot;{
   }
+  _code = _code.replace(/^\n/, '')
   _code = _code.replace(rgx_var1, p1=> `undefine ${p1}`)
   _code = _code.replace(rgx_var2, p1=> `undefine ${p1}`)
   _code = _code.replace(rgx_rsv1, p1=> `rsvword1 ${p1}`)
