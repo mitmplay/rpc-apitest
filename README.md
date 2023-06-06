@@ -124,6 +124,46 @@ body:               // request_post.yaml
     first: John
     last: Doe
 ```
+## Inject on specific key
+when **the Spread** words contain tilde "~" after it, its a key that need to search and do merged values.
+```yaml
+_validate: 
+  -@:
+    id: true
+    userId: true
+    title: true 
+  response:
+    200: 'records'
+
+_body~-@:
+  userId: false
+  body: true
+
+runs:
+  validate~1: 
+    _1: '{..._validate}'
+  validate~2:
+    _1: '{..._validate}'
+    _2: '{..._body~-@}'
+
+=>
+runs:
+  validate~1: 
+    -@:
+      id: true
+      userId: true
+      title: true 
+    response:
+      200: 'records'
+  validate~2:
+    -@:
+      id: true
+      userId: false
+      title: true 
+      body: true
+    response:
+      200: 'records'
+```
 </details>
 
 <details><summary><b>Function Parser</b></summary>
