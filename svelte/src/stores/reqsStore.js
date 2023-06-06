@@ -131,7 +131,7 @@ export function changeRun(req, ns, sec, _run) {
     }
     opt.var = true
     const [xhr, ori, src] = await RPC.api.request(sec.run, opt)
-    syncStor(sec, _run, xhr, ori, src)
+    syncStor(sec, sec.run, xhr, ori, src)
     reqs.update(json => {
       json.req[ns] = req[ns]
       return json

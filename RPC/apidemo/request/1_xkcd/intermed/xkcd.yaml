@@ -1,8 +1,10 @@
 runs:
-  run1:
+  run~1:
     greet: 'run1'
-  run2:
+  run~2:
     greet: 'run2'
+  run-3:
+    greet3: 'run3'
 
 url: '{envurl}info.0.json'
 method: post

@@ -13,8 +13,12 @@ function wraplongheaders(json) {
 
 export async function run(evn, ns, req, logs) {
   evn.preventDefault()
-  const {run, _run} = evn.target.parentElement.dataset
+  let {run, _run} = evn.target.parentElement.dataset
   const _env = req[ns]?._template_?._env
+
+  if (typeof _run==='string') {
+    _run = [_run]
+  }
 
   const opt = {var: true}
   _env && (opt.env = _env)
