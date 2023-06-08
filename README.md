@@ -1,6 +1,10 @@
 # RPC Apitest
 
-RPC Apitest - an Isomorphic Rest-client to test API from Web, Nodejs or Browser Console. One of key feature is authoring request with YAML nested templating. Env. can be set on root template, next YAML nested can have opt. selection, either unique or multi-select, and before run/execution of request, opt. selection can be set if needed to override what template provide. The templating shared that values across same tree.
+RPC Apitest - an Isomorphic Rest-client to test API from Web, Nodejs or Browser Console. One of key feature is authoring request with `YAML nested templating`.
+
+`Env` can be set on root template, next YAML nested can have `opt-select`, either unique or multi-select, and before execution(`run`) of request, `opt-run` can be set to override what template provide.
+
+The templating shared that values across same tree.
 
 # Installation
 ```js
