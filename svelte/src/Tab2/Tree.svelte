@@ -31,8 +31,7 @@
         <Runs json={json[nspace]} {_req} {_ns}>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div class=_hover_ 
-          data-run={json[nspace].run} 
-          data-_run={json[nspace]._run}
+          data-run={json[nspace].run}
           on:click={e=>run(e, _ns, $reqs.req, $logs)}>
             {#if arrLength(json[nspace]?._run)}
               <i>
