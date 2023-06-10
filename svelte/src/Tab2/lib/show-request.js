@@ -28,13 +28,13 @@ const rgx_rsv3 = /(hljs-attr)">(runs|validate):/g
 
 export function showRequest({options}, nspace, json) {
   let _code = {}
-  const {autoParsed, showRvar, showSrc} = options
+  const {autoParsed, showHidden, showSrc} = options
   const {request, ori, src} = json[nspace]
   if (showSrc) {
     _code = pretty(src || '', true)
   } else {
     let _tmp = (autoParsed ? request : ori)||{}
-    if (showRvar) {
+    if (showHidden) {
       _code = _tmp
     } else if (nspace==='_template_') {
       _code = _novar(JSON.parse(JSON.stringify(_tmp)))

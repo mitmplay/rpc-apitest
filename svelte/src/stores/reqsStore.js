@@ -3,7 +3,7 @@ const json = {
   req: {},
   options: {
     autoParsed: false,
-    showRvar: false,
+    showHidden: false,
     showSrc: false,
   }
 }
@@ -278,8 +278,8 @@ export function showSrc({currentTarget}) {
   clickTogle(currentTarget, 'showSrc')
 }
 
-export function showRvar({currentTarget}) {
-  clickTogle(currentTarget, 'showRvar')
+export function showHidden({currentTarget}) {
+  clickTogle(currentTarget, 'showHidden')
 }
 
 function clickTogle(el, key) {
@@ -287,7 +287,7 @@ function clickTogle(el, key) {
     reqs.update(json => {
       if (key==='showSrc' && !el.checked) {
         json.options.autoParsed = false
-        json.options.showRvar   = false
+        json.options.showHidden   = false
       }
       if (key!=='showSrc' && !el.checked) {
         json.options.showSrc    = false

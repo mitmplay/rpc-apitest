@@ -3,12 +3,12 @@
     reqs,
     clickCollapse,
     autoParsed,
-    showRvar,
+    showHidden,
     showSrc,
   } from '../stores/reqsStore';
   import {logs} from '../stores/logsStore';
   $: prsd = $reqs.options.autoParsed;
-  $: rvar = $reqs.options.showRvar;
+  $: hidn = $reqs.options.showHidden;
   $: ssrc = $reqs.options.showSrc;
 </script>
 
@@ -19,7 +19,7 @@
     <input type="checkbox" id="checkbkParsed" on:click={autoParsed} bind:checked={prsd}>Parsed
   </label>
   <label for="checkbkRuns">
-    <input type="checkbox" id="checkbkRuns" on:click={showRvar} bind:checked={rvar}>Req-var
+    <input type="checkbox" id="checkbkRuns" on:click={showHidden} bind:checked={hidn}>Hidden
   </label>
   <label for="checkbkSrc">
     <input type="checkbox" id="checkbkSrc" on:click={showSrc} bind:checked={ssrc}>Source
