@@ -203,7 +203,7 @@ export async function updateReq(path, opt={}) {
     const sec = req[file]
     // Update envs
     if (folders.length===1 && file==='_template_') {
-      sec._envs = Object.keys(xhr.env)
+      sec._envs = Object.keys(xhr?.env || {})
     }
     syncStor(sec, sec.run, xhr, ori, src)
     return json

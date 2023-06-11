@@ -1,1 +1,4 @@
+env:
+  validation: true
+
 baseurl: 'https://jsonplaceholder.typicode.com'

@@ -245,6 +245,8 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     return errmsg
   }
   const [p0, nmspace, name] = match
+  const _template_ = name.includes('_template_')
+
   const {merge} = _rpc_._fn_
   const ns = _rpc_[nmspace]
   if (ns) {
@@ -259,7 +261,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       const {url, headers, body, env, slc, run} = opt
       if (tp2.default) {
         // merge default to request
-        if (!name.includes('_template_')) {
+        if (!_template_) {
           xhr = merge(tp2.default, xhr) //# donot change the order!
         }
       }
@@ -289,30 +291,42 @@ async function request(req='apidemo/u_agent_post', opt={}) {
           }
         }
         if (xhr2.default) {
-          if (!name.includes('_template_')) {
+          if (!_template_) {
             xhr = merge(xhr2.default, xhr) //# donot change the order!
           }
           delete xhr2.default
         }
         tp2 = merge(tp2, xhr2)
       }
-      if (xhr.runs && run) {
-        let {runs, url, method, headers, body, validate, ...vars} = xhr
 
-        vars = startParsing(vars, ns, tp2)
-        const vtp2 = merge(vars, tp2) // parsing both!
-        const json = startParsing(xhr.runs, ns, vtp2)
-        for (const name of run) {
-          const {runs, url, method, headers, body, validate, ...vars} = json[name]
-          const obj = {url, method, headers, body, validate}
-          const tgt = {}
-          for (const id in obj) {
-            obj[id]!==undefined && (tgt[id] = obj[id])
+      if (!_template_) {
+        let {runs, url, method, headers, body, validate, ...vars} = xhr
+  
+        vars = startParsing(vars, ns, tp2) // parsing xhr vars with template
+        const vtp2 = merge(vars, tp2) // merge result parsing with template
+        if (xhr.runs && run) {
+          const reqkeys = {url: true, method: true, headers: true, body: true, validate: true}
+          const json = startParsing(xhr.runs, ns, vtp2) // parse runs with (xhr vars + template)
+          for (const name of run) {
+            const obj = json[name]
+            const xhr2 = {}
+            const vars2 = {}
+
+            for (const id in obj) {
+              if (reqkeys[id]) {
+                xhr2[id] = obj[id]
+              } else if (id!=='runs') {
+                vars2[id]= obj[id]
+              }
+            }
+
+            xhr = merge(xhr,  xhr2 ) // merged with xhr2 request from run
+            vars= merge(vars, vars2) // merged with vars2 from run
           }
-          xhr = merge(xhr, tgt)
-          tp2 = merge(tp2, vars)
         }
+        tp2 = merge(tp2, vars)
       }
+
       // Parse request from template
       prs = startParsing(xhr, ns, tp2)
       xhr = merge(xhr, prs)
@@ -320,14 +334,18 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         xhr = merge(xhr, startParsing({url, headers, body}, ns, tp2, env))
       }
     }
-    let xhr2 = {}
-    const {url, method, headers, body, validate, ...vars} = xhr
-    if (opt.var) {
-      xhr2 = {...vars, validate, url, method, headers, body}  
+    if (_template_) {
+      return [xhr, ori, src]
     } else {
-      xhr2 = {validate, url, method, headers, body}
+      let xhr2 = {}
+      const {validate, url, method, headers, body, ...vars} = xhr
+      if (opt.var) { // if opt.var=true include vars in return
+        xhr2 = {...vars, validate, url, method, headers, body}  
+      } else {
+        xhr2 = {validate, url, method, headers, body}
+      }
+      return [xhr2, ori, src]  
     }
-    return [ name.includes('_template_') ? xhr : xhr2, ori, src]
   }
 }
 module.exports = request
