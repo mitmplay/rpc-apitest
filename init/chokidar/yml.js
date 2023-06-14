@@ -17,34 +17,35 @@ function yml(_rpc_) {
     if (initToggle || !_broadcast2) {
       return
     }
-    const {request} = RPC.api
-    if (method.includes('_template_')) {
-      const [app, ...folders] = method.split(/[:/]/).slice(1,-1)
-      const pth = folders.join('/')
-      const requests = RPC[app]._request_
-      const keys = Object.keys(requests).map(x=>{
-        if (x.includes('_template_')) {
-          x = x.replace(/_template_$/, '-template-')
-        }
-        return x
-      }).sort()
-      for (const id of keys) {
-        let path = id
-        if (id.includes('-template-')) {
-          path = id.replace(/-template-$/,'_template_')
-        }
-        if (path.includes(pth)) {
-          const path2 = `${app}/${path}`
-          const method2 = `request:${path2}`
-          _broadcast2(method2, '')
-        }
-      }
-    } else {
-      const [_, path] = method.split(/:/)
-      const reqs = await request(path)
-      console.log(method, reqs)
-      _broadcast2(method, reqs)
-    }
+    _broadcast2(method, '')
+    // const {request} = RPC.api
+    // if (method.includes('_template_')) {
+    //   const [app, ...folders] = method.split(/[:/]/).slice(1,-1)
+    //   const pth = folders.join('/')
+    //   const requests = RPC[app]._request_
+    //   const keys = Object.keys(requests).map(x=>{
+    //     if (x.includes('_template_')) {
+    //       x = x.replace(/_template_$/, '-template-')
+    //     }
+    //     return x
+    //   }).sort()
+    //   for (const id of keys) {
+    //     let path = id
+    //     if (id.includes('-template-')) {
+    //       path = id.replace(/-template-$/,'_template_')
+    //     }
+    //     if (path.includes(pth)) {
+    //       const path2 = `${app}/${path}`
+    //       const method2 = `request:${path2}`
+    //       _broadcast2(method2, '')
+    //     }
+    //   }
+    // } else {
+    //   const [_, path] = method.split(/:/)
+    //   const reqs = await request(path)
+    //   console.log(method, reqs)
+    //   _broadcast2(method, reqs)
+    // }
   }
 
   let timeout = false
