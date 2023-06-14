@@ -129,7 +129,9 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     }
     if (typeof value1==='string') {
       value1 = interpolate(fncRegx, value1, tp2, opt.env, key, ns)
-      value1 = interpolate(varRegx, value1, tp2, opt.env, key)  
+      if (typeof value1==='string') {
+        value1 = interpolate(varRegx, value1, tp2, opt.env, key)
+      }
     }
     if (value1===undefined) {
       return
