@@ -2,6 +2,7 @@ const rpc       = require('../../_rpc_')
 const hostlookup= require('./hostlookup')
 const toTreeObj = require('./totreeobj')
 const tildehome = require('./tildehome')
+const timeout   = require('./timeout')
 const request   = require('./request')
 const nanoid    = require('./nanoid')
 const apilog    = require('./apilog')
@@ -16,6 +17,7 @@ function fn(_rpc_) {
     ...thome,
     hostlookup,
     toTreeObj,
+    timeout,
     request,
     nanoid,
     apilog,

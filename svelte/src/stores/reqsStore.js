@@ -147,6 +147,9 @@ async function _request(path, rpc=true) {
   const [ns,...slcs] = apath
 
   req = req[ns]
+  if (RPC._obj_.argv.verbose && req===undefined) {
+    console.log('UNDIFINED!', ns)
+  }
   const env = req?._template_?._env
   const opt = env ? {env} : {}
   for (const id of slcs) {
@@ -171,6 +174,40 @@ async function _request(path, rpc=true) {
   }
 }
 
+async function updateState(path) {
+  if (RPC._obj_.argv.verbose) {
+    console.log('updateState-1', path)
+  }
+  const [xhr, ori, src] = await _request(path, true) // if it came from broadcast
+  if (!xhr) {
+    return
+  }
+
+  reqs.update(json => {
+    let {req} = json
+    const folders = path.split('/')
+    const file = folders.pop()
+    for (const folder of folders) {
+      req = req[folder] || {}
+    }
+    const sec = req[file]
+    // Update envs
+    if (folders.length===1 && file==='_template_') {
+      console.log('UPDATE _envs', path)
+      sec._envs = Object.keys(xhr?.env || {})
+      if (!sec._envs.length) {
+        console.log('DELETE _env')
+        delete sec._env
+      }
+    }
+    if (RPC._obj_.argv.verbose) {
+      console.log('updateState-2', path)
+    }
+    syncStor(sec, sec.run, xhr, ori, src)
+    return json
+  })
+}
+
 export async function updateReq(path, opt={}) {
   if (opt.del) {
     reqs.update(json => {
@@ -187,27 +224,7 @@ export async function updateReq(path, opt={}) {
     })
     return
   }
-
-  const [xhr, ori, src] = await _request(path, false) // if it came from broadcast
-  if (!xhr) {
-    return
-  }
-
-  reqs.update(json => {
-    let {req} = json
-    const folders = path.split('/')
-    const file = folders.pop()
-    for (const folder of folders) {
-      req = req[folder] || {}
-    }
-    const sec = req[file]
-    // Update envs
-    if (folders.length===1 && file==='_template_') {
-      sec._envs = Object.keys(xhr?.env || {})
-    }
-    syncStor(sec, sec.run, xhr, ori, src)
-    return json
-  })
+  await updateState(path)
 }
 
 export function clickSummary(evn, req, ns, json) {
