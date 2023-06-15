@@ -22,23 +22,23 @@ export async function init() {
   return req2
 }
 
-function syncStor(sec, run, xhr, ori, src) {
-  if (/_template_/.test(run)) {
+function syncStor(req, path, xhr, ori, src) {
+  if (/_template_/.test(path)) {
     if (typeof xhr.select==='object' && xhr.select!==null) {
-      sec._slcs = Object.keys(xhr.select)
+      req._slcs = Object.keys(xhr.select)
     } else {
-      delete sec._slcs
+      delete req._slcs
     }
   } else {
     if (typeof ori.runs==='object' && ori.runs!==null) {
-      sec._runs = Object.keys(ori.runs)
+      req._runs = Object.keys(ori.runs)
     } else {
-      sec._runs = []
+      req._runs = []
     }
   }
-  sec.request = xhr
-  sec.ori     = ori
-  sec.src     = src
+  req.request = xhr
+  req.ori     = ori
+  req.src     = src
 }
 
 //# opt.slc is an object for uniq adding 
@@ -175,35 +175,42 @@ async function _request(path, rpc=true) {
 }
 
 async function updateState(path) {
-  if (RPC._obj_.argv.verbose) {
-    console.log('updateState-1', path)
+  const {req} = get(reqs)
+  const [ns, ...arr] = path.split('/')
+  const file = arr.pop()
+  let xreq = req[ns]
+  let opt = {}
+  if (arr.length===0) {
+    const env = xreq?._template_?._env
+    env && (opt.env = env)
+  } 
+  for (const id of arr) {
+    xreq = xreq[id]
+    const slc = xreq?._template_?._slc
+    slc && (opt.slc = slc)
   }
-  const [xhr, ori, src] = await _request(path, true) // if it came from broadcast
+  const [xhr, ori, src] = await RPC.api.request(path, opt) // if it came from broadcast
   if (!xhr) {
     return
   }
+  syncStor(xreq[file], path, xhr, ori, src)
+  if (path.includes('_template_')) {
+    collapse(xreq, true) 
+    if (arr.length===0) {
+      // Update envs
+      console.log('UPDATE _envs', path)
+      const envs = Object.keys(xhr?.env || {})
+      const root = xreq[file]
+      root._envs = envs
+      if (!envs.length || !envs.includes(root._env)) {
+        console.log('DELETE _env')
+        delete root._env
+      }
+    }  
+  }
 
   reqs.update(json => {
-    let {req} = json
-    const folders = path.split('/')
-    const file = folders.pop()
-    for (const folder of folders) {
-      req = req[folder] || {}
-    }
-    const sec = req[file]
-    // Update envs
-    if (folders.length===1 && file==='_template_') {
-      console.log('UPDATE _envs', path)
-      sec._envs = Object.keys(xhr?.env || {})
-      if (!sec._envs.length) {
-        console.log('DELETE _env')
-        delete sec._env
-      }
-    }
-    if (RPC._obj_.argv.verbose) {
-      console.log('updateState-2', path)
-    }
-    syncStor(sec, sec.run, xhr, ori, src)
+    json.req[ns] = req[ns]
     return json
   })
 }
@@ -264,19 +271,25 @@ export function clickSummary(evn, req, ns, json) {
   })
 }
 
-function collapse(_reqs_) {
+function collapse(_reqs_, all=false) {
   for (const key in _reqs_) {
     const req = _reqs_[key]
-    if (req.request) {
-      delete req.request
-      // delete req._runs
-      delete req.ori
-      delete req.src
-    }
-    if (!/^_[a-zA-Z0-9.-]+$/.test(key)) {
-      req._openName = false
-      if (!req.run) {
-        collapse(req) 
+    if (req!==null && typeof req==='object') {
+      if (req.request) {
+        delete req.request
+        // delete req._runs
+        delete req.ori
+        delete req.src
+        if (all) {
+          req._slc && (req._slc = [])
+          req._run && (req._run = [])
+        }
+      }
+      if (!/^_[a-zA-Z0-9.-]+$/.test(key)) {
+        req._openName = false
+        if (!req.run) {
+          collapse(req) 
+        }  
       }  
     }
   }
