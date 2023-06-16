@@ -1,0 +1,23 @@
+# simple var
+baseurl: 'http://localhost:12345'
+
+# var hidden on UI
+_hidden: '{baseurl}/hidden'
+
+env:
+  dev: true
+
+# combine {baseurl} with path
+pathurl: '{baseurl}/hello'
+
+# discourage use of nested var unless 
+# it used in nested with template available
+nested1: '{pathurl}/nested1'
+
+# getting var from _template_.js
+number: '{{number}}'
+datenow: '{{dtnow}}'
+jsonobj: '{{object}}'
+profile:
+  first: '{{first}}'
+  last: '{{last}}'

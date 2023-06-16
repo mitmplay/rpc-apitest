@@ -12,3 +12,5 @@ body:
   wow: kereen
   _1: '{greet}'
   _2: '{greet-ed}'
+  _3: '{...test}'
+  _4: '{...nested}'

@@ -78,12 +78,15 @@ function yml(_rpc_) {
     const str = fs.readFileSync(path, 'utf8')
     const obj = YAML.parse(str)
     if (obj===null) {
-      return
-    } else if (obj.openapi) {
+      if (path.includes('openapi')) {
+        return
+      }
+    }
+    if (obj?.openapi) {
       _rpc_[app]._openapi_[name] = obj
     } else {
-      _rpc_[app]._request_[name] = obj
-      _rpc_[app]._request_src_[name] = str
+      _rpc_[app]._request_[name] = obj || {}
+      _rpc_[app]._request_src_[name] = str || ''
     }
 
     // const typ = obj.openapi ? 'openapi' : 'request'

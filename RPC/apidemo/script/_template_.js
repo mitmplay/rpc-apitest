@@ -4,5 +4,11 @@ module.exports = $ => {
     first: _ => chance.first(),
     xkcd:  _ => chance.integer({ min: 1, max: 700 }),
     dtnow: _ => `${(new Date()).toISOString()}`,
+    json: _ => {
+      return {
+        lt: 1,
+        gt: 10
+      }
+    }
   }
 }

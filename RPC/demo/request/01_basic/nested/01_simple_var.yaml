@@ -1,0 +1,6 @@
+url: '{baseurl}'
+method: post
+body:
+  test-pathurl: '{pathurl}'
+  test-nested1: '{nested1}'
+  test-nested2: '{nested2}'

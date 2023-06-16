@@ -1,0 +1,8 @@
+env:
+  dev:
+    default:
+      method: post
+      headers:
+        Content-Type: application/json
+
+default: ''

@@ -1,0 +1,22 @@
+env:
+  dev:
+    default:
+      method: post
+      headers:
+        Content-Type: application/json
+
+select:
+  other-headers:
+    default:
+      headers:
+        x-other: 'another'
+  other-headers~1:
+    default:
+      headers:
+        x-other-1: 'another~1'
+  other-headers~2:
+    default:
+      headers:
+        x-other-2: 'another~2'
+
+default: ''

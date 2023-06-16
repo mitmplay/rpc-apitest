@@ -169,7 +169,8 @@ function parser(ori, xhr, ns, tp2, opt={}) {
           const tmp = merge(xhr, values)
           for (const id in tmp) {
             xhr[id] = tmp[id]
-          }  
+          }
+          // console.log('xhr', xhr)
         }
       }
     } else {
@@ -192,11 +193,16 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   return xhr
 }
 
-function startParsing(xp1, ns, xp2, opt) {
+function startParsing(xp1, ns, xp2, opt={}) {
   // parse vars in xp1 and find value on xp2
-  const tp1 = JSON.parse(JSON.stringify(xp1))
-  const tp2 = JSON.parse(JSON.stringify(xp2))
-  const rtn = parser(tp1, tp1, ns, tp2, opt)
+  let rtn
+  if (opt._reff_) {
+    rtn = parser(xp1, xp1, ns, xp2, opt)
+  } else {
+    const tp1 = JSON.parse(JSON.stringify(xp1))
+    const tp2 = JSON.parse(JSON.stringify(xp2))
+    rtn = parser(tp1, tp1, ns, tp2, opt)
+  }
   // console.log(JSON.stringify(rtn,0,2))
   return rtn
 }
@@ -329,9 +335,9 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         tp2 = merge(tp2, vars)
       }
 
-      // Parse request from template
-      prs = startParsing(xhr, ns, tp2)
-      xhr = merge(xhr, prs)
+      // Parse request from template, xhr pass by refference 
+      // to avoid unremoval {xhr: ...spread} variable 
+      startParsing(xhr, ns, tp2, {_reff_: true}) 
       if (url || headers || body) {
         xhr = merge(xhr, startParsing({url, headers, body}, ns, tp2, env))
       }

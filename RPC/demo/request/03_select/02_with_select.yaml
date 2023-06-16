@@ -1,0 +1,3 @@
+url: '{baseurl}/from_default'
+headers:
+  x-origin: local

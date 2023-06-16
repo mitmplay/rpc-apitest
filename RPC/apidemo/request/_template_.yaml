@@ -1,6 +1,10 @@
 baseurl: 'https://' # comments
 msg: Hi
 greet: Hi from non ENV
+nested: 
+  at: 1
+  bt: 25
+test: '{{json}}'
 
 env:
   dev:

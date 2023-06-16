@@ -1,0 +1,4 @@
+# discourage use of nested var unless
+# it used in nested with template available
+nested2: '{nested1}/nested2'
+test: hello

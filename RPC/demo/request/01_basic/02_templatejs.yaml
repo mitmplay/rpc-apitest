@@ -1,0 +1,7 @@
+url: '{baseurl}'
+method: post
+body:
+  date-now: '{datenow}'
+  json-obj: '{jsonobj}'
+  number: '{&}'
+  profile: '{&}'
