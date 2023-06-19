@@ -1,6 +1,6 @@
 {
   "name": "rpc-apitest",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "RPC Apitest - an Isomorphic way to test APIs, from Web, Browser Console or Nodejs Debugger.",
   "main": "rpc-apitest.js",
   "bin": {
@@ -45,7 +45,7 @@
     "open": "^9.0.0",
     "request": "^2.88.2",
     "rollup": "^3.19.1",
-    "sqlite3": "5.1.6",
+    "sqlite3": "5.0.0",
     "tabulator-tables": "^5.4.4",
     "ws": "^8.12.1",
     "yaml": "^2.2.1",
