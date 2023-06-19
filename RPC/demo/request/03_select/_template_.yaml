@@ -5,18 +5,18 @@ env:
       headers:
         Content-Type: application/json
 
+default: '' # required to trigger interpolation
+
 select:
-  other-headers:
+  headers:   # regular select
     default:
       headers:
-        x-other: 'another'
-  other-headers~1:
+        x-other: 'other'
+  headers~1: # unique select (with ~)
     default:
       headers:
         x-other-1: 'another~1'
-  other-headers~2:
+  headers~2: # unique select (with ~)
     default:
       headers:
         x-other-2: 'another~2'
-
-default: ''

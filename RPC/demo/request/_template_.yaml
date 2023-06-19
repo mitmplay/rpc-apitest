@@ -1,20 +1,16 @@
-# simple var
-baseurl: 'http://localhost:12345'
-
-# var hidden on UI
-_hidden: '{baseurl}/hidden'
+baseurl: 'http://localhost:12345' # simple var
+_hidden: '{baseurl}/hidden'       # hidden var
 
 env:
   dev: true
 
-# combine {baseurl} with path
-pathurl: '{baseurl}/hello'
+pathurl: '{baseurl}/hello' # combine {baseurl} with path
 
-# discourage use of nested var unless 
-# it used in nested with template available
+# can be use in nested request when template available
 nested1: '{pathurl}/nested1'
 
-# getting var from _template_.js
+# getting var from _template_.js script
+# advanced interpolation only on regular template
 number: '{{number}}'
 datenow: '{{dtnow}}'
 jsonobj: '{{object}}'

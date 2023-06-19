@@ -1,0 +1,11 @@
+runs:
+  headers:   # regular select
+    headers: '{x-other: other}'
+  headers~1: # unique select (with ~)
+    headers: '{x-other-1: another~1}'
+  headers~2: # unique select (with ~)
+    headers: '{x-other-2: another~2}'
+
+url: '{baseurl}/from_default'
+headers:
+  x-origin: local

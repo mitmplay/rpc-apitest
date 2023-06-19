@@ -6,19 +6,19 @@ nested:
   bt: 25
 test: '{{json}}'
 
+default:
+  method: get
+  headers:
+    Content-Type: application/json
+
 env:
   dev:
     greet: '{msg} from DEV'
     default:
       headers:
-        X-Type: xtype
+        x-type: xtype
   qa: 
     greet: '{msg} from QA'
   noreplace: 'no change on var'
-
-default:
-  method: get
-  headers:
-    Content-Type: application/json
 
 greet-ed: 'hello {{chance.address}} - {{dtnow}}'

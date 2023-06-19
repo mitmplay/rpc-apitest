@@ -1,8 +1,9 @@
 env:
   dev:
+    # available when dev environment selected
     default:
       method: post
       headers:
         Content-Type: application/json
 
-default: ''
+default: '' # required to trigger interpolation

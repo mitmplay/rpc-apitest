@@ -1,6 +1,7 @@
 url: '{baseurl}'
 method: post
 body:
+  # dynamic value from template script
   date-now: '{datenow}'
   json-obj: '{jsonobj}'
   number: '{&}'

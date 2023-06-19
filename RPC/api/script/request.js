@@ -107,8 +107,12 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     let value1 = xhr[key]
     if (opt.env) {
       const evalue =_env(xhr, key, opt.env)
-      if (evalue) {
-        value1 = evalue
+      if (evalue) { //# replace template with env object 
+        if (!Array.isArray(value1) && typeof value1==='object') {
+          value1 = merge(value1, evalue)
+        } else {
+          value1 = evalue
+        }
       }
     } 
     if (value1===undefined) {
