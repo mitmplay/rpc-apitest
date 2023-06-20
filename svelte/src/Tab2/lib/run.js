@@ -37,23 +37,28 @@ export async function run(evn, ns, req, logs) {
   if (msg.match(/\{[\w&]+\}/)) {
     alert(`WARNING: Request having UN-parsed !\n${msg}`)
   } else {
-    console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
-    let msg = await RPC.api.fetch(run, opt)
-    if (typeof msg==='object' && msg!==null) {
-      if (logs.options.limithdr) {
-        wraplongheaders(msg.request)
-        wraplongheaders(msg.response)
-      }
-      if (msg?.request?.body) {
-        msg.request.body = JSON.parse(msg.request.body)
-      }
-      console.log(JSON.stringify(msg, null, 2))
-      if (msg.rowid && logs.options.autoShowlog) { //# autoShowlog
-        clickCollapse({activeTab:1, rowid: msg.rowid})
-      }
+    const match = msg.match(/url": "\/([^"]+)/)
+    if (match) {
+      alert(`WARNING: Request having Incorrect:\n{ url: "/${match[1]}" }`)
     } else {
-      console.log(msg)
+      console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
+      let msg = await RPC.api.fetch(run, opt)
+      if (typeof msg==='object' && msg!==null) {
+        if (logs.options.limithdr) {
+          wraplongheaders(msg.request)
+          wraplongheaders(msg.response)
+        }
+        if (msg?.request?.body) {
+          msg.request.body = JSON.parse(msg.request.body)
+        }
+        console.log(JSON.stringify(msg, null, 2))
+        if (msg.rowid && logs.options.autoShowlog) { //# autoShowlog
+          clickCollapse({activeTab:1, rowid: msg.rowid})
+        }
+      } else {
+        console.log(msg)
+      }
+      RPC._obj_.run = msg   
     }
-    RPC._obj_.run = msg   
-  }
+  } 
 }

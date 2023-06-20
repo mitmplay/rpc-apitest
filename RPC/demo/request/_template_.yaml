@@ -1,8 +1,11 @@
-baseurl: 'http://localhost:12345' # simple var
+base: 'http://localhost:12345'    # simple var
+baseurl: '{base}/hi'              # combine 
 _hidden: '{baseurl}/hidden'       # hidden var
 
 env:
   dev: true
+  empty:
+    baseurl: '/hi'
 
 pathurl: '{baseurl}/hello' # combine {baseurl} with path
 

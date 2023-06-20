@@ -155,6 +155,9 @@ p.values {
 
 .rsvword2 {
   color: rgb(27, 66, 110);
+  &.undefine {
+    color: red;
+  }
   font-weight: bold;
   font-style: italic;
   text-decoration: underline;
