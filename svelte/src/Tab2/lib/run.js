@@ -28,11 +28,18 @@ export async function run(evn, ns, req, logs) {
     if (sec?._template_?._slc) {
       sec._template_._slc.forEach(v=>slc[v]=true)
     }
-    opt.slc = Object.keys(slc)
+    const arr = Object.keys(slc)
+    arr.length && (opt.slc = arr)
   })
-  opt.run = sec[file]._run
+  sec[file]._run && (opt.run = sec[file]._run)
 
-  const arr = await RPC.api.request(run, opt)
+  const is_opt = Object.keys(opt).length
+  let arr
+  if (is_opt) {
+    arr = await RPC.api.request(run, opt)
+  } else {
+    arr = await RPC.api.request(run)
+  }
   const msg = JSON.stringify(arr[0], null, 2)
   if (msg.match(/\{[\w&]+\}/)) {
     alert(`WARNING: Request having UN-parsed !\n${msg}`)
@@ -41,8 +48,14 @@ export async function run(evn, ns, req, logs) {
     if (match) {
       alert(`WARNING: Request having Incorrect:\n{ url: "/${match[1]}" }`)
     } else {
-      console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
-      let msg = await RPC.api.fetch(run, opt)
+      let msg
+      if (is_opt) {
+        console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
+        msg = await RPC.api.fetch(run, opt)
+      } else {
+        console.log(`await RPC.api.fetch('${run}')`)
+        msg = await RPC.api.fetch(run)
+      }
       if (typeof msg==='object' && msg!==null) {
         if (logs.options.limithdr) {
           wraplongheaders(msg.request)

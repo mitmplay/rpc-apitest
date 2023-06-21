@@ -19,7 +19,7 @@
         str += `  -d '${JSON.stringify(json.body)}' \\\n`
       }
       str += `  --compressed`
-    } else if (copy==='wget') {
+    } else if (['wget', 'wget_pp'].includes(copy)) {
       str = `wget --no-check-certificate \\
   --method ${json.method.toUpperCase()} \\
   --timeout=0 \\
@@ -31,6 +31,9 @@
         str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
       }
       str += `-qO- '${json.url}'`
+      if (copy==='wget_pp') {
+        str += ` | json_pp`
+      }
     }
     if (window.isSecureContext && navigator.clipboard) {
       await navigator.clipboard.writeText(str);
@@ -65,6 +68,7 @@
     </div>
     <ul>
       <li>[<a href=# data-copy=wget on:click={copyClipboard}>wget</a>]</li>
+      <li>[<a href=# data-copy=wget_pp on:click={copyClipboard}>wget pp</a>]</li>
     </ul>  
   </span>
   {#if ttip!==''}
@@ -82,7 +86,7 @@
   color: red;
   border: solid;
   padding: 0 2px;
-  margin: 0 0 0 49px;
+  margin: -1px 0 0 60px;
   position: fixed;
   z-index: 1000;
 }
@@ -92,6 +96,7 @@ span.copies {
   position: absolute;
   text-align: center;
   display: inline-table;
+  white-space: nowrap;
   ul {
     margin: 0;
     padding: 0;
@@ -107,9 +112,6 @@ span.copies {
   }
   div:hover, li:hover {
     background-color: antiquewhite;
-  }
-  &,ul {
-    width: 44px;
   }
 }
 </style>

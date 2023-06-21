@@ -5,7 +5,7 @@ _hidden: '{baseurl}/hidden'       # hidden var
 env:
   dev: true
   empty:
-    baseurl: '/hi'
+    base: '/wow'
 
 pathurl: '{baseurl}/hello' # combine {baseurl} with path
 
