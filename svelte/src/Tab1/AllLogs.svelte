@@ -42,52 +42,54 @@
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>
       <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url',options)}~>{row.rspcode}
     </summary>
-    <Copy _id={row._id} {logs}/>
-    <div class="main-content">
-      <details data-id={row._id} data-name=openRqs open={row.openRqs}>
-        <summary class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>
-        <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
-          {#if yaml}
-            <pre><code class="language-yaml">{@html toYaml(row.request)}</code></pre>  
-          {:else}
-            <pre><code class="language-json">{@html toJson(row.request)}</code></pre>  
-          {/if}  
-        </div>
-      </details>
-      {#if row.invalid!==null}
-        <details data-id={row._id} data-name=openVld open={row.openVld}>
-          <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Validate</summary>
-          <div class="ttp" data-typ="validate">
+    {#if row.openLog}
+      <Copy _id={row._id} {logs}/>
+      <div class="main-content">
+        <details data-id={row._id} data-name=openRqs open={row.openRqs}>
+          <summary class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>
+          <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
             {#if yaml}
-              <pre><code class="language-yaml">{@html toYaml(row.validate)}</code></pre>
+              <pre><code class="language-yaml">{@html toYaml(row.request)}</code></pre>  
             {:else}
-              <pre><code class="language-json">{@html toJson(row.validate)}</code></pre>
-            {/if}
+              <pre><code class="language-json">{@html toJson(row.request)}</code></pre>  
+            {/if}  
           </div>
         </details>
-      {/if}
-      <details data-id={row._id} data-name=openHdr open={row.openHdr}>
-        <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
-        <div class="ttp" data-typ="resp-header" on:mouseover={mouseOver}>
-          <pre>{row.x_tag}</pre>
-            {#if yaml}
-              <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
-            {:else}
-              <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
-            {/if}
-        </div>
-      </details>
-      <details data-id={row._id} data-name=openBody open={row.openBody}>
-        <summary class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response body</summary>
-        <div class="ttp aliceblue" data-typ="resp-body" on:mouseover={mouseOver}>
-            {#if yaml}
-              <pre><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
-            {:else}
-              <pre><code class="language-json">{@html toJson(row.response)}</code></pre>          
-            {/if}
-        </div>
-      </details>
-    </div>
+        {#if row.invalid!==null}
+          <details data-id={row._id} data-name=openVld open={row.openVld}>
+            <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Validate</summary>
+            <div class="ttp" data-typ="validate">
+              {#if yaml}
+                <pre><code class="language-yaml">{@html toYaml(row.validate)}</code></pre>
+              {:else}
+                <pre><code class="language-json">{@html toJson(row.validate)}</code></pre>
+              {/if}
+            </div>
+          </details>
+        {/if}
+        <details data-id={row._id} data-name=openHdr open={row.openHdr}>
+          <summary  class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
+          <div class="ttp" data-typ="resp-header" on:mouseover={mouseOver}>
+            <pre>{row.x_tag}</pre>
+              {#if yaml}
+                <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
+              {:else}
+                <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
+              {/if}
+          </div>
+        </details>
+        <details data-id={row._id} data-name=openBody open={row.openBody}>
+          <summary class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response body</summary>
+          <div class="ttp aliceblue" data-typ="resp-body" on:mouseover={mouseOver}>
+              {#if yaml}
+                <pre><code class="language-yaml">{@html toYaml(row.response)}</code></pre>
+              {:else}
+                <pre><code class="language-json">{@html toJson(row.response)}</code></pre>          
+              {/if}
+          </div>
+        </details>
+      </div>
+    {/if}  
 </details>
 {/each}
 

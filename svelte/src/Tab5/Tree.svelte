@@ -45,16 +45,18 @@
       {nspace}
     {/if}
   </summary>
-  {#if json[nspace].run}
-    {#if json[nspace].content}
-      <div id="markdown">
-        {@html content(json[nspace])}
-      </div>
+  {#if json[nspace]?._openName}
+    {#if json[nspace].run}
+      {#if json[nspace].content}
+        <div id="markdown">
+          {@html content(json[nspace])}
+        </div>
+      {:else}
+        <pre>...</pre>
+      {/if}
     {:else}
-      <pre>...</pre>
-    {/if}
-  {:else}
-    <div><Tree {_doc} json={json[nspace]} /></div>
+      <div><Tree {_doc} json={json[nspace]} /></div>
+    {/if}    
   {/if}
 </details>
 {/each}

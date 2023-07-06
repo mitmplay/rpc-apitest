@@ -53,25 +53,27 @@
       {nspace}
     {/if}
   </summary>
-  {#if json[nspace]?._template_?._envs}
-    <Envs ns={nspace}/>
-  {:else if json[nspace]?._template_?._slcs}
-    <Slcs json={json[nspace]._template_} {_req} {_ns}/>
-  {/if}
-  {#if json[nspace].run}
-    {#if !/_template_/.test(json[nspace].run)}
-      <Copy json={json[nspace].request}/>
+  {#if json[nspace]?._openName}
+    {#if json[nspace]?._template_?._envs}
+      <Envs ns={nspace}/>
+    {:else if json[nspace]?._template_?._slcs}
+      <Slcs json={json[nspace]._template_} {_req} {_ns}/>
     {/if}
-    <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-    <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
-      {#if RPC._obj_?.argv?.json}
-        <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
-      {:else}
-        <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
+    {#if json[nspace].run}
+      {#if !/_template_/.test(json[nspace].run)}
+        <Copy json={json[nspace].request}/>
       {/if}
-    </div>
-  {:else}
-    <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} /></div>
+      <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+      <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
+        {#if RPC._obj_?.argv?.json}
+          <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
+        {:else}
+          <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
+        {/if}
+      </div>
+    {:else}
+      <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} /></div>
+    {/if}
   {/if}
 </details>
 {/each}

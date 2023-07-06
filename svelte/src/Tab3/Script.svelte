@@ -72,21 +72,23 @@
     <summary on:click={clickSummary}>
       {nspace}
     </summary>
-    <div>
-      {#each toArray(window.RPC[nspace]) as fn}
-        <details data-nspace={nspace} data-fn={fn} data-name="_openCode" open={$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]._openCode}>
-          <summary on:click={e=>showCode(e,$rpc.rpc)}>
-            {#if /_template_/.test(fn)}
-              <b>{`${fn}`}</b>
-            {:else}
-              <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
-              <a href="#" class=_hover_ data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
-            {/if}
-          </summary>  
-          <pre><code class="language-js">{@html $rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</code></pre>
-        </details>
-      {/each}
-    </div>
+    {#if $rpc.rpc[nspace]?._openName}
+      <div>
+        {#each toArray(window.RPC[nspace]) as fn}
+          <details data-nspace={nspace} data-fn={fn} data-name="_openCode" open={$rpc.rpc[nspace] && $rpc.rpc[nspace][fn]._openCode}>
+            <summary on:click={e=>showCode(e,$rpc.rpc)}>
+              {#if /_template_/.test(fn)}
+                <b>{`${fn}`}</b>
+              {:else}
+                <i>await</i> {`${nspace}`}.<b>{`${fn}`}</b>()
+                <a href="#" class=_hover_ data-nspace={nspace} data-fn={fn} on:click={run}>run</a>
+              {/if}
+            </summary>  
+            <pre><code class="language-js">{@html $rpc.rpc[nspace] && $rpc.rpc[nspace][fn]?.code}</code></pre>
+          </details>
+        {/each}
+      </div>      
+    {/if}
   </details>
   {/each}  
 </section>
