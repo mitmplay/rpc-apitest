@@ -22,3 +22,4 @@ env:
   noreplace: 'no change on var'
 
 greet-ed: 'hello {{chance.address}} - {{dtnow}}'
+t_range: '{{json}}'

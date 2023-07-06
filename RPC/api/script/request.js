@@ -105,6 +105,12 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   const arr = []
   const set_object = (key) => {
     let value1 = xhr[key]
+    if (Array.isArray(value1)) {
+      for (const _xhr of value1) {
+        parser(ori, _xhr, ns, tp2, opt)
+      }
+      return xhr
+    }
     if (opt.env) {
       const evalue =_env(xhr, key, opt.env)
       if (evalue) { //# replace template with env object 
@@ -153,7 +159,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
         delete xhr[key]
         if (path) {
           path = path.slice(0,-1)
-          const tmp = JSON.parse(JSON.stringify(xhr))
+          const tmp = structuredClone(xhr)
           const recv = deep => {
             for (const key in deep) {
               const src = deep[key]
@@ -174,7 +180,6 @@ function parser(ori, xhr, ns, tp2, opt={}) {
           for (const id in tmp) {
             xhr[id] = tmp[id]
           }
-          // console.log('xhr', xhr)
         }
       }
     } else {
@@ -203,11 +208,10 @@ function startParsing(xp1, ns, xp2, opt={}) {
   if (opt._reff_) {
     rtn = parser(xp1, xp1, ns, xp2, opt)
   } else {
-    const tp1 = JSON.parse(JSON.stringify(xp1))
-    const tp2 = JSON.parse(JSON.stringify(xp2))
+    const tp1 = structuredClone(xp1)
+    const tp2 = structuredClone(xp2)
     rtn = parser(tp1, tp1, ns, tp2, opt)
   }
-  // console.log(JSON.stringify(rtn,0,2))
   return rtn
 }
 
@@ -230,7 +234,7 @@ function template(ns, name, opt) {
     if (tpl) {
       let parsed;
       const {env='', slc={}} = opt
-      tpl = JSON.parse(JSON.stringify(tpl))
+      tpl = structuredClone(tpl)
       if (i===0) {
         // parse to it-self
         parsed = startParsing(tpl, ns, tpl, {env})
@@ -268,7 +272,7 @@ async function request(req='apidemo/u_agent_post', opt={}) {
     if (ori===undefined) {
       return [{},{}]
     }
-    let xhr = JSON.parse(JSON.stringify(ori))
+    let xhr = structuredClone(ori)
     if (tp2) {
       const {url, headers, body, env, slc, run} = opt
       if (tp2.default) {

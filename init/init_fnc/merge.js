@@ -1,6 +1,6 @@
 function merge(obj1, obj2) {
   if (Array.isArray(obj2)) {
-    return JSON.parse(JSON.stringify(obj2))
+    return structuredClone(obj2)
   }
 
   let result = {};

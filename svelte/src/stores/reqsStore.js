@@ -2,9 +2,9 @@ import { writable, get } from 'svelte/store';
 const json = {
   req: {},
   options: {
-    autoParsed: false,
+    autoParsed: true,
     showHidden: false,
-    showSrc: false,
+    showSource: false,
   }
 }
 export const reqs = writable(json);
@@ -308,8 +308,8 @@ export function autoParsed({currentTarget}) {
   clickTogle(currentTarget, 'autoParsed')
 }
 
-export function showSrc({currentTarget}) {
-  clickTogle(currentTarget, 'showSrc')
+export function showSource({currentTarget}) {
+  clickTogle(currentTarget, 'showSource')
 }
 
 export function showHidden({currentTarget}) {
@@ -319,12 +319,12 @@ export function showHidden({currentTarget}) {
 function clickTogle(el, key) {
   setTimeout(_ => {
     reqs.update(json => {
-      if (key==='showSrc' && !el.checked) {
+      if (key==='showSource' && !el.checked) {
         json.options.autoParsed = false
         json.options.showHidden   = false
       }
-      if (key!=='showSrc' && !el.checked) {
-        json.options.showSrc    = false
+      if (key!=='showSource' && !el.checked) {
+        json.options.showSource    = false
       }
       json.options[key] = !el.checked
       return json

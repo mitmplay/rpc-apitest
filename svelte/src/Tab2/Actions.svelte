@@ -4,12 +4,12 @@
     clickCollapse,
     autoParsed,
     showHidden,
-    showSrc,
+    showSource,
   } from '../stores/reqsStore';
   import {logs} from '../stores/logsStore';
   $: prsd = $reqs.options.autoParsed;
   $: hidn = $reqs.options.showHidden;
-  $: ssrc = $reqs.options.showSrc;
+  $: ssrc = $reqs.options.showSource;
 </script>
 
 <div class=action>
@@ -22,7 +22,7 @@
     <input type="checkbox" id="checkbkRuns" on:click={showHidden} bind:checked={hidn}>Hidden
   </label>
   <label for="checkbkSrc">
-    <input type="checkbox" id="checkbkSrc" on:click={showSrc} bind:checked={ssrc}>Source
+    <input type="checkbox" id="checkbkSrc" on:click={showSource} bind:checked={ssrc}>Source
   </label>
 </div>
 

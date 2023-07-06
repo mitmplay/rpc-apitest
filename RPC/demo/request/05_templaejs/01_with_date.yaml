@@ -1,0 +1,8 @@
+body:
+  non-arr: '{t-range}'
+  array:
+  - obj-first: '1'
+    obj-one: '{t-range}'
+    obj-two:
+      lt: 5
+      gt: 32

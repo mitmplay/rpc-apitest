@@ -29,16 +29,16 @@ const rgx_rsv3 = /(hljs-attr)">(runs|validate):/g
 
 export function showRequest({options}, nspace, json) {
   let _code = {}
-  const {autoParsed, showHidden, showSrc} = options
+  const {autoParsed, showHidden, showSource} = options
   const {request, ori, src} = json[nspace]
-  if (showSrc) {
+  if (showSource) {
     _code = pretty(src || '', true)
   } else {
     let _tmp = (autoParsed ? request : ori)||{}
     if (showHidden) {
       _code = _tmp
     } else if (nspace==='_template_') {
-      _code = _novar(JSON.parse(JSON.stringify(_tmp)))
+      _code = _novar(structuredClone(_tmp))
     } else {
       const {validate, url, method, headers, body} = _tmp
       _code = {validate, url, method, headers, body}
