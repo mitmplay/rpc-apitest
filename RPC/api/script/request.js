@@ -107,9 +107,10 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     let value1 = xhr[key]
     if (Array.isArray(value1)) {
       for (const _xhr of value1) {
-        parser(ori, _xhr, ns, tp2, opt)
+        if (typeof _xhr!=='string') {
+          parser(ori, _xhr, ns, tp2, opt)
+        }
       }
-      return xhr
     }
     if (opt.env) {
       const evalue =_env(xhr, key, opt.env)
