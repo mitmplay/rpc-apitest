@@ -3,6 +3,7 @@
   export let json
   import {clickSummary} from '../stores/oapiStore';
   import Tree from './Tree.svelte';
+  import Collapsible from '../components/Collapsible.svelte';
 
   function toArray(_json) {
     const arr1 = []
@@ -35,29 +36,29 @@
 </script>
 
 {#each toArray(json) as nspace}
-<details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
-  <summary on:click={evn => clickSummary(evn, _req, json)}>
-    {#if /_template_/.test(json[nspace].run)}
-      <b>{`${json[nspace].run.split('/').pop()}`}</b>
-    {:else if json[nspace].run}
-      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}')</b>
-      <a href="#" class=_hover_ data-run={json[nspace].run} on:click={run}>run</a>
-    {:else}
-      {nspace}
-    {/if}
-  </summary>
-  {#if json[nspace]?._openName}
-    {#if json[nspace].run}
-      {#if RPC._obj_?.argv?.json}
-        <pre class="aliceblue"><code class="language-json">{@html json[nspace].request || '...'}</code></pre>
+  <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
+    <summary slot=head on:click={evn => clickSummary(evn, _req, json)}>
+      {#if /_template_/.test(json[nspace].run)}
+        <b>{`${json[nspace].run.split('/').pop()}`}</b>
+      {:else if json[nspace].run}
+        <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}')</b>
+        <a href="#" class=_hover_ data-run={json[nspace].run} on:click={run}>run</a>
       {:else}
-        <pre class="aliceblue"><code class="language-yaml">{@html json[nspace].request || '...'}</code></pre>
+        {nspace}
       {/if}
-    {:else}
-      <div><Tree {_req} json={json[nspace]} /></div>
-    {/if}    
-  {/if}
-</details>
+    </summary>
+    <div slot=body>
+      {#if json[nspace].run}
+        {#if RPC._obj_?.argv?.json}
+          <pre class="aliceblue"><code class="language-json">{@html json[nspace].request || '...'}</code></pre>
+        {:else}
+          <pre class="aliceblue"><code class="language-yaml">{@html json[nspace].request || '...'}</code></pre>
+        {/if}
+      {:else}
+        <div><Tree {_req} json={json[nspace]} /></div>
+      {/if}
+    </div>
+  </Collapsible>
 {/each}
 
 <style lang="scss">

@@ -1,12 +1,12 @@
 import { writable } from 'svelte/store';
 const json = {
-  logs: {},
-  logs2: {},
-  logs3: {},
-  logs4: {},
+  logs: {},  //# all
+  logs2: {}, //# host
+  logs3: {}, //# time
+  logs4: {}, //# api
   options: {
     activeTab: 1,
-    grouping: '1', //# 1:all, 2:Host, 3:Time
+    grouping: '1', //# 1:all, 2:host 3:time, 4:api
     autoExpandRequest: true,
     autoExpandRespHdr: false,
     autoExpandRespBody: true,

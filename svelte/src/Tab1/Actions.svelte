@@ -1,4 +1,5 @@
 <script>
+  // @ts-nocheck
   import {
     logs, 
     clickYaml,
@@ -22,10 +23,10 @@
   <button on:click={clickCollapse}>[-]</button>
   <button on:click={e=>download_html(e, $logs)}>Download</button>
   |
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="all"    value="1">All</label>
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="domain" value="4">Api</label>
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="host"   value="2">Host</label>
-  <label><input type=radio on:click={clickGroup} bind:group={grp} name="time"   value="3">Date</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="all"  value="1">All</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="api"  value="4">Api</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="host" value="2">Host</label>
+  <label><input type=radio on:click={clickGroup} bind:group={grp} name="date" value="3">Date</label>
   |
   <label for="checkbkRqs">
     <input type="checkbox" id="checkbkRqs" on:click={autoExpandRequest}  bind:checked={rqs}>Reqs

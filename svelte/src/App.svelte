@@ -4,8 +4,8 @@
   import {updateLogs} from './stores/logsStore';
   import {updateReq } from './stores/reqsStore';
 
+  import Tabs    from "./components/Tabs.svelte";
   import ShowLog from './ShowLog.svelte';
-  import Tabs    from "./Tabs/Tabs.svelte";
   import Logs    from "./Tab1/Logs.svelte";
   import Docs    from "./Tab5/Docs.svelte";
   import Script  from "./Tab3/Script.svelte";

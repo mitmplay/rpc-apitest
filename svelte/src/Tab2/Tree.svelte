@@ -14,6 +14,7 @@
   import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
   import Copy from './Copy.svelte';
+  import Collapsible from '../components/Collapsible.svelte';
 
   function arrLength(arr) {
     return (Array.isArray(arr)? arr.length : 0)
@@ -21,61 +22,63 @@
 </script>
 
 {#each toArray(json) as nspace}
-<details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
-  <summary on:click={evn => clickSummary(evn, _req, _ns, json)}>
-    {#if /_template_/.test(json[nspace].run)}
-      <i>#</i>
-    {:else if json[nspace].run}
-      <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
-      {#if json[nspace]?._runs}
-        <Runs json={json[nspace]} {_req} {_ns}>
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <div class=_hover_ 
-          data-run={json[nspace].run}
-          on:click={e=>run(e, _ns, $reqs.req, $logs)}>
-            {#if arrLength(json[nspace]?._run)}
-              <i>
-                &gt;{json[nspace]?._run[0]+(json[nspace]?._run.length>1?',.':'')}
-              </i>
+  <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
+    <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)}>
+      {#if /_template_/.test(json[nspace].run)}
+        <i>#</i>
+      {:else if json[nspace].run}
+        <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
+        {#if json[nspace]?._runs}
+          <Runs json={json[nspace]} {_req} {_ns}>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class=_hover_ 
+            data-run={json[nspace].run}
+            on:click={e=>run(e, _ns, $reqs.req, $logs)}>
+              {#if arrLength(json[nspace]?._run)}
+                <i>
+                  &gt;{json[nspace]?._run[0]+(json[nspace]?._run.length>1?',.':'')}
+                </i>
+              {:else}
+                <b>run<i>{json[nspace]?._runs.length>0 ? '(*)' : ''}</i></b>
+              {/if}
+            </div>
+          </Runs>
+        {:else}
+          <!-- svelte-ignore a11y-invalid-attribute -->
+          <a href="#" class=_hover_ 
+          data-run={json[nspace].run} 
+          data-_run={json[nspace]._run || ''} 
+          on:click={e=>run(e, _ns, $reqs.req, $logs)}><b>run</b></a>
+        {/if}
+      {:else}
+        {nspace}
+      {/if}
+    </summary>
+    <div slot=body>
+      {#if json[nspace]?._openName}
+        {#if json[nspace]?._template_?._envs}
+          <Envs ns={nspace}/>
+        {:else if json[nspace]?._template_?._slcs}
+          <Slcs json={json[nspace]._template_} {_req} {_ns}/>
+        {/if}
+        {#if json[nspace].run}
+          {#if !/_template_/.test(json[nspace].run)}
+            <Copy json={json[nspace].request}/>
+          {/if}
+          <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+          <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
+            {#if RPC._obj_?.argv?.json}
+              <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
             {:else}
-              <b>run<i>{json[nspace]?._runs.length>0 ? '(*)' : ''}</i></b>
+              <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
             {/if}
           </div>
-        </Runs>
-      {:else}
-        <!-- svelte-ignore a11y-invalid-attribute -->
-        <a href="#" class=_hover_ 
-        data-run={json[nspace].run} 
-        data-_run={json[nspace]._run || ''} 
-        on:click={e=>run(e, _ns, $reqs.req, $logs)}><b>run</b></a>
-      {/if}
-    {:else}
-      {nspace}
-    {/if}
-  </summary>
-  {#if json[nspace]?._openName}
-    {#if json[nspace]?._template_?._envs}
-      <Envs ns={nspace}/>
-    {:else if json[nspace]?._template_?._slcs}
-      <Slcs json={json[nspace]._template_} {_req} {_ns}/>
-    {/if}
-    {#if json[nspace].run}
-      {#if !/_template_/.test(json[nspace].run)}
-        <Copy json={json[nspace].request}/>
-      {/if}
-      <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-      <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
-        {#if RPC._obj_?.argv?.json}
-          <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
         {:else}
-          <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
+          <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} /></div>
         {/if}
-      </div>
-    {:else}
-      <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} /></div>
-    {/if}
-  {/if}
-</details>
+      {/if}
+    </div>
+  </Collapsible>
 {/each}
 
 <style lang="scss">

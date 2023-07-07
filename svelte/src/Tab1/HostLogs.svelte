@@ -3,6 +3,7 @@
   export let yaml;
   export let options;
   import {clickSummary} from '../stores/logsStore';
+  import Collapsible from '../components/Collapsible.svelte';
   import {
     sortID,
     toArray,
@@ -16,10 +17,10 @@
 </svelte:head>
 
 {#each toArray(logs4).sort(sortID) as row}
-  <details data-id={row._id} data-name=domain open={row.domain}>
-    <summary on:click={e=>clickSummary(e,'logs4')}>{row._id}</summary>
-    <div><AllLogs logs={row.logs} {options} {yaml}/></div>
-</details>
+  <Collapsible id={row._id} name=openDomain open={row.openDomain}>
+    <summary slot=head on:click={e=>clickSummary(e,'logs4')}>{row._id}</summary>
+    <div slot=body><AllLogs logs={row.logs} {options} {yaml}/></div>
+  </Collapsible>
 {/each}
 
 <style lang="scss">

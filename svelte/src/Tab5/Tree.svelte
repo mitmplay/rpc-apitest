@@ -3,6 +3,7 @@
   export let json
   import {clickSummary} from '../stores/docsStore';
   import Tree from './Tree.svelte';
+  import Collapsible from '../components/Collapsible.svelte';
 
   function toArray(_json) {
     const arr1 = []
@@ -37,28 +38,28 @@
 </script>
 
 {#each toArray(json) as nspace}
-<details data-nspace={nspace} data-name="_openName" open={json[nspace]._openName}>
-  <summary on:click={evn => clickSummary(evn, _doc, json)}>
-    {#if json[nspace].run}
-      <b>{`${json[nspace].run.replace(/(^_|_|\.md$)/g, '').split('/').pop()}`}</b>
-    {:else}
-      {nspace}
-    {/if}
-  </summary>
-  {#if json[nspace]?._openName}
-    {#if json[nspace].run}
-      {#if json[nspace].content}
-        <div id="markdown">
-          {@html content(json[nspace])}
-        </div>
+  <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
+    <summary slot=head on:click={evn => clickSummary(evn, _doc, json)}>
+      {#if json[nspace].run}
+        <b>{`${json[nspace].run.replace(/(^_|_|\.md$)/g, '').split('/').pop()}`}</b>
       {:else}
-        <pre>...</pre>
+        {nspace}
       {/if}
-    {:else}
-      <div><Tree {_doc} json={json[nspace]} /></div>
-    {/if}    
-  {/if}
-</details>
+    </summary>
+    <div slot=body>
+      {#if json[nspace].run}
+        {#if json[nspace].content}
+          <div id="markdown">
+            {@html content(json[nspace])}
+          </div>
+        {:else}
+          <pre>...</pre>
+        {/if}
+      {:else}
+        <div><Tree {_doc} json={json[nspace]} /></div>
+      {/if}
+    </div>
+  </Collapsible>
 {/each}
 
 <style lang="scss">

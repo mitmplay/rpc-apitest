@@ -1,7 +1,7 @@
 <script>
   export let items = [];
-  import {logs} from '../stores/logsStore';
-  import {ttp}  from '../stores/ttpStore';
+  import {ttp}   from '../stores/ttpStore';
+  import {logs}  from '../stores/logsStore';
   import Tooltip from '../lib/Tooltip.svelte';
 
   const handleClick = tabValue => () => {
