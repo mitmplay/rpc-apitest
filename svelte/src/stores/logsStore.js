@@ -33,7 +33,8 @@ export function updateLogs(newLogs) {
       _logs[id] = json.logs[id] || newLogs[id]
       // group by host
       const {host, request, created=''} = _logs[id]
-      const match  = request.match(/:\/\/([^/]+)/) || ['all', 'undefined']
+      const url = JSON.parse(request)?.url || ''
+      const match = url.match(/:\/\/([^/:]+)/) || ['all', 'undefined']
       const domain = match[1]
       if (!_logs2[host]) {
         _logs2[host] = {
