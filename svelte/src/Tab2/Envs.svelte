@@ -28,11 +28,11 @@
 .commonlink {
   position: relative;
   div {
+    width: calc(100vw - 65px);
     color: darkmagenta;
     position: absolute;
     font-size: smaller;
-    width: 400px;
-    left: 35px;
+    left: 20px;
     top: -2px;
   }
 }
