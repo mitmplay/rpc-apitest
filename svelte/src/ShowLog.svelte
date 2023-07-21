@@ -36,12 +36,12 @@
         </label>
       </li>
       <li>
-        <label for="checkbkDomain">
+        <label for="checkbkDomain" class=purple>
           <input type="checkbox" id="checkbkDomain" on:click={hideHost} bind:checked={host}>Hide domain
         </label>
       </li>
       <li>
-        <label for="checkbkTips">
+        <label for="checkbkTips" class=purple>
           <input type="checkbox" id="checkbkTips" on:click={showttips} bind:checked={tips}>Show TTips
         </label>  
       </li>
@@ -65,6 +65,9 @@
     ul {
       display: block;
     }
+  }
+  .purple {
+    color: purple;
   }
 }
 input {

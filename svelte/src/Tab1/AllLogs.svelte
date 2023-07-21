@@ -38,7 +38,7 @@
 </svelte:head>
 
 {#each toArray(logs) as row}
-  <Collapsible id={row._id} name=openLog open={row.openLog}>
+  <Collapsible id={row._id} name=openLog open={row?._?.openLog}>
     <summary slot=head class="logs" on:click={e=>clickSummary(e,'logs')}>
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>
       <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url',options)}~>{row.rspcode}
@@ -46,7 +46,7 @@
     <div slot=body>
       <Copy _id={row._id} {logs}/>
       <div class="main-content">
-        <Collapsible id={row._id} name=openRqs open={row.openRqs}>
+        <Collapsible id={row._id} name=openRqs open={row?._?.openRqs}>
           <summary slot=head class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div slot=body class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
@@ -57,7 +57,7 @@
             {/if}  
           </div>
         </Collapsible>
-        <Collapsible id={row._id} name=openVld open={row.openVld} show={row.invalid}>
+        <Collapsible id={row._id} name=openVld open={row?._?.openVld} show={row.invalid}>
           <summary slot=head class="title-blue" on:click={e=>clickSummary(e,'logs')}>Validate</summary>
           <div slot=body class="ttp" data-typ="validate">
             {#if yaml}
@@ -67,7 +67,7 @@
             {/if}
           </div>
         </Collapsible>
-        <Collapsible id={row._id} name=openHdr open={row.openHdr}>
+        <Collapsible id={row._id} name=openHdr open={row?._?.openHdr}>
           <summary slot=head class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div slot=body class="ttp" data-typ="resp-header" on:mouseover={mouseOver}>
@@ -79,7 +79,7 @@
               {/if}
           </div>
         </Collapsible>
-        <Collapsible id={row._id} name=openBody open={row.openBody}>
+        <Collapsible id={row._id} name=openBody open={row?._?.openBody}>
           <summary slot=head class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response body</summary>
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div slot=body class="ttp aliceblue" data-typ="resp-body" on:mouseover={mouseOver}>

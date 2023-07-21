@@ -13,6 +13,7 @@ export async function init() {
   const req1 = await window.RPC.api.requests(true)
   const req2 = {}
   reqs.update(json => {
+    window.stores.req = json
     for (const nspace in req1) {
       req2[nspace] = json.req[nspace] || req1[nspace]
     }

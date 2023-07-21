@@ -16,7 +16,7 @@
 </svelte:head>
 
 {#each toArray(logs3) as row}
-  <Collapsible id={row._id} name=openDate open={row.openDate}>
+  <Collapsible id={row._id} name=openDate open={row?._?.openDate}>
     <summary slot=head on:click={e=>clickSummary(e,'logs3')}>{row._id}</summary>
     <div slot=body><AllLogs logs={row.logs} {options} {yaml}/></div>
   </Collapsible>

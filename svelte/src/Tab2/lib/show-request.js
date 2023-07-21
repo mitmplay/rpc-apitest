@@ -27,10 +27,10 @@ const rgx_rsv1 = /(hljs-attr)">(env|select|default):/g
 const rgx_rsv2 = /(hljs-attr)">(url|body|method|headers):/g
 const rgx_rsv3 = /(hljs-attr)">(runs|validate):/g
 
-export function showRequest({options}, nspace, json) {
+export function showRequest(logOptions, {options}, nspace, json) {
   let _code = {}
   const {autoParsed, showHidden, showSource} = options
-  const {request, ori, src} = json[nspace]
+  const {request, ori, src, run} = json[nspace]
   if (showSource) {
     _code = pretty(src || '', true)
   } else {
@@ -54,6 +54,9 @@ export function showRequest({options}, nspace, json) {
     _code = _code.replace(rgx_rsv1, a=> `rsvword1 ${a}`)
     _code = _code.replace(rgx_rsv2, a=> `rsvword2 ${a}`)
     _code = _code.replace(rgx_rsv3, a=> `rsvword3 ${a}`)  
+  }
+  if (logOptions.hideHost && autoParsed && !run.match('_template_')) {
+    _code = _code.replace(/http(s|):\/\/[^/]+/,'')
   }
   return _code
 }

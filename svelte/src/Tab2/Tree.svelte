@@ -68,9 +68,9 @@
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
             {#if RPC._obj_?.argv?.json}
-              <pre class="aliceblue"><code class="language-json">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
+              <pre class="aliceblue"><code class="language-json">{@html showRequest($logs.options, $reqs, nspace, json) || '...'}</code></pre>
             {:else}
-              <pre class="aliceblue"><code class="language-yaml">{@html showRequest($reqs, nspace, json) || '...'}</code></pre>
+              <pre class="aliceblue"><code class="language-yaml">{@html showRequest($logs.options, $reqs, nspace, json) || '...'}</code></pre>
             {/if}
           </div>
         {:else}

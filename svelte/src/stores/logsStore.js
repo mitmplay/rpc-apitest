@@ -29,6 +29,7 @@ export function updateLogs(newLogs) {
   const _logs3= {}
   const _logs4= {}
   logs.update(json => {
+    window.stores.log= json
     for (const id in newLogs) {
       _logs[id] = json.logs[id] || newLogs[id]
       // group by host
@@ -65,7 +66,6 @@ export function updateLogs(newLogs) {
     json.logs2 = _logs2
     json.logs3 = _logs3
     json.logs4 = _logs4
-    window.json= json
     return json
   });
 }
@@ -87,16 +87,20 @@ export function clickSummary(evn, lg) {
     logs.update(json => {
       const {id,name} = el.dataset
       const open = (typeof el.getAttribute('open')==='string')
-      json[lg][id][name]= open
+      if (json[lg][id]._===undefined) {
+        json[lg][id]._ = {}
+      }
+      const _ = json[lg][id]._
+      _[name]= open
       if (name==='openLog') {
         if (json.options.autoExpandRespBody) {
-          json.logs[id].openBody = true
+          _.openBody = true
         }
         if (json.options.autoExpandRespHdr) {
-          json.logs[id].openHdr = true
+          _.openHdr = true
         }
         if (json.options.autoExpandRequest) {
-          json.logs[id].openRqs = true
+          _.openRqs = true
         }
       }
       return json
@@ -117,12 +121,7 @@ export function clickCollapse({activeTab, rowid}) {
   setTimeout(_ => {
     logs.update(json => {
       for (const id in json.logs) {
-        const obj = json.logs[id]
-        obj.openBody= false
-        obj.openLog = false
-        obj.openRqs = false
-        obj.openHdr = false
-        obj.chkLog  = false
+        json.logs[id]._ = {}
       }
       if (activeTab===1) {
         const id = `_${rowid}`
@@ -130,13 +129,13 @@ export function clickCollapse({activeTab, rowid}) {
         json.options.grouping  = '1'
         json.logs[id].openLog  = true
         if (json.options.autoExpandRespBody) {
-          json.logs[id].openBody = true
+          json.logs[id]._.openBody = true
         }
         if (json.options.autoExpandRespHdr) {
-          json.logs[id].openHdr = true
+          json.logs[id]._.openHdr = true
         }
         if (json.options.autoExpandRequest) {
-          json.logs[id].openRqs = true
+          json.logs[id]._.openRqs = true
         }
       }
       return json
