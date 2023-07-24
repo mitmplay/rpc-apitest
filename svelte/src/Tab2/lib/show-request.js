@@ -56,7 +56,7 @@ export function showRequest(logOptions, {options}, nspace, json) {
     _code = _code.replace(rgx_rsv3, a=> `rsvword3 ${a}`)  
   }
   if (logOptions.hideHost && autoParsed && !run.match('_template_')) {
-    _code = _code.replace(/http(s|):\/\/[^/]+/,'')
+    _code = _code.replace(/http(s|):\/\/[^/&]+/,'')
   }
   return _code
 }

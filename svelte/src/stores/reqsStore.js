@@ -217,7 +217,7 @@ async function updateState(path) {
 }
 
 export async function updateReq(path, opt={}) {
-  if (opt.del) {
+  if (['add', 'chg', 'del'].includes(opt._act)) {
     reqs.update(json => {
       let {req} = json
       const folders = path.split('/')
@@ -225,12 +225,16 @@ export async function updateReq(path, opt={}) {
       for (const folder of folders) {
         req = req[folder] || {}
       }
-      if (req[file]) {
+      if (opt._act==='del') {
         delete req[file]
+      }  else {
+        const run = path.replace(/\.yaml$/, '')
+        req[file] = {run}
       }
       return json
     })
     return
+
   }
   await updateState(path)
 }
