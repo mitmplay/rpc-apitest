@@ -37,7 +37,7 @@ function yml(_rpc_) {
       ignored: /\/_.*\.js$/, // ignore files
       persistent: true
     })
-    // Something to use when events are received.
+
     userYMLWatcher // Add event listeners.
     .on('add',    fullpath => update(fullpath, 'add'))
     .on('change', fullpath => update(fullpath, 'chg'))

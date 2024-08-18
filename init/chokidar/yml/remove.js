@@ -22,7 +22,6 @@ function _remove(_rpc_, initToggle) {
       initToggle.id = 0
     }
   }
-
   return remove;  
 }
 module.exports = _remove

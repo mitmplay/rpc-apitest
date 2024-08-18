@@ -32,7 +32,6 @@ function _chg(_rpc_, initToggle) {
       initToggle.id = 0
     }
   }
-
   return chg;  
 }
 module.exports = _chg
