@@ -355,11 +355,21 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       return [xhr, ori, src]
     } else {
       let xhr2 = {}
-      const {validate, url, method, headers, body, ...vars} = xhr
+      let {validate, url, method, headers, body, ...vars} = xhr
       if (opt.var) { // if opt.var=true include vars in return
         xhr2 = {...vars, validate, url, method, headers, body}  
       } else {
         xhr2 = {validate, url, method, headers, body}
+      }
+      if (!url.match(/{.+}/) && vars.params) {
+        const arr = Object.keys(vars.params)
+        const q = arr.map(k=>`${k}=${vars.params[k]}`).join('&')
+        const {search} = new URL(url)
+        if (search) {
+          xhr2.url = url.replace(search, `?${q}&${search.slice(1)}`)
+        } else {
+          xhr2.url = `${url}?${q}`
+        }
       }
       return [xhr2, ori, src]  
     }

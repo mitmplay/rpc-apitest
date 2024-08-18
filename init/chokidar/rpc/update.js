@@ -1,4 +1,4 @@
-function _update(_rpc_, initToggle, initEnd) {
+function _update(_rpc_, initToggle, initEnd, loadJS) {
   const {
     _fn_ : {tilde},
     _obj_: {HOME, argv},

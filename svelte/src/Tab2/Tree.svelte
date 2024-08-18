@@ -35,8 +35,8 @@
             data-run={json[nspace].run}
             on:click={e=>run(e, _ns, $reqs.req, $logs)}>
               {#if arrLength(json[nspace]?._run)}
-                <i>
-                  &gt;{json[nspace]?._run[0]+(json[nspace]?._run.length>1?',.':'')}
+                <i id={json[nspace]?._run ? json[nspace]?._run[0].replace('~', '_') : ''}>
+                  &gt;{json[nspace]._run[0]+(json[nspace]._run.length>1?',.':'')}
                 </i>
               {:else}
                 <b>run<i>{json[nspace]?._runs.length>0 ? '(*)' : ''}</i></b>

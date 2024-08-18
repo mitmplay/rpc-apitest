@@ -5,6 +5,7 @@ const chokidar  = require('./chokidar')
 
 function init() {
   const _rpc_ = require('../_rpc_')()
+  global.RPC = _rpc_
   console.log('Init - Startup!')
   init_lib(_rpc_)
   cli_args(_rpc_)

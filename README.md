@@ -61,7 +61,7 @@ Each of requests are define using **YAML** file and can having **variable** and 
 * `{static-var}` => `_template_.yaml`
 * `{{dynamic-var}}` => `_template_.js`
 
-Each `request definition file` will be loaded in the UI and can be tested, as the files is watched!, when you edit the file and save it, it will automaticaly reflected on the UI.
+Each `request definition file` will be loaded in the UI and can be tested, as the files is watched!, when you edit the file and save it, it will refresh the UI.
 
 **Parser checkbox** on the action-bar will help (when checked) to see the end result result, but for random value using fake in dynamic vars, the values can be different during the execution of API call.
 
@@ -73,8 +73,20 @@ await RPC.api.fetch('apidemo/u_agent_post') run
 <details><summary><b>Parser</b></summary>
 
 ## Parser
+Some Variable definition in request are reserved for specific purpose:
+
+| var     | description                               |
+|---------|-------------------------------------------|
+| url     | full-path api-url                         |
+| method  | request-method `[get\|post\|put\|delete]` |
+| headers | request-headers                           |
+| params  | query-params `[get]`, injected into `url` |
+| body    | request-body `[post\|put]`                |
+
+### Dynamic Variables
 Capability of RPC-Apitest to interprate specific string rules (world inside curly-braces) as variable and during parsing, some rules having different meaning on how replacement behave: 
-### Simple
+
+#### Simple
 if the world inside curly-braces contains "strings" chars without dots.
 ```js
 greet: Hello        // _template_.yaml
@@ -84,7 +96,7 @@ body: {greet}       // request_post.yaml
 
 => body: Hello      // result
 ```
-### Nested
+#### Nested
 meaning two-things 1) the definition is nested and want to access specific value, the world inside curly-braces need to reach the nested using "dots" separator -OR- 2) its a simple parser way with result of replacement will be nested.
 ```js
 greet:              // _template_.yaml
@@ -101,7 +113,7 @@ body: {greet}       // request_post.yaml
 => body:
      nice: Hi Alice // result
 ```
-### Shorthand `{&}`
+#### Shorthand `{&}`
 Ampersand will denotate the current key, ie: below show how it works during the parser
 ```js 
 greet:              // _template_.yaml
@@ -113,7 +125,7 @@ body: {greet.&}     // request_post.yaml
 
 => body: Howdy John // result
 ```
-### Spread
+#### Spread
 Basic meaning is to replace the key with the nested values
 ```js
 names:              // _template_.yaml
@@ -128,7 +140,7 @@ body:               // request_post.yaml
     first: John
     last: Doe
 ```
-## Inject on specific key
+### Inject on specific key
 when **the Spread** words contain tilde "~" after it, its a key that need to search and do merged values.
 ```yaml
 _validate: 

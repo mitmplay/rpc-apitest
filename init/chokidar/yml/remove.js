@@ -1,3 +1,5 @@
+const xpath = require('../xpath')
+
 function _remove(_rpc_, initToggle) {
   const {
     _obj_: {HOME, argv},

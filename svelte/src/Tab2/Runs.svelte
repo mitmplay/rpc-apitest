@@ -6,6 +6,7 @@
   import {changeRun} from '../stores/reqsStore';
 
   async function chgRun(e) {
+    e.preventDefault()
     e.stopPropagation()
     const {checked, value} = e.target
     const arrV = value.split('~')
@@ -17,6 +18,17 @@
       changeRun(_req, _ns, json, runs)
     })
   }
+
+  async function chgChkRun(e) {
+    const {run} = e.target.dataset
+    setTimeout(()=>{
+      const node = document.querySelector(`#${run}`)
+      const event = new MouseEvent('click')
+      node.click.call(node, event)
+    }, 1000)
+    console.log('EXEC!')
+  }
+
   let runs = [];
   onMount(() => {
     runs = json?._run || []
@@ -31,9 +43,12 @@
       <li class=run-options>
         <label>
           <input type="checkbox"
-           on:click={chgRun} bind:group={runs} value={run}>{run}&nbsp;
+           on:click={chgRun} bind:group={runs} value={run} />{run}&nbsp;
+           <span 
+           on:click={chgChkRun} 
+           data-run={run?.replace('~', '_')}
+           class=run-time>&lt;!&gt;</span> 
         </label>
-        <!-- <span class=run-time>&nbsp;~&gt;&nbsp;</span> -->
       </li>
       {/each}
     </ul>  

@@ -18,7 +18,7 @@ function rpc(_rpc_) {
   const remove  = _remove (_rpc_, initToggle);
   const initEnd = _initEnd(_rpc_, initToggle);
   const loadJS  = _loadJS (_rpc_, initToggle, initEnd);
-  const update  = _update  (_rpc_, initToggle, initEnd);
+  const update  = _update (_rpc_, initToggle, initEnd, loadJS);
 
   // Initialize watcher.
   const path = _path(_rpc_)

@@ -25,7 +25,7 @@ const rgx_var2 = /(hljs[\w-]+)">(|&quot;|&#x27;){+[@\w&.:;~-]+}/g
 const rgx_var3 = /(hljs-string)">.*undefined/g
 const rgx_rsv1 = /(hljs-attr)">(env|select|default):/g
 const rgx_rsv2 = /(hljs-attr)">(url|body|method|headers):/g
-const rgx_rsv3 = /(hljs-attr)">(runs|validate):/g
+const rgx_rsv3 = /(hljs-attr)">(runs|validate|params):/g
 
 export function showRequest(logOptions, {options}, nspace, json) {
   let _code = {}
@@ -46,8 +46,8 @@ export function showRequest(logOptions, {options}, nspace, json) {
     _code = pretty(_code || '') //hljs-string">&quot;{
   }
   _code = _code.replace(/^\n/, '')
-  _code = _code.replace(rgx_var2, a=> `undefine ${a}`)
-  _code = _code.replace(rgx_var3, a=> `undefine ${a}`)
+  _code = _code.replace(rgx_var2,   a=> `undefine ${a}`)
+  _code = _code.replace(rgx_var3,   a=> `undefine ${a}`)
   if (_code.match(rgx_var0)) {
     _code = _code.replace(rgx_var1, a=> `undefine ${a}`)
   } else {

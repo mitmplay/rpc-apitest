@@ -13,7 +13,8 @@ function wraplongheaders(json) {
 
 export async function run(evn, ns, req, logs) {
   evn.preventDefault()
-  let {run} = evn.target.parentElement.dataset
+  evn.stopPropagation()
+  let {run} = evn.currentTarget.dataset
   const _env = req[ns]?._template_?._env
 
   const opt = {} // novar!

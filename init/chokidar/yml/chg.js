@@ -1,3 +1,5 @@
+const xpath = require('../xpath')
+
 function _chg(_rpc_, initToggle) {
   const {
     _obj_: {HOME, argv},
