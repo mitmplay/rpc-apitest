@@ -56,14 +56,14 @@ function md(_rpc_) {
   path.push(`${rpath}/*/docs/*.md`)
 
   console.log(c.magentaBright(`>>> Markdown watcher:`), [tilde(path)])
-  const uMDWatcher = chokidar.watch([path], {
+  const userMDWatcher = chokidar.watch([path], {
     persistent: true
   })
   // Something to use when events are received.
-  uMDWatcher // Add event listeners.
-  .on('add',    _ => { _ = loadMD(_, 'add') })
-  .on('change', _ => { _ = loadMD(_, 'chg') })
-  .on('unlink', _ => { _ = remove(_, 'del') })
-  _rpc_._watcher_.uMDWatcher = uMDWatcher
+  userMDWatcher // Add event listeners.
+  .on('add',    fullpath => loadMD(fullpath, 'add'))
+  .on('change', fullpath => loadMD(fullpath, 'chg'))
+  .on('unlink', fullpath => remove(fullpath, 'del'))
+  _rpc_._watcher_.userMDWatcher = userMDWatcher
 }
 module.exports = md

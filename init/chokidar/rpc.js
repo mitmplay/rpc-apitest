@@ -67,16 +67,16 @@ function rpc(_rpc_) {
     })  
   } else {
     console.log(c.magentaBright(`>>> RPC watcher:`), [tilde(path)])
-    const uRPCWatcher = chokidar.watch([path], {
+    const userRPCWatcher = chokidar.watch([path], {
       ignored, // ignore files
       persistent: true
     })
     // Something to use when events are received.
-    uRPCWatcher // Add event listeners.
-    .on('add',    _ => { _ = updateJS(_, 'add') })
-    .on('change', _ => { _ = updateJS(_, 'chg') })
-    .on('unlink', _ => { _ =   remove(_, 'del') })
-    _rpc_._watcher_.uRPCWatcher = uRPCWatcher
+    userRPCWatcher // Add event listeners.
+    .on('add',    fullpath => updateJS(fullpath, 'add'))
+    .on('change', fullpath => updateJS(fullpath, 'chg'))
+    .on('unlink', fullpath => remove  (fullpath, 'del'))
+    _rpc_._watcher_.userRPCWatcher = userRPCWatcher
   }
 }
 module.exports = rpc
