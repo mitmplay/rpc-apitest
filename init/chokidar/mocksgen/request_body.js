@@ -1,4 +1,4 @@
-const $RefParser = require('json-schema-ref-parser');
+const $RefParser = require('@apidevtools/json-schema-ref-parser');
 
 function requestBody(spec, endpoint, method, fn) {
   const specmth = spec.paths[endpoint][method]
