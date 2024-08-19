@@ -5,13 +5,16 @@
     clickYaml,
     clickGroup, 
     clickCollapse,
+    clickSelectAll,
     autoExpandRequest,
     autoExpandRespHdr,
     autoExpandRespBody,
   } from '../stores/logsStore';
+  import {remove} from './remove';
   import {download_html} from './download';
   
   $: grp = $logs.options.grouping;
+  $: slc = $logs.options.selectAll;
   $: rqs = $logs.options.autoExpandRequest;
   $: hdr = $logs.options.autoExpandRespHdr;
   $: bdy = $logs.options.autoExpandRespBody;
@@ -21,7 +24,11 @@
 
 <div class=action>
   <button on:click={clickCollapse}>[-]</button>
-  <button on:click={e=>download_html(e, $logs)}>Download</button>
+  <button on:click={e=>remove(e, $logs)}>del</button>
+  <label for="checkbkSlc">
+    <input type="checkbox" id="checkbkSlc" on:click={clickSelectAll}  bind:checked={slc}>
+  </label>
+  <button on:click={e=>download_html(e, $logs)}>download</button>
   |
   <label><input type=radio on:click={clickGroup} bind:group={grp} name="all"  value="1">All</label>
   <label><input type=radio on:click={clickGroup} bind:group={grp} name="api"  value="4">Api</label>

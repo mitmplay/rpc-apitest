@@ -7,6 +7,7 @@ const json = {
   options: {
     activeTab: 1,
     grouping: '1', //# 1:all, 2:host 3:time, 4:api
+    selectAll: false,
     autoExpandRequest: true,
     autoExpandRespHdr: false,
     autoExpandRespBody: true,
@@ -112,6 +113,19 @@ export function clickGroup({currentTarget}) {
   setTimeout(_ => {
     logs.update(json => {
       json.options.grouping = currentTarget.value
+      return json
+    })
+  })
+}
+
+export function clickSelectAll({activeTab, rowid}) {
+  setTimeout(_ => {
+    logs.update(json => {
+      const toggle = !json.options.selectAll
+      json.options.selectAll = toggle
+      for (const id in json.logs) {
+        json.logs[id].chkLog = toggle
+      }
       return json
     })
   })

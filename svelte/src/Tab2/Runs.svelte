@@ -26,7 +26,6 @@
       const event = new MouseEvent('click')
       node.click.call(node, event)
     }, 1000)
-    console.log('EXEC!')
   }
 
   let runs = [];

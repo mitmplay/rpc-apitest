@@ -2,6 +2,7 @@ const requests= require('./script/requests')
 const openapis= require('./script/openapis')
 const request = require('./script/request')
 const openapi = require('./script/openapi')
+const remove  = require('./script/remove')
 const fetch   = require('./script/fetch')
 const peek    = require('./script/peek')
 const code    = require('./script/code')
@@ -12,6 +13,7 @@ module.exports = {
   openapis,
   request,
   openapi,
+  remove,
   fetch,
   peek,
   code,

@@ -38,9 +38,15 @@ function _loadYAML(_rpc_, initToggle, initEnd) {
         return
       }
     }
+    if (_rpc_[app]._openapi_===undefined) {
+      _rpc_[app]._openapi_ = {} 
+    }
     if (obj?.openapi) {
       _rpc_[app]._openapi_[name] = obj
     } else {
+      if (_rpc_[app]._request_src_===undefined) {
+        _rpc_[app]._request_src_ = {} 
+      }
       _rpc_[app]._request_[name] = obj || {}
       _rpc_[app]._request_src_[name] = str || ''
     }
