@@ -30,6 +30,10 @@
     }
     return arr.length ? `${arr.join('|')}` : ''
   }
+  function openLog(row) {
+    const l = row.openLog;
+    return l;
+  }
 </script>
 
 <svelte:head>
@@ -38,7 +42,7 @@
 </svelte:head>
 
 {#each toArray(logs) as row}
-  <Collapsible id={row._id} name=openLog open={row?._?.openLog}>
+  <Collapsible id={row._id} name=openLog open={openLog(row)}>
     <summary slot=head class="logs" on:click={e=>clickSummary(e,'logs')}>
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>
       <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url',options)}~>{row.rspcode}

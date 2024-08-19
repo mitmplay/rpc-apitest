@@ -1,7 +1,6 @@
 function onmsgs(ws) {
   const {pendingRequests}= ws
-  ws.onmessage = async message => {
-    const {data} = message
+  ws.onmessage = async ({data}) => {
     const payload = JSON.parse(data)
     const {id, result, error, broadcast:method} = payload
     const pending = pendingRequests.get(id)

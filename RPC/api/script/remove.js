@@ -1,6 +1,9 @@
+const peek = require('./peek')
+
 async function remove(arr) {
-  await rpc()._db_.logs('api_log').select('*').whereIn('id', arr).del()
-  // let rows = await rpc()._db_.logs('api_log').select ('*')
-  // return rows
+  const row = await rpc()._db_.logs('api_log').select('*').whereIn('id', arr).delete()
+  console.log('deleted:', row)
+  const l = await peek();
+  return l
 }
 module.exports = remove

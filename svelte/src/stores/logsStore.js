@@ -22,6 +22,19 @@ const json = {
   }
 }
 
+function autoShow(json, _) {
+  if (json.options.autoExpandRespBody) {
+    _.openBody = true
+  }
+  if (json.options.autoExpandRespHdr) {
+    _.openHdr = true
+  }
+  if (json.options.autoExpandRequest) {
+    _.openRqs = true
+  }
+  return _
+}
+
 export const logs = writable(json);
 
 export function updateLogs(newLogs) {
@@ -31,11 +44,22 @@ export function updateLogs(newLogs) {
   const _logs4= {}
   logs.update(json => {
     window.stores.log= json
+    const {autoShowlog} = json.options
+    const key = Object.keys(newLogs)[0]
     for (const id in newLogs) {
       _logs[id] = json.logs[id] || newLogs[id]
+      if (autoShowlog && id===key) {  
+        _logs[id]._ = autoShow(json, {})
+        _logs[id].openLog = true
+      }
       // group by host
       const {host, request, created=''} = _logs[id]
-      const url = JSON.parse(request)?.url || ''
+      let url;
+      try {
+        url = JSON.parse(request)?.url || ''        
+      } catch (error) {
+        continue;
+      }
       const match = url.match(/:\/\/([^/:]+)/) || ['all', 'undefined']
       const domain = match[1]
       if (!_logs2[host]) {
@@ -62,7 +86,6 @@ export function updateLogs(newLogs) {
       }
       _logs4[domain].logs[id] = _logs[id]
     }
-
     json.logs  = _logs
     json.logs2 = _logs2
     json.logs3 = _logs3
@@ -92,17 +115,9 @@ export function clickSummary(evn, lg) {
         json[lg][id]._ = {}
       }
       const _ = json[lg][id]._
-      _[name]= open
+      json[lg][id][name]= open
       if (name==='openLog') {
-        if (json.options.autoExpandRespBody) {
-          _.openBody = true
-        }
-        if (json.options.autoExpandRespHdr) {
-          _.openHdr = true
-        }
-        if (json.options.autoExpandRequest) {
-          _.openRqs = true
-        }
+        autoShow(json, _)
       }
       return json
     });  
@@ -135,6 +150,7 @@ export function clickCollapse({activeTab, rowid}) {
   setTimeout(_ => {
     logs.update(json => {
       for (const id in json.logs) {
+        json.logs[id].openLog = false
         json.logs[id]._ = {}
       }
       if (activeTab===1) {
@@ -142,15 +158,7 @@ export function clickCollapse({activeTab, rowid}) {
         json.options.activeTab = 1
         json.options.grouping  = '1'
         json.logs[id].openLog  = true
-        if (json.options.autoExpandRespBody) {
-          json.logs[id]._.openBody = true
-        }
-        if (json.options.autoExpandRespHdr) {
-          json.logs[id]._.openHdr = true
-        }
-        if (json.options.autoExpandRequest) {
-          json.logs[id]._.openRqs = true
-        }
+        autoShow(json, json.logs[id]._)
       }
       return json
     })
