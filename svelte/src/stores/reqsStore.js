@@ -1,8 +1,11 @@
 import { writable, get } from 'svelte/store';
+import {logs, activeTab} from './logsStore';
 const json = {
   req: {},
+  path: 'Request',
   options: {
     autoParsed: true,
+    showHeader: true,
     showHidden: false,
     showSource: false,
   }
@@ -239,10 +242,34 @@ export async function updateReq(path, opt={}) {
   await updateState(path)
 }
 
+export async function autoExpand() {
+  const path = window.location.hash.replace('#/','')
+  if (path!==json.path) {
+    let xpath = 'Request'
+    const arr = path.split('/').slice(1);
+    for (const item of arr) {
+      xpath += `/${item}`
+      await new Promise(resolve => setTimeout(resolve, 120));
+      const node = document.querySelector(`summary[data-path="${xpath}"]`)
+      if (node) {
+        const text = node.parentElement.getAttribute('open')
+        if (text===null) {
+          await new Promise(resolve => setTimeout(resolve, 10));
+          node.click()
+        }
+      }  
+    }
+  }
+}
+
 export function clickSummary(evn, req, ns, json) {
-  const el = evn.currentTarget.parentElement
+  const ct = evn.currentTarget
+  const el = ct.parentElement
   setTimeout(async _1 => {
+    const {path} = ct.dataset
     const {nspace,name} = el.dataset
+    window.location.hash = `#/${path}`
+
     const sec = json[nspace]
     if (sec.run && !sec.request) {
       const [xhr, ori, src] = await _request(sec.run)
@@ -267,13 +294,17 @@ export function clickSummary(evn, req, ns, json) {
       }
     }
     const root = ns || nspace
+    if (RPC._obj_.argv.verbose) {
+      console.log('JSON!', json)
+    }  
     reqs.update(_2 => {
       const open = (typeof el.getAttribute('open')==='string')
       json[nspace][name]= open
       _2.req[root] = req[root]
+      _2.path = path
       return _2
     });
-  })
+  }, 0)
 }
 
 function collapse(_reqs_, all=false) {
@@ -321,15 +352,20 @@ export function showHidden({currentTarget}) {
   clickTogle(currentTarget, 'showHidden')
 }
 
+export function showHeader({currentTarget}) {
+  clickTogle(currentTarget, 'showHeader')
+}
+
 function clickTogle(el, key) {
   setTimeout(_ => {
     reqs.update(json => {
       if (key==='showSource' && !el.checked) {
         json.options.autoParsed = false
-        json.options.showHidden   = false
+        json.options.showHidden = false
+        json.options.showHeader = false
       }
       if (key!=='showSource' && !el.checked) {
-        json.options.showSource    = false
+        json.options.showSource = false
       }
       json.options[key] = !el.checked
       return json

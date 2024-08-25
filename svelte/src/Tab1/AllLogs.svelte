@@ -2,8 +2,10 @@
   export let logs;
   export let yaml;
   export let options;
-  import { mouseOver } from '../stores/ttpStore';
-  import { toJson, toYaml } from '../lib/common';
+  export let _grp = 'logs';
+  export let _path = 'Logs/all@';
+  import {toJson, toYaml} from '../lib/common';
+  import {mouseOver} from '../stores/ttpStore';
   import Collapsible from '../components/Collapsible.svelte';
   import {
     clickSummary,
@@ -30,6 +32,7 @@
     }
     return arr.length ? `${arr.join('|')}` : ''
   }
+
   function openLog(row) {
     const l = row.openLog;
     return l;
@@ -43,7 +46,7 @@
 
 {#each toArray(logs) as row}
   <Collapsible id={row._id} name=openLog open={openLog(row)}>
-    <summary slot=head class="logs" on:click={e=>clickSummary(e,'logs')}>
+    <summary slot=head class="logs" on:click={e=>clickSummary(e, _grp)} data-path={`${_path}${row._id}`}>
       {no1(row)}.<input type=checkbox on:click={clickChecked} bind:checked={row.chkLog}/>
       <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url',options)}~>{row.rspcode}
     </summary>
@@ -51,7 +54,7 @@
       <Copy _id={row._id} {logs}/>
       <div class="main-content">
         <Collapsible id={row._id} name=openRqs open={row?._?.openRqs}>
-          <summary slot=head class="title-brown" on:click={e=>clickSummary(e,'logs')}>Request</summary>
+          <summary slot=head class="title-brown" on:click={e=>clickSummary(e, _grp)} data-path={`${_path}${row._id}/request`}>Request</summary >
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div slot=body class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
             {#if yaml}
@@ -72,19 +75,19 @@
           </div>
         </Collapsible>
         <Collapsible id={row._id} name=openHdr open={row?._?.openHdr}>
-          <summary slot=head class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response hdr</summary>
+          <summary slot=head class="title-blue" on:click={e=>clickSummary(e, _grp)} data-path={`${_path}${row._id}/resp-header`}>Response hdr</summary>
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div slot=body class="ttp" data-typ="resp-header" on:mouseover={mouseOver}>
             <pre>{row.x_tag}</pre>
-              {#if yaml}
-                <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
-              {:else}
-                <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
-              {/if}
+            {#if yaml}
+              <pre><code class="language-yaml">{@html toYaml(resp(row))}</code></pre>
+            {:else}
+              <pre><code class="language-json">{@html toJson(resp(row))}</code></pre>
+            {/if}
           </div>
         </Collapsible>
         <Collapsible id={row._id} name=openBody open={row?._?.openBody}>
-          <summary slot=head class="title-blue" on:click={e=>clickSummary(e,'logs')}>Response body</summary>
+          <summary slot=head class="title-blue" on:click={e=>clickSummary(e, _grp)} data-path={`${_path}${row._id}/resp-body`}>Response body</summary>
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div slot=body class="ttp aliceblue" data-typ="resp-body" on:mouseover={mouseOver}>
               {#if yaml}

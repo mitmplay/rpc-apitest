@@ -50,7 +50,7 @@ export function req({request}, str, {hideHost:h}) {
   }
 }
 
-export function resp({resp_hdr}) {
+export function resp({resp_hdr, elapsed}) {
   const json = JSON.parse(resp_hdr) || {}
   const arr = ['report-to', 'nel']
   arr.forEach(el => {
@@ -59,5 +59,7 @@ export function resp({resp_hdr}) {
       json[el] = JSON.parse(data)
     }
   });
-  return JSON.stringify(json, null, 2)        
+  json.elapsed = elapsed
+  const result = JSON.stringify(json, null, 2)
+  return result
 }

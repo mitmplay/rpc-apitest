@@ -1,7 +1,7 @@
-const startup    = require('./init')
-const RPC        = require('./RPC')
-const DB         = require('./DB')
-const {_rpc_,fn} = startup()
+const start = require('./start')
+const RPC   = require('./RPC')
+const DB    = require('./DB')
+const {_rpc_,fn} = start()
 
 async function run(_fn) {
   const {c} = _rpc_._lib_

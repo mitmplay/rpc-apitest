@@ -29,19 +29,24 @@ const rgx_rsv3 = /(hljs-attr)">(runs|validate|params):/g
 
 export function showRequest(logOptions, {options}, nspace, json) {
   let _code = {}
-  const {autoParsed, showHidden, showSource} = options
+  const {autoParsed, showHidden, showSource, showHeader} = options
   const {request, ori, src, run} = json[nspace]
   if (showSource) {
     _code = pretty(src || '', true)
   } else {
     let _tmp = (autoParsed ? request : ori)||{}
     if (showHidden) {
-      _code = _tmp
-    } else if (nspace==='_template_') {
-      _code = _novar(structuredClone(_tmp))
+      _code = structuredClone(_tmp)
     } else {
-      const {validate, url, method, headers, body} = _tmp
-      _code = {validate, url, method, headers, body}
+      if (nspace==='_template_') {
+        _code = _novar(structuredClone(_tmp))
+      } else {
+        const {validate, url, method, headers, body} = _tmp
+        _code = structuredClone({validate, url, method, headers, body})
+      }
+    }
+    if (!showHeader) {
+      delete _code.headers;
     }
     _code = pretty(_code || '') //hljs-string">&quot;{
   }

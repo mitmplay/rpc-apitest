@@ -106,11 +106,16 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   const set_object = (key) => {
     let value1 = xhr[key]
     if (Array.isArray(value1)) {
-      for (const _xhr of value1) {
+      value1.forEach((_xhr,i) => {
         if (typeof _xhr!=='string') {
           parser(ori, _xhr, ns, tp2, opt)
+        } else if (!_xhr.includes('{...') && _xhr.match(varRegx)) { // additional parser
+          const value2 = interpolate(varRegx, _xhr, tp2, opt.env, key, ns)
+          if (value2!==_xhr) {
+            value1[i] = value2
+          }
         }
-      }
+      })
     }
     if (opt.env) {
       const evalue =_env(xhr, key, opt.env)
@@ -147,13 +152,23 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     if (value1===undefined) {
       return
     }
-    const {_spread_, values} = value1
+    // const {_spread_, values} = typeof value1!=='string' ? value1 : {}
+    const _spread_ = value1?._spread_
+    const values   = value1?.values
     if (_spread_ && values!==undefined) { //# undefined - handled on ln:75
       if (Array.isArray(xhr)) {
         if (!Array.isArray(values)) {
           arr.push(value1)
         } else {
-          values.forEach(x=>arr.push(x))
+          values.forEach(value1=>{
+            if (typeof value1==='string' && !value1.includes('{...') && value1.match(varRegx)) { // additional parser
+              const value2 = interpolate(varRegx, value1, tp2, opt.env, key, ns)
+              if (value1!==value2) {
+                value1 = value2
+              }
+            }
+            arr.push(value1)
+          })
         }
       } else {
         let [_,path] = xhr[key].split('~')
@@ -236,6 +251,9 @@ function template(ns, name, opt) {
       let parsed;
       const {env='', slc={}} = opt
       tpl = structuredClone(tpl)
+      if (tpl.select && tpl.select[slc]) {
+        tpl = merge(tpl,tpl.select[slc])
+      }
       if (i===0) {
         // parse to it-self
         parsed = startParsing(tpl, ns, tpl, {env})
@@ -244,9 +262,9 @@ function template(ns, name, opt) {
         // merged & parse to it-self
         template = merge(template, tpl)
         template = startParsing(template, ns, template, {env})
-        if (template.select && template.select[slc]) {
-          template = merge(template,template.select[slc])
-        }
+        // if (template.select && template.select[slc]) {
+        //   template = merge(template,template.select[slc])
+        // }
       }
     }
   })

@@ -8,7 +8,7 @@ const req = function(request, opt={}) {
     } else if (typeof request.body!=='string') {
       request.body = JSON.stringify(request.body)
     }
-    const ts = Date.now()
+    const startTime = Date.now()
     _request(request, async (error, response) => {
       if (error) {
         resolve(error)
@@ -16,7 +16,7 @@ const req = function(request, opt={}) {
       } else {
         let {statusCode, headers, body} = response
         opt.rspcode = `${statusCode}`
-        opt.created = ts
+        opt.created = startTime
         if (opt.x_tag) {
           const xtag= headers[opt.x_tag]
           xtag && (opt.x_tag = `${opt.x_tag}=${xtag}`)
@@ -47,6 +47,8 @@ const req = function(request, opt={}) {
         }
         const [rowid] = await apilog(request, headers, resp, opt)
         console.log(rowid)
+        const endTime = Date.now();
+        const elapsedTime = endTime - startTime;
         resolve({
           request,
           response:{
@@ -54,6 +56,7 @@ const req = function(request, opt={}) {
             headers,
             body,
           },
+          elapsedTime,
           rowid,
           error,
         })

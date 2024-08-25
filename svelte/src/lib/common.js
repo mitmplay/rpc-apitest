@@ -25,7 +25,7 @@ export function toJson(str) {
 export function toYaml(str) {
   try {
     const language = 'yaml'
-    str = YAML.stringify(JSON.parse(str))
+    str = YAML.stringify(JSON.parse(str)).replace(/^\n+/, '')
     str = hljs.highlight(str, {language}).value      
     return str
   } catch (error) {

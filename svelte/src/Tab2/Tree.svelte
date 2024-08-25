@@ -1,20 +1,21 @@
 <script>
   export let _ns
   export let _req
+  export let _path
   export let json
   import {enf}         from './lib/enf';
   import {run}         from './lib/run';
   import {toArray}     from './lib/to-array';
   import {showRequest} from './lib/show-request';
+  import {mouseOver}   from '../stores/ttpStore';
+  import {logs}        from '../stores/logsStore';
   import {reqs, clickSummary} from '../stores/reqsStore';
-  import {logs}               from '../stores/logsStore';
-  import {mouseOver}          from '../stores/ttpStore';
+  import Collapsible from '../components/Collapsible.svelte';
   import Tree from './Tree.svelte';
   import Envs from './Envs.svelte';
   import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
   import Copy from './Copy.svelte';
-  import Collapsible from '../components/Collapsible.svelte';
 
   function arrLength(arr) {
     return (Array.isArray(arr)? arr.length : 0)
@@ -23,7 +24,7 @@
 
 {#each toArray(json) as nspace}
   <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
-    <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)}>
+    <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} data-path={`${_path}/${nspace}`}>
       {#if /_template_/.test(json[nspace].run)}
         <i>#</i>
       {:else if json[nspace].run}
@@ -74,7 +75,7 @@
             {/if}
           </div>
         {:else}
-          <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} /></div>
+          <div><Tree {_req} json={json[nspace]} _ns={_ns || nspace} _path={`${_path}/${nspace}`}/></div>
         {/if}
       {/if}
     </div>

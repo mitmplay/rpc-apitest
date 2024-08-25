@@ -4,10 +4,12 @@
     clickCollapse,
     autoParsed,
     showHidden,
+    showHeader,
     showSource,
   } from '../stores/reqsStore';
-  import {logs} from '../stores/logsStore';
+
   $: prsd = $reqs.options.autoParsed;
+  $: hdrs = $reqs.options.showHeader;
   $: hidn = $reqs.options.showHidden;
   $: ssrc = $reqs.options.showSource;
 </script>
@@ -18,11 +20,14 @@
   <label for="checkbkParsed">
     <input type="checkbox" id="checkbkParsed" on:click={autoParsed} bind:checked={prsd}>Parsed
   </label>
-  <label for="checkbkRuns">
-    <input type="checkbox" id="checkbkRuns" on:click={showHidden} bind:checked={hidn}>Hidden
+  <label for="checkbkHdrs">
+    <input type="checkbox" id="checkbkHdrs" on:click={showHeader} bind:checked={hdrs}>Header
   </label>
-  <label for="checkbkSrc">
-    <input type="checkbox" id="checkbkSrc" on:click={showSource} bind:checked={ssrc}>Source
+  <label for="checkbkRuns">
+    <input type="checkbox" id="checkbkRuns" on:click={showHidden} bind:checked={hidn}>Vars
+  </label>
+  <label for="checkbkSrcs">
+    <input type="checkbox" id="checkbkSrcs" on:click={showSource} bind:checked={ssrc}>Source
   </label>
 </div>
 

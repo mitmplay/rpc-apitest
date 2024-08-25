@@ -1,7 +1,7 @@
-const startup = require('./init')
-const server  = require('./server')
+const start = require('./start')
+const server= require('./server')
 
-startup()
+start()
 require('./database')
 require('./RPC')
 server()

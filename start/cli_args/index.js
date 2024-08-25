@@ -5,8 +5,10 @@ const helper  = require('./helper')
 const {home}  = require('../init_fnc/tildehome')
 
 module.exports = (_rpc_) => {
+  const {argv, env} = process;
   const {_obj_} = _rpc_
-  _obj_.argv = yargs(process.argv.slice(2))
+  _obj_.argv = yargs(argv.slice(2))
+  env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
   const argsChg= require('./args_chg')(_obj_)
 
   argsChg('d', 'devmode'   )
@@ -14,8 +16,8 @@ module.exports = (_rpc_) => {
   argsChg('j', 'json'      )
   argsChg('m', 'mockserver')
   argsChg('o', 'open'      )
-  argsChg('s', 'https'     )
   argsChg('r', 'rpcpath'   )
+  argsChg('s', 'https'     )
   argsChg('t', 'test'      )
   argsChg('x', 'proxy'     )
 
@@ -28,7 +30,7 @@ module.exports = (_rpc_) => {
   }
 
   if (_obj_.argv.devmode) {
-    global.RPC = fn()
+    // global.RPC = fn()
   }
 
   if (_obj_.argv.rpcpath) {

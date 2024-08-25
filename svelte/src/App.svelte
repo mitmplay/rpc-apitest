@@ -1,8 +1,11 @@
 <script>
   import {onMount} from 'svelte';
 
-  import {updateLogs} from './stores/logsStore';
-  import {updateReq } from './stores/reqsStore';
+  import {
+    logs,
+    updateLogs
+  } from './stores/logsStore';
+  import {updateReq} from './stores/reqsStore';
 
   import Tabs    from "./components/Tabs.svelte";
   import ShowLog from './ShowLog.svelte';
@@ -11,10 +14,11 @@
   import Script  from "./Tab3/Script.svelte";
   import Request from "./Tab2/Request.svelte";
   import OpenApi from "./Tab4/OpenApi.svelte";
-  
+
   let ttl = 0
   let rows = []
   $: version = '' 
+
   // List of tab items with labels, values and assigned components
   let items = [
     { label: "Logs"   , value: 1, component: Logs, props: {rows}},
@@ -24,7 +28,7 @@
     { label: "Docs"   , value: 5, component: Docs               },
   ];
 
-  onMount(() => {
+  onMount(async () => {
     window.RPC._broadcast_._any_.homepage = async (data, method) => {
       version = `v${window.RPC._version_}`
       const [name, path] = method.split(':')
@@ -41,7 +45,19 @@
       }
       // return false
     }
-    setTimeout(async ()=>{await window.RPC.api.peek()}, 500)
+    // await new Promise(resolve => setTimeout(resolve, 100));
+    // await window.RPC.api.peek()
+
+    const route = ['Logs', 'Request', 'Script', 'OpenApi', 'Docs']
+    const path  = window.location.hash.split('/')[1]
+    if (path && route.includes(path)) {
+      logs.update(json => {
+        json.options.activeTab = route.indexOf(path)+1;
+        return json
+      })
+    } else {
+      window.location.hash = '#/Logs'
+    }
   })
 
 </script>

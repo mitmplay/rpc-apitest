@@ -1,16 +1,17 @@
 <script>
   export let items = [];
   import {ttp}   from '../stores/ttpStore';
-  import {logs}  from '../stores/logsStore';
+  import {logs, activeTab}  from '../stores/logsStore';
   import Tooltip from '../lib/Tooltip.svelte';
 
-  const handleClick = tabValue => () => {
+  const handleClick = tabValue => async () => {
     ttp.update(ttpSet => {
       ttpSet.options.isHovered = false
       return ttpSet
     })
     logs.update(json => {
       json.options.activeTab = tabValue
+      window.location.hash = activeTab();
       return json
     })
   };
