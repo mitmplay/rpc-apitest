@@ -251,8 +251,26 @@ function template(ns, name, opt) {
       let parsed;
       const {env='', slc={}} = opt
       tpl = structuredClone(tpl)
-      if (tpl.select && tpl.select[slc]) {
-        tpl = merge(tpl,tpl.select[slc])
+      if (tpl.select && Array.isArray(slc)) {
+        // parse tp_slc & merge to template
+        let xhr2 = {}
+        for (const name of slc) {
+          const tp_slc = tpl.select[name]
+          if (typeof tp_slc==='object' && tp_slc!==null) {
+            for (const key in tp_slc) {
+              if (Array.isArray(tp_slc[key])) {
+                if (xhr2[key]===undefined) {
+                  xhr2[key] = [...tpl[key], ...tp_slc[key]]
+                } else {
+                  xhr2[key] = [...xhr2[key], ...tp_slc[key]]
+                }
+              } else {
+                xhr2[key] = tp_slc[key]
+              }
+            }
+          }
+        }
+        tpl = merge(tpl, xhr2)
       }
       if (i===0) {
         // parse to it-self
@@ -262,9 +280,6 @@ function template(ns, name, opt) {
         // merged & parse to it-self
         template = merge(template, tpl)
         template = startParsing(template, ns, template, {env})
-        // if (template.select && template.select[slc]) {
-        //   template = merge(template,template.select[slc])
-        // }
       }
     }
   })
@@ -314,24 +329,6 @@ async function request(req='apidemo/u_agent_post', opt={}) {
             tp2 = merge(tp2, parsed)
           }  
         }
-      }
-      if (tp2.select && slc) {
-        // parse tp_slc & merge to template
-        let xhr2 = {}
-        for (const name of slc) {
-          const tp_slc = tp2.select[name]
-          if (typeof tp_slc==='object' && tp_slc!==null) {
-            let parsed = startParsing(tp_slc, ns, tp2)
-            xhr2 = merge(xhr2, parsed)
-          }
-        }
-        if (xhr2.default) {
-          if (!_template_) {
-            xhr = merge(xhr2.default, xhr) //# donot change the order!
-          }
-          delete xhr2.default
-        }
-        tp2 = merge(tp2, xhr2)
       }
 
       if (!_template_) {
