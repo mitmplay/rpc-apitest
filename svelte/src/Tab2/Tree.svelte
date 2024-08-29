@@ -64,7 +64,7 @@
         {/if}
         {#if json[nspace].run}
           {#if !/_template_/.test(json[nspace].run)}
-            <Copy json={json[nspace].request}/>
+            <Copy json={json[nspace].request} _ns={_ns} _run={json[nspace].run}/>
           {/if}
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>

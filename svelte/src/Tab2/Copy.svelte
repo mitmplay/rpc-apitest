@@ -1,12 +1,15 @@
 <script>
+  export let _ns;
+  export let _run;
   export let json;
-
+  import {option} from './lib/run';
+  import {reqs}   from '../stores/reqsStore';
   let ttip = ''
 
   async function copyClipboard(e) {
     const {copy} = e.target.dataset
     let str = ''
-    if (copy==='curl') {
+    if (['curl', 'curl_pp'].includes(copy)) {
       if (json.method==='get') {
         str += `curl '${json.url}' \\\n`
       } else {
@@ -19,6 +22,12 @@
         str += `  -d '${JSON.stringify(json.body)}' \\\n`
       }
       str += `  --compressed`
+      if (json.api.insecure) {
+        str+= ` -k`
+      }
+      if (copy==='curl_pp') {
+        str += ` | json_pp`
+      }
     } else if (['wget', 'wget_pp'].includes(copy)) {
       str = `wget --no-check-certificate \\
   --method ${json.method.toUpperCase()} \\
@@ -31,9 +40,22 @@
         str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
       }
       str += `-qO- '${json.url}'`
+      if (json.api.insecure) {
+        str += ` --no-check-certificate`
+      }
       if (copy==='wget_pp') {
         str += ` | json_pp`
       }
+    } else if (['devtool'].includes(copy)) {
+      let {run} = e.currentTarget.dataset
+      const {opt, is_opt} = await option(run, _ns, $reqs.req)
+      const _str = is_opt ? `, ${JSON.stringify(opt)}` : ''
+      str = `var msg = await RPC.api.fetch('${run}'${_str});
+console.log('Result:', msg);
+const {statusCode, body} = msg?.response;
+console.log(JSON.stringify({statusCode, body}, null, 2));
+`
+      console.log(str)
     }
     if (window.isSecureContext && navigator.clipboard) {
       await navigator.clipboard.writeText(str);
@@ -67,8 +89,13 @@
       [<a href=# data-copy=curl on:click={copyClipboard}>curl </a>]
     </div>
     <ul>
-      <li>[<a href=# data-copy=wget on:click={copyClipboard}>wget</a>]</li>
+      <li>[<a href=# data-copy=curl_pp on:click={copyClipboard}>curl pp</a>]</li>
+      <li>[<a href=# data-copy=wget    on:click={copyClipboard}>wget</a>]</li>
       <li>[<a href=# data-copy=wget_pp on:click={copyClipboard}>wget pp</a>]</li>
+      <li>[<a href=# 
+        data-run={_run}
+        data-copy=devtool 
+        on:click={copyClipboard}>devtools</a>]</li>
     </ul>  
   </span>
   {#if ttip!==''}
@@ -94,7 +121,6 @@ span.copies {
   top: -2px;
   border: 1px solid white;
   position: absolute;
-  text-align: center;
   display: inline-table;
   white-space: nowrap;
   ul {

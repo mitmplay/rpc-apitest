@@ -11,10 +11,7 @@ function wraplongheaders(json) {
   }
 }
 
-export async function run(evn, ns, req, logs) {
-  evn.preventDefault()
-  evn.stopPropagation()
-  let {run} = evn.currentTarget.dataset
+export async function option(run, ns, req) {
   const _env = req[ns]?._template_?._env
 
   const opt = {} // novar!
@@ -35,6 +32,14 @@ export async function run(evn, ns, req, logs) {
   sec[file]._run && (opt.run = sec[file]._run)
 
   const is_opt = Object.keys(opt).length
+  return {opt, is_opt}
+}
+
+export async function run(evn, ns, req, logs) {
+  evn.preventDefault()
+  evn.stopPropagation()
+  let {run} = evn.currentTarget.dataset
+  const {opt, is_opt} = await option(run, ns, req)
   let arr
   if (is_opt) {
     arr = await RPC.api.request(run, opt)
