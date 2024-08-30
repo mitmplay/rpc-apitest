@@ -39,9 +39,11 @@ function yml(_rpc_) {
     })
 
     userYMLWatcher // Add event listeners.
-    .on('add',    fullpath => update(fullpath, 'add'))
-    .on('change', fullpath => update(fullpath, 'chg'))
-    .on('unlink', fullpath => remove(fullpath, 'del'))
+    .on('add'      , fullpath => update(fullpath, 'add'))
+    .on('addDir'   , fullpath => update(fullpath, 'add', false))
+    .on('unlink'   , fullpath => remove(fullpath, 'del'))    
+    .on('unlinkDir', fullpath => remove(fullpath, 'del', false))
+    .on('change'   , fullpath => update(fullpath, 'chg'))
     _rpc_._watcher_.userYMLWatcher = userYMLWatcher
   }
 }

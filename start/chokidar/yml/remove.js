@@ -7,7 +7,7 @@ function _remove(_rpc_, initToggle) {
     _lib_: {chokidar, YAML, fs, fg, c}
   } = _rpc_
   
-  function remove(path, msg) {
+  function remove(path, msg, file=true) {
     let [app, typ, name] = xpath(path)
     name = name.replace(/\.yaml$/, '')
     if (_rpc_[app]._openapi_[name]) {
@@ -19,7 +19,7 @@ function _remove(_rpc_, initToggle) {
     console.log(msg,  JSON.stringify({app, typ, name}))
     if (!argv.test) { 
       const method = `${typ}:${app}/${name}`
-      console.log(c.magentaBright(`>>> broadcast delete file`))
+      console.log(c.magentaBright(`>>> broadcast delete ${file? 'file': 'dir'}`), [tilde(path)])  
       _broadcast2(method, {_act: 'del'})
       initToggle.id = 0
     }

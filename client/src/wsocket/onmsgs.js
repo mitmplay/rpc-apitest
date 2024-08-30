@@ -54,7 +54,7 @@ function onmsgs(ws) {
         }
       }
       if (show) {
-        console.log(msg)
+        console.warn(msg)
       }
       if (pending) {
         pending.logged += 1

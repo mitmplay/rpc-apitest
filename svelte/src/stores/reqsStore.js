@@ -226,7 +226,10 @@ export async function updateReq(path, opt={}) {
       const folders = path.split('/')
       const file = folders.pop().replace(/\.yaml$/, '')
       for (const folder of folders) {
-        req = req[folder] || {}
+        if (req[folder]===undefined) {
+          req[folder] = {}
+        }
+        req = req[folder]
       }
       if (opt._act==='del') {
         delete req[file]

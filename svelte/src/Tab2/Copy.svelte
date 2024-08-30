@@ -22,7 +22,7 @@
         str += `  -d '${JSON.stringify(json.body)}' \\\n`
       }
       str += `  --compressed`
-      if (json.api.insecure) {
+      if (json?.api?.insecure) {
         str+= ` -k`
       }
       if (copy==='curl_pp') {
@@ -40,7 +40,7 @@
         str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
       }
       str += `-qO- '${json.url}'`
-      if (json.api.insecure) {
+      if (json?.api?.insecure) {
         str += ` --no-check-certificate`
       }
       if (copy==='wget_pp') {

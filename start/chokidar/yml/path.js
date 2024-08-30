@@ -12,7 +12,9 @@ function _path(_rpc_) {
   }
   const rpath = argv.rpcpath || `${HOME}/user-rpc`
   path.push(`${rpath}/*/request/**/*.yaml`)
+  path.push(`${rpath}/*/request/**`)
   path.push(`${rpath}/*/openapi/**/*.yaml`)
+  path.push(`${rpath}/*/openapi/**`)
 
   return path;  
 }
