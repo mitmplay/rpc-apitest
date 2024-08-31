@@ -32,7 +32,7 @@
   }
 </script>
 
-{#each toArray(json) as nspace}
+{#each toArray(json) as nspace, index}
   {#if !$reqs.options.showTemplate && templateMenu(json[nspace])}
     <div class="normal"><i>#</i></div>
   {/if}
@@ -78,7 +78,7 @@
         {/if}
         {#if json[nspace].run}
           {#if !/_template_/.test(json[nspace].run) && $reqs.options.showCommand}
-            <Copy json={json[nspace].request} _ns={_ns} _run={json[nspace].run}/>
+            <Copy json={json[nspace].request} _ns={_ns} _run={json[nspace].run} _idx={index}/>
           {/if}
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>

@@ -6,6 +6,7 @@
   import {changeSlc} from '../stores/reqsStore';
 
   async function chgSlc(e) {
+    e.stopPropagation()
     const {checked, value} = e.target
     const arrV = value.split('~')
     setTimeout(()=>{

@@ -6,7 +6,6 @@
   import {changeRun} from '../stores/reqsStore';
 
   async function chgRun(e) {
-    e.preventDefault()
     e.stopPropagation()
     const {checked, value} = e.target
     const arrV = value.split('~')
@@ -20,6 +19,10 @@
   }
 
   async function chgChkRun(e) {
+    e.stopPropagation()
+    if (e.currentTarget.parentElement.firstElementChild.checked) {
+      e.preventDefault()
+    }
     const {run} = e.target.dataset
     setTimeout(()=>{
       const node = document.querySelector(`#${run}`)

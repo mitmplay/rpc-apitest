@@ -1,6 +1,7 @@
 <script>
   export let _ns;
   export let _run;
+  export let _idx;
   export let json;
   import {option} from './lib/run';
   import {reqs}   from '../stores/reqsStore';
@@ -84,15 +85,15 @@ console.log(JSON.stringify({statusCode, body}, null, 2));
 
 <div class="copylink">
   cmd:
-  <span class="copies">
+  <span class="copies" style={`z-index: ${1100-_idx};`}>
     <div>
-      [<a href=# data-copy=curl on:click={copyClipboard}>curl </a>]
+      [<a href="/#" data-copy=curl on:click={copyClipboard}>curl </a>]
     </div>
     <ul>
-      <li>[<a href=# data-copy=curl_pp on:click={copyClipboard}>curl pp</a>]</li>
-      <li>[<a href=# data-copy=wget    on:click={copyClipboard}>wget</a>]</li>
-      <li>[<a href=# data-copy=wget_pp on:click={copyClipboard}>wget pp</a>]</li>
-      <li>[<a href=# 
+      <li>[<a href="/#" data-copy=curl_pp on:click={copyClipboard}>curl pp</a>]</li>
+      <li>[<a href="/#" data-copy=wget    on:click={copyClipboard}>wget</a>]</li>
+      <li>[<a href="/#" data-copy=wget_pp on:click={copyClipboard}>wget pp</a>]</li>
+      <li>[<a href="/#" 
         data-run={_run}
         data-copy=devtool 
         on:click={copyClipboard}>devtools</a>]</li>
@@ -113,7 +114,8 @@ console.log(JSON.stringify({statusCode, body}, null, 2));
   color: red;
   border: solid;
   padding: 0 2px;
-  margin: -1px 0 0 60px;
+  margin-top: -24px;
+  background-color: whitesmoke;
   position: fixed;
   z-index: 1000;
 }
