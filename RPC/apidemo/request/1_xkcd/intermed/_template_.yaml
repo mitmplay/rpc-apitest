@@ -15,3 +15,6 @@ env:
     envurl: '{mainurl}qa/'
 
 select: '{_slc}'
+
+lol: '{{first}} {{last}}'
+today: '{{today}}'

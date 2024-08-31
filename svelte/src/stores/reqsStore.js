@@ -8,6 +8,7 @@ const json = {
     showHeader: true,
     showHidden: false,
     showSource: false,
+    showTemplate: false,
   }
 }
 export const reqs = writable(json);
@@ -359,6 +360,10 @@ export function showHeader({currentTarget}) {
   clickTogle(currentTarget, 'showHeader')
 }
 
+export function showTemplate({currentTarget}) {
+  clickTogle(currentTarget, 'showTemplate')
+}
+
 function clickTogle(el, key) {
   setTimeout(_ => {
     reqs.update(json => {
@@ -366,6 +371,10 @@ function clickTogle(el, key) {
         json.options.autoParsed = false
         json.options.showHidden = false
         json.options.showHeader = false
+        json.options.showTemplate = true
+      }
+      if (key=='showHidden' && !el.checked) {
+        json.options.showTemplate = true
       }
       if (key!=='showSource' && !el.checked) {
         json.options.showSource = false

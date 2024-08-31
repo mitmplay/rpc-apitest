@@ -83,7 +83,7 @@
     position: absolute;
     font-size: smaller;
     padding: 0 4px 0 2px;
-    left: 35px;
+    left: 20px;
     top: -2px;
     input {
       vertical-align: sub;

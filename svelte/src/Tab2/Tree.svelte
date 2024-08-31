@@ -20,13 +20,27 @@
   function arrLength(arr) {
     return (Array.isArray(arr)? arr.length : 0)
   }
+  function templateMenu(obj) {
+    const l1 = /_template_/.test(obj.run)
+    if (l1) {
+      const l2 = obj._envs?.length
+      const l3 = obj._slcs?.length
+      return l2 || l3
+    } else {
+      return false
+    }
+  }
 </script>
 
 {#each toArray(json) as nspace}
+  {#if !$reqs.options.showTemplate && templateMenu(json[nspace])}
+    <div class="normal"><i>#</i></div>
+  {/if}
+  {#if !/_template_/.test(json[nspace].run) || (json[nspace]?._template_?._envs || $reqs.options.showTemplate)}
   <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
     <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} data-path={`${_path}/${nspace}`}>
       {#if /_template_/.test(json[nspace].run)}
-        <i>#</i>
+        <i>#</i>          
       {:else if json[nspace].run}
         <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
         {#if json[nspace]?._runs}
@@ -80,6 +94,7 @@
       {/if}
     </div>
   </Collapsible>
+  {/if}
 {/each}
 
 <style lang="scss">
@@ -92,5 +107,11 @@
   }
   b {
     color:darkblue
+  }
+  .normal {
+    font-size: 12px;
+    font-weight: bold;
+    font-family: monospace;
+    padding-left: 10px;
   }
 </style>

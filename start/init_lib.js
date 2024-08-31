@@ -3,6 +3,7 @@ const YAML= require('yaml')
 const fs  = require('fs-extra')
 const fg  = require('fast-glob')
 const Chance = require('chance')
+const datefns = require('date-fns')
 const c   = require('ansi-colors')
 const chokidar = require('chokidar')
 const jsfaker = require('json-schema-faker');
@@ -56,6 +57,7 @@ function init_lib(_rpc_) {
   _lib_.fg = fg
   _lib_.YAML = YAML
   _lib_.jsfaker = jsfaker
+  _lib_.datefns = datefns
   _lib_.chokidar = chokidar
   _lib_.chance = new Chance()
   import('open').then(async m => {
