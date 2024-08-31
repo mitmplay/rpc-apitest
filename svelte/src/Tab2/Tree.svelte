@@ -77,7 +77,7 @@
           <Slcs json={json[nspace]._template_} {_req} {_ns}/>
         {/if}
         {#if json[nspace].run}
-          {#if !/_template_/.test(json[nspace].run)}
+          {#if !/_template_/.test(json[nspace].run) && $reqs.options.showCommand}
             <Copy json={json[nspace].request} _ns={_ns} _run={json[nspace].run}/>
           {/if}
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->

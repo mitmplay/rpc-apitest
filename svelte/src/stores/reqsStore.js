@@ -8,6 +8,7 @@ const json = {
     showHeader: true,
     showHidden: false,
     showSource: false,
+    showCommand: false,
     showTemplate: false,
   }
 }
@@ -358,6 +359,10 @@ export function showHidden({currentTarget}) {
 
 export function showHeader({currentTarget}) {
   clickTogle(currentTarget, 'showHeader')
+}
+
+export function showCommand({currentTarget}) {
+  clickTogle(currentTarget, 'showCommand')
 }
 
 export function showTemplate({currentTarget}) {
