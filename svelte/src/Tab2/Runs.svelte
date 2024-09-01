@@ -41,7 +41,7 @@
   <div class=runlist>
     <slot />
     <ul>
-      {#each json._runs as run}
+      {#each Object.keys(json?.request?.runs || {}) as run}
       <li class=run-options>
         <label>
           <input type="checkbox"

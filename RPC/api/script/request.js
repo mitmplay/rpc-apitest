@@ -1,9 +1,9 @@
 function _env(ob, key, env='') {
-  let tp3
-  try {
-    tp3 = ob.env && ob.env[env] && ob.env[env][key] || undefined    
-  } catch (error) {
-    console.log(error)
+  let tp3 = undefined
+  if (ob===undefined) {
+    console.warn('Undefined:', {ob, key, env})
+  } else {
+    tp3 = ob.env && ob.env[env] && ob.env[env][key]
   }
   return tp3
 }
@@ -20,6 +20,9 @@ function nested1(arr, tp1) {
 function nested2(arr, tp2, env) {
   key = arr.shift()
   const tp3 = _env(tp2, key, env) // || tp2[key]
+  if (tp3===undefined && tp2[key]===undefined) {
+    return undefined
+  }
   if (arr.length) {
     return tp3 && nested2(arr, tp3) || nested2(arr, tp2[key])
   } else {
