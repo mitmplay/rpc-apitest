@@ -162,6 +162,8 @@ function parser(ori, xhr, ns, tp2, opt={}) {
       if (Array.isArray(xhr)) {
         if (!Array.isArray(values)) {
           arr.push(value1)
+        } else if (values.length===1 && values[0]==='') {
+          console.log('Arrays Empty template!')
         } else {
           values.forEach(value1=>{
             if (typeof value1==='string' && !value1.includes('{...') && value1.match(varRegx)) { // additional parser
@@ -170,7 +172,7 @@ function parser(ori, xhr, ns, tp2, opt={}) {
                 value1 = value2
               }
             }
-            arr.push(value1==='' ? '...delete...' : value1)
+            arr.push(value1)
           })
         }
       } else {
@@ -213,7 +215,6 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   if (Array.isArray(xhr)) {
     xhr.forEach((v,i) => set_object(i))
     arr.forEach((v,i) => (xhr[i] = v))
-    xhr = xhr.filter(v=>v!=='...delete...')
   } else {
     for (const key in xhr) {
       set_object(key)
@@ -338,10 +339,11 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       if (!_template_) {
         let {runs, url, method, headers, body, validate, ...vars} = xhr
   
+        vars = startParsing(vars, ns, tp2) // parsing xhr vars with template
         const vtp2 = merge(vars, tp2) // merge result parsing with template
-        if (runs && run) {
+        if (xhr.runs && run) {
           const reqkeys = {url: true, method: true, headers: true, body: true, validate: true}
-          const json = startParsing(runs, ns, vtp2) // parse runs with (xhr vars + template)
+          const json = startParsing(xhr.runs, ns, vtp2) // parse runs with (xhr vars + template)
           for (const name of run) {
             const obj = json[name]
             const xhr2 = {}
@@ -359,8 +361,6 @@ async function request(req='apidemo/u_agent_post', opt={}) {
             vars= merge(vars, vars2) // merged with vars2 from run
           }
         }
-        vars = startParsing(vars, ns, vars) // parsing xhr-vars with xhr-vars
-        vars = startParsing(vars, ns, tp2) // parsing xhr-vars with template
         tp2 = merge(tp2, vars)
       }
 
