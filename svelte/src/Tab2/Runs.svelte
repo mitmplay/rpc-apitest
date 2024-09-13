@@ -2,6 +2,7 @@
   export let _ns
   export let _req
   export let json
+  export let runIds
   import {onMount} from 'svelte';
   import {changeRun} from '../stores/reqsStore';
 
@@ -20,15 +21,16 @@
 
   async function chgChkRun(e) {
     e.stopPropagation()
-    if (e.currentTarget.parentElement.firstElementChild.checked) {
+    const {currentTarget: ct} = e
+    if (ct.parentElement.firstElementChild.checked) {
       e.preventDefault()
     }
-    const {run} = e.target.dataset
     setTimeout(()=>{
-      const node = document.querySelector(`#${run}`)
+      const {run} = ct.dataset
+      const nodes = document.querySelector(`#${run}`)
       const event = new MouseEvent('click')
-      node.click.call(node, event)
-    }, 1000)
+      nodes.click.call(nodes, event)
+    }, 500)
   }
 
   let runs = [];
@@ -48,7 +50,7 @@
            on:click={chgRun} bind:group={runs} value={run} />{run}&nbsp;
            <span 
            on:click={chgChkRun} 
-           data-run={run?.replace('~', '_')}
+           data-run={runIds || run?.replace(/[~:]+/g, '_')}
            class=run-time>&lt;!&gt;</span> 
         </label>
       </li>

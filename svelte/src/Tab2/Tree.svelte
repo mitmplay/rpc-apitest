@@ -30,6 +30,10 @@
       return false
     }
   }
+  function runIds(_run) {
+    const result = _run ? _run.map(x=>x.replace(/[~:]+/g, '_')) : []
+    return result.join('-')
+  }
 </script>
 
 {#each toArray(json) as nspace, index}
@@ -44,13 +48,13 @@
       {:else if json[nspace].run}
         <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
         {#if json[nspace]?._runs}
-          <Runs json={json[nspace]} {_req} {_ns}>
+          <Runs json={json[nspace]} {_req} {_ns} runIds={runIds(json[nspace]?._run)}>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class=_hover_ 
             data-run={json[nspace].run}
             on:click={e=>run(e, _ns, $reqs.req, $logs)}>
               {#if arrLength(json[nspace]?._run)}
-                <i id={json[nspace]?._run ? json[nspace]?._run[0].replace('~', '_') : ''}>
+                <i id={runIds(json[nspace]?._run)}>
                   &gt;{json[nspace]._run[0]+(json[nspace]._run.length>1?',.':'')}
                 </i>
               {:else}

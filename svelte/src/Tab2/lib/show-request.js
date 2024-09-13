@@ -23,7 +23,7 @@ const rgx_var0 = /hljs-attr">url:<\/span> <span class="(hljs-string)">&quot;\//
 const rgx_var1 = /(hljs-string)">&quot;\//
 const rgx_var2 = /(hljs[\w-]+)">(|&quot;|&#x27;){+[@\w&.:;~-]+}/g
 const rgx_var3 = /(hljs-string)">.*undefined/g
-const rgx_rsv1 = /(hljs-attr)">(env|select|default):/g
+const rgx_rsv1 = /(hljs-attr)">(api|env|select|default):/g
 const rgx_rsv2 = /(hljs-attr)">(url|body|method|headers):/g
 const rgx_rsv3 = /(hljs-attr)">(runs|validate|params):/g
 

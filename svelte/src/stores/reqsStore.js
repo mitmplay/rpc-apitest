@@ -57,11 +57,15 @@ async function requestEnv(sec, opt) {
   }
   for (const id in sec) {
     const {run} = sec[id]
-    if (run===undefined && typeof sec[id]==='object' && sec[id]!==null) {
+    if ((run===undefined || (!run.match(/_template_$/) && !run.match(RegExp(`${id}$`)))) && 
+      typeof sec[id]==='object' && sec[id]!==null ) {
       await requestEnv(sec[id], opt)
     } else if (sec[id].request) {
       const slc = Object.keys(opt.slc) // slc translate to array
       const opt2 = {...opt, slc, var: true} // before rpc call
+      if (sec[id]._run) {
+        opt2.run = sec[id]._run      
+      }
       const [xhr, ori, src] = await RPC.api.request(run, opt2)
       syncStor(sec[id], run, xhr, ori, src)
     }
@@ -87,19 +91,19 @@ export function changeEnv(ns, env) {
   })
 }
 
-function resetRun(sec) {
-  for (const key in sec) {
-    if (key==='_template_') {
-      continue
-    }
-    const sec2 = sec[key]
-    if (sec2._openName && sec2?._run?.length) {
-      sec[key] = {run: sec2.run}
-    } else if (!Array.isArray(sec2) && typeof sec2==='object') {
-      resetRun(sec2)
-    }
-  }
-}
+// function resetRun(sec) {
+//   for (const key in sec) {
+//     if (key==='_template_') {
+//       continue
+//     }
+//     const sec2 = sec[key]
+//     if (sec2._openName && sec2?._run?.length) {
+//       sec[key] = {run: sec2.run}
+//     } else if (!Array.isArray(sec2) && typeof sec2==='object') {
+//       resetRun(sec2)
+//     }
+//   }
+// }
 
 export function changeSlc(req, ns, sec, slc) {
   if (sec._slc!==slc) {
@@ -118,7 +122,7 @@ export function changeSlc(req, ns, sec, slc) {
         sec2._template_._slc.forEach(x => slc[x]=true)
       }
     })
-    resetRun(sec2)
+    // resetRun(sec2)
     await requestEnv(sec2, {env, slc})
     reqs.update(json => {
       json.req[ns] = req[ns]
