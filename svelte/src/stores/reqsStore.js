@@ -91,20 +91,6 @@ export function changeEnv(ns, env) {
   })
 }
 
-// function resetRun(sec) {
-//   for (const key in sec) {
-//     if (key==='_template_') {
-//       continue
-//     }
-//     const sec2 = sec[key]
-//     if (sec2._openName && sec2?._run?.length) {
-//       sec[key] = {run: sec2.run}
-//     } else if (!Array.isArray(sec2) && typeof sec2==='object') {
-//       resetRun(sec2)
-//     }
-//   }
-// }
-
 export function changeSlc(req, ns, sec, slc) {
   if (sec._slc!==slc) {
     sec._slc = slc
@@ -122,7 +108,6 @@ export function changeSlc(req, ns, sec, slc) {
         sec2._template_._slc.forEach(x => slc[x]=true)
       }
     })
-    // resetRun(sec2)
     await requestEnv(sec2, {env, slc})
     reqs.update(json => {
       json.req[ns] = req[ns]
@@ -242,22 +227,33 @@ async function updateState(path) {
 
 export async function updateReq(path, opt={}) {
   if (['add', 'chg', 'del'].includes(opt._act)) {
-    reqs.update(json => {
-      let {req} = json
-      const folders = path.split('/')
-      const file = folders.pop().replace(/\.yaml$/, '')
-      for (const folder of folders) {
-        if (req[folder]===undefined) {
-          req[folder] = {}
-        }
-        req = req[folder]
+    const folders = path.split('/')
+    const ns = folders.shift();
+    const file = folders.pop().replace(/\.yaml$/, '')
+    const sec = get(reqs).req[ns]
+    let req = sec
+    for (const folder of folders) {
+      if (req[folder]===undefined) {
+        req[folder] = {}
       }
-      if (opt._act==='del') {
-        delete req[file]
-      }  else {
+      req = req[folder]
+    }
+    const env = sec?._template_?._env || ''
+    const reqOpt = {env, slc:{}}
+    if (opt._act==='del') {
+      delete req[file]
+      if (file==='_template_') {
+        await requestEnv(sec, reqOpt)
+      }
+    } else {
+      if (!req[file]) {
         const run = path.replace(/\.yaml$/, '')
         req[file] = {run}
       }
+      await requestEnv(sec, reqOpt)
+    }
+    reqs.update(json => {
+      json.req[ns] = sec
       return json
     })
     return
