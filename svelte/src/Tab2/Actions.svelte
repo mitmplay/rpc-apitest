@@ -8,6 +8,7 @@
     showHidden,
     showHeader,
     showSource,
+    showRpc,
   } from '../stores/reqsStore';
 
   $: prsd = $reqs.options.autoParsed;
@@ -16,6 +17,7 @@
   $: ssrc = $reqs.options.showSource;
   $: scmd = $reqs.options.showCommand;
   $: stpl = $reqs.options.showTemplate;
+  $: srpc = $reqs.options.showRpc;
 </script>
 
 <div class=action>
@@ -23,6 +25,9 @@
   |
   <label for="checkbkCommand">
     <input type="checkbox" id="checkbkCommand" on:click={showCommand}   bind:checked={scmd}>Cmd
+  </label>
+  <label for="checkbkRpc">
+    <input type="checkbox" id="checkbkRpc"     on:click={showRpc}       bind:checked={srpc}>Rpc
   </label>
   |
   <label for="checkbkParsed">

@@ -38,5 +38,9 @@ module.exports = (_rpc_) => {
     argv.rpcpath = home(argv.rpcpath)
   }
 
+  if (typeof _obj_.argv.verbose==='string') {
+    _obj_.argv.verbose = _obj_.argv.verbose.split(',')
+  }
+
   console.log(_obj_)
 }

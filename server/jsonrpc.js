@@ -36,9 +36,9 @@ module.exports = async _ => {
     }
     const msg = `RPC ${payload.method}`
     if (_obj_.argv.verbose) {
-      console.log(msg, '~>', result)
+      console.warn(msg, '~>', result)
     } else if (_obj_.argv.devmode) {
-      console.log(msg)
+      console.warn(msg)
     }
     ws.send(JSON.stringify(result))
     const timeout = +(_obj_.argv.timeout || 100)

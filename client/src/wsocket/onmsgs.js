@@ -22,7 +22,7 @@ function onmsgs(ws) {
     if (RPC._obj_.argv.verbose) {
       msg.result = result
     }
-    const show = !(msg.bc && msg.id)
+    // const show = !(msg.bc && msg.id)
     try {
       if (method) {
         const func = RPC._broadcast_[method.split(':')[0]]
@@ -53,9 +53,12 @@ function onmsgs(ws) {
           }
         }
       }
-      if (show) {
-        console.warn(msg)
-      }
+      if (RPC._obj_.argv.verbose.includes('ws')) {
+        console.warn('ws:rcvd',msg)
+      }  
+      // if (show) {
+      //   console.warn(msg)
+      // }
       if (pending) {
         pending.logged += 1
         pendingRequests.delete(id)

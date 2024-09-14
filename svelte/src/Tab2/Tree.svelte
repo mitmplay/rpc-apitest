@@ -46,7 +46,11 @@
       {#if /_template_/.test(json[nspace].run)}
         <i>#</i>          
       {:else if json[nspace].run}
-        <i>await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
+        {#if $reqs.options.showRpc}
+          <i class="await">await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
+        {:else}          
+          <i class="{json[nspace].ori ? 'ori':'file'}">{json[nspace].run.split('/').pop()}</i>
+        {/if}
         {#if json[nspace]?._runs}
           <Runs json={json[nspace]} {_req} {_ns} runIds={runIds(json[nspace]?._run)}>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -54,11 +58,11 @@
             data-run={json[nspace].run}
             on:click={e=>run(e, _ns, $reqs.req, $logs)}>
               {#if arrLength(json[nspace]?._run)}
-                <i id={runIds(json[nspace]?._run)}>
+                <i class="run" id={runIds(json[nspace]?._run)}>
                   &gt;{json[nspace]._run[0]+(json[nspace]._run.length>1?',.':'')}
                 </i>
               {:else}
-                <b>run<i>{json[nspace]?._runs.length>0 ? '(*)' : ''}</i></b>
+                <b class="run">run<i class="run">{json[nspace]?._runs.length>0 ? '(*)' : ''}</i></b>
               {/if}
             </div>
           </Runs>
@@ -67,10 +71,12 @@
           <a href="#" class=_hover_ 
           data-run={json[nspace].run} 
           data-_run={json[nspace]._run || ''} 
-          on:click={e=>run(e, _ns, $reqs.req, $logs)}><b>run</b></a>
+          on:click={e=>run(e, _ns, $reqs.req, $logs)}>
+            <b class="run">run</b>
+          </a>
         {/if}
       {:else}
-        {nspace}
+        <i class="ns_{_path.split('/').length}">{nspace}</i>
       {/if}
     </summary>
     <div slot=body>
@@ -107,10 +113,33 @@
   }
   i {
     white-space: nowrap;
-    color:crimson;
+    &.ns_1 {
+      text-decoration: underline;
+      font-style: italic;
+    }
+    &.ns_1,&.ns_2,&.ns_3,&.ns_4 {
+      font-style: normal;
+      font-weight: 100;
+      color: darkblue;
+    }
+    &.await, &.run {
+      color:crimson;
+    }
+    &.file {
+      font-style: normal;
+      font-weight: 100;
+      color: teal;
+    }
+    &.ori {
+      font-style: normal;
+      color: teal;
+    }
   }
   b {
-    color:darkblue
+    color:darkblue;
+    &.run {
+      color: red;
+    }
   }
   .normal {
     font-size: 12px;

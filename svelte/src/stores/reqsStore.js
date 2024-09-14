@@ -5,11 +5,12 @@ const json = {
   path: 'Request',
   options: {
     autoParsed: true,
-    showHeader: true,
+    showHeader: false,
     showHidden: false,
     showSource: false,
     showCommand: false,
     showTemplate: false,
+    showRpc: false,
   }
 }
 export const reqs = writable(json);
@@ -382,6 +383,10 @@ export function showCommand({currentTarget}) {
 
 export function showTemplate({currentTarget}) {
   clickTogle(currentTarget, 'showTemplate')
+}
+
+export function showRpc({currentTarget}) {
+  clickTogle(currentTarget, 'showRpc')
 }
 
 function clickTogle(el, key) {

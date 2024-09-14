@@ -25,6 +25,9 @@ function onopen(ws) {
         req.broadcast = true // broadcast call
       }
     }
+    if (RPC._obj_.argv.verbose.includes('ws')) {
+      console.warn('ws:send',req)
+    }
     ws.send(JSON.stringify(req))
     return new Promise((resolve, reject) => {
       // Store the request ID and resolve/reject functions in the pending requests Map
