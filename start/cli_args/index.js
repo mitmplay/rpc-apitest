@@ -40,6 +40,8 @@ module.exports = (_rpc_) => {
 
   if (typeof _obj_.argv.verbose==='string') {
     _obj_.argv.verbose = _obj_.argv.verbose.split(',')
+  } else if (_obj_.argv.verbose) {
+    _obj_.argv.verbose = []
   }
 
   console.log(_obj_)
