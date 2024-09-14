@@ -53,7 +53,7 @@ function onmsgs(ws) {
           }
         }
       }
-      if (RPC._obj_.argv.verbose.includes('ws')) {
+      if (RPC._obj_.argv.verbose?.includes('ws')) {
         console.warn('ws:rcvd',msg)
       }  
       // if (show) {

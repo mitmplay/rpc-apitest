@@ -25,7 +25,7 @@ function onopen(ws) {
         req.broadcast = true // broadcast call
       }
     }
-    if (RPC._obj_.argv.verbose.includes('ws')) {
+    if (RPC._obj_.argv.verbose?.includes('ws')) {
       console.warn('ws:send',req)
     }
     ws.send(JSON.stringify(req))
