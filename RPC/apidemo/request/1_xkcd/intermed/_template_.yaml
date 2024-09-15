@@ -4,17 +4,17 @@ mainurl: '{baseurl}{xcd}'
 env:
   dev:
     envurl: '{mainurl}dev/'
-    # greet: '{msg} from BBBC'
-    _slc:
-      s~one:
-        greet: howdy one
-      s~two:
-        greet: howdy two
 
   qa: 
     envurl: '{mainurl}qa/'
 
-select: '{_slc}'
+_greet: 'hi there'
+select:
+  s~one:
+    _greet: howdy one
+  s~two:
+    _greet: howdy two
 
 lol: '{{first}} {{last}}'
 today: '{{today}}'
+# greet: '{_greet}'

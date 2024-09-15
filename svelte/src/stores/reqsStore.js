@@ -398,9 +398,6 @@ function clickTogle(el, key) {
         json.options.showHeader = false
         json.options.showTemplate = true
       }
-      if (key=='showHidden' && !el.checked) {
-        json.options.showTemplate = true
-      }
       if (key!=='showSource' && !el.checked) {
         json.options.showSource = false
       }

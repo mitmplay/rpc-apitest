@@ -1,0 +1,4 @@
+url: '{host}/objects/{id}'
+method: patch
+body:
+  name: Apple MacBook Pro 17

@@ -1,0 +1,4 @@
+params:
+  id: [3,5,10]
+
+url: '{host}/objects' #?id=3&id=5&id=10

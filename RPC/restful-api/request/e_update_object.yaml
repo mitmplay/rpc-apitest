@@ -1,0 +1,9 @@
+url: '{host}/objects/{id}'
+method: put
+body:
+  name: Apple MacBook Pro 16
+  data:
+    year: 2019
+    price: 1849.99
+    CPU Model: Intel Core i9
+    Hard disk size: 2 GB

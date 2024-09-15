@@ -11,6 +11,7 @@ method: post
 body:
   wow: kereen
   _1: '{greet}'
-  _2: '{greet-ed}'
-  _3: '{...test}'
-  _4: '{...nested}'
+  _2: '{_greet}'
+  _3: '{greet-ed}'
+  _4: '{...test}'
+  _5: '{...nested}'

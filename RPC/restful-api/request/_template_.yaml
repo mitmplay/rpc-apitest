@@ -1,0 +1,6 @@
+host: https://api.restful-api.dev
+id: 'ff80818191f5078a0191f53af9910078'
+
+default:
+  headers:
+    content-type: application/json

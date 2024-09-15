@@ -383,7 +383,14 @@ async function request(req='apidemo/u_agent_post', opt={}) {
       }
       if (!url.match(/{.+}/) && vars.params) {
         const arr = Object.keys(vars.params)
-        const q = arr.map(k=>`${k}=${vars.params[k]}`).join('&')
+        const q = arr.map(k=> {
+          if (Array.isArray(vars.params[k])) {
+            const paramIds = vars.params[k]
+            return paramIds.map(x=>`${k}=${x}`).join('&')
+          } else {
+            return `${k}=${vars.params[k]}`
+          }
+        }).join('&')
         const {search} = new URL(url)
         if (search) {
           xhr2.url = url.replace(search, `?${q}&${search.slice(1)}`)
