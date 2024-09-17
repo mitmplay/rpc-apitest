@@ -1,5 +1,5 @@
-import {clickCollapse} from '../../stores/logsStore';
-import {reqs} from '../../stores/reqsStore';
+import {clickCollapse}  from '../../stores/logsStore';
+import {reqs, _request} from '../../stores/reqsStore';
 import prettify from 'html-prettify';
 import {get} from 'svelte/store';
 
@@ -33,6 +33,10 @@ export async function option(run, ns, req) {
     arr.length && (opt.slc = arr)
   })
   sec[file]._run && (opt.run = sec[file]._run)
+  if (sec[file].run && !sec[file].request) {
+    const [xhr, ori, src] = await _request(sec[file].run)
+    sec[file].request = xhr
+  }
   if (sec[file].request?.api) {
     opt.api = sec[file].request.api
   }
@@ -62,7 +66,8 @@ export async function run(evn, ns, req, logs) {
     } else {
       let msg
       if (is_opt) {
-        console.log(`await RPC.api.fetch('${run}', ${JSON.stringify(opt)})`)
+        const opt2 = JSON.stringify(opt).replace(/"(\w+)":/g,(v1,v2)=>`${v2}:`)
+        console.log(`await RPC.api.fetch('${run}', ${opt2})`)
         msg = await RPC.api.fetch(run, opt)
       } else {
         console.log(`await RPC.api.fetch('${run}')`)

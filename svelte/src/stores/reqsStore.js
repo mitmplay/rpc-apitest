@@ -150,7 +150,7 @@ export function changeRun(req, ns, sec, _run) {
   })
 }
 
-async function _request(path, rpc=true) {
+export async function _request(path, rpc=true) {
   let json = get(reqs)
   let {req} = json
   const apath = path.split('/')
