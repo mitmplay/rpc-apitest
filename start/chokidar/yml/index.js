@@ -34,7 +34,7 @@ function yml(_rpc_) {
   } else {
     console.log(c.magentaBright(`>>> YAML watcher:`), [tilde(path)])
     const userYMLWatcher = chokidar.watch([path], {
-      ignored: /(\/_.*\.js|DS_Store)$/, // ignore files
+      ignored: /(\/_.*\.js|\.DS_Store)$/, // ignore files
       persistent: true
     })
 

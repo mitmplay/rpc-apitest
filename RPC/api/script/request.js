@@ -391,11 +391,13 @@ async function request(req='apidemo/u_agent_post', opt={}) {
             return `${k}=${vars.params[k]}`
           }
         }).join('&')
-        const {search} = new URL(url)
-        if (search) {
-          xhr2.url = url.replace(search, `?${q}&${search.slice(1)}`)
-        } else {
-          xhr2.url = `${url}?${q}`
+        if (q) {
+          const {search} = new URL(url)
+          if (search) {
+            xhr2.url = url.replace(search, `?${q}&${search.slice(1)}`)
+          } else {
+            xhr2.url = `${url}?${q}`
+          }  
         }
       }
       return [xhr2, ori, src]  

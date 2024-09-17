@@ -1,5 +1,6 @@
 import {clickCollapse} from '../../stores/logsStore';
 import {reqs} from '../../stores/reqsStore';
+import prettify from 'html-prettify';
 import {get} from 'svelte/store';
 
 function wraplongheaders(json) {
@@ -72,12 +73,19 @@ export async function run(evn, ns, req, logs) {
         if (msg?.request?.body) {
           msg.request.body = JSON.parse(msg.request.body)
         }
+        const {headers, body} = msg.response
         if (!get(reqs).options.showHeader) {
           const {request: req, response: res} = msg
           req?.headers && (delete req.headers)
           res?.headers && (delete res.headers)
         }
-        console.log(JSON.stringify(msg, null, 2))          
+        let html = ''
+        if (headers['content-type'].includes('html') && body) {
+          msg.response.body = '...'
+          html = prettify(body).trim()
+        }
+        console.log(JSON.stringify(msg, null, 2))
+        html && console.log(html)
         if (msg.rowid && logs.options.autoShowlog) { //# autoShowlog
           clickCollapse({activeTab:1, rowid: msg.rowid})
         }
