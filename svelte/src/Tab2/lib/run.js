@@ -80,7 +80,8 @@ export async function run(evn, ns, req, logs) {
           res?.headers && (delete res.headers)
         }
         let html = ''
-        if (headers['content-type'].includes('html') && body) {
+        const contentType = headers['content-type'] || ''
+        if (contentType.includes('html') && body) {
           msg.response.body = '...'
           html = prettify(body).trim()
         }
