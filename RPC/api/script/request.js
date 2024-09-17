@@ -386,9 +386,9 @@ async function request(req='apidemo/u_agent_post', opt={}) {
         const q = arr.map(k=> {
           if (Array.isArray(vars.params[k])) {
             const paramIds = vars.params[k]
-            return paramIds.map(x=>`${k}=${x}`).join('&')
+            return paramIds.map(x=>`${k}=${encodeURIComponent(x)}`).join('&')
           } else {
-            return `${k}=${vars.params[k]}`
+            return `${k}=${encodeURIComponent(vars.params[k])}`
           }
         }).join('&')
         if (q) {
