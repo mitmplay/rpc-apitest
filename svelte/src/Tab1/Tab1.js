@@ -29,15 +29,16 @@ export function elapse({elapsed}, ln=5) {
 }
 
 const _m = {
-  get:    'get ',
-  put:    'put ',
-  post:   'post',
-  delete: 'del ',
-  head:   'head',
-  trace:  'trac',
-  patch:  'patc',
-  connect:'conn',
-  options:'optn',
+  get      : 'get ',
+  put      : 'put ',
+  post     : 'post',
+  delete   : 'del ',
+  head     : 'head',
+  trace    : 'trac',
+  patch    : 'patc',
+  connect  : 'conn',
+  options  : 'optn',
+  undefined: '....',
 }
 export function req({request}, str, {hideHost:h}) {
   const [c, m, u] = str.split(',')

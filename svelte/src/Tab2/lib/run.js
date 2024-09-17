@@ -33,6 +33,9 @@ export async function option(run, ns, req) {
     arr.length && (opt.slc = arr)
   })
   sec[file]._run && (opt.run = sec[file]._run)
+  if (sec[file].request?.api) {
+    opt.api = sec[file].request.api
+  }
 
   const is_opt = Object.keys(opt).length
   return {opt, is_opt}
@@ -73,22 +76,27 @@ export async function run(evn, ns, req, logs) {
         if (msg?.request?.body) {
           msg.request.body = JSON.parse(msg.request.body)
         }
-        const {headers, body} = msg.response
-        if (!get(reqs).options.showHeader) {
-          const {request: req, response: res} = msg
-          req?.headers && (delete req.headers)
-          res?.headers && (delete res.headers)
-        }
-        let html = ''
-        const contentType = headers['content-type'] || ''
-        if (contentType.includes('html') && body) {
-          msg.response.body = '...'
-          html = prettify(body).trim()
-        }
-        console.log(JSON.stringify(msg, null, 2))
-        html && console.log(html)
-        if (msg.rowid && logs.options.autoShowlog) { //# autoShowlog
-          clickCollapse({activeTab:1, rowid: msg.rowid})
+        const {response={}, code} = msg
+        if (code==='ENOTFOUND') {
+          console.warn(msg)
+        } else {
+          const {headers, body} = response
+          if (!get(reqs).options.showHeader) {
+            const {request: req, response: res} = msg
+            req?.headers && (delete req.headers)
+            res?.headers && (delete res.headers)
+          }
+          let html = ''
+          const contentType = headers['content-type'] || ''
+          if (contentType.includes('html') && body) {
+            msg.response.body = '...'
+            html = prettify(body).trim()
+          }
+          console.log(JSON.stringify(msg, null, 2))
+          html && console.log(html)
+          if (msg.rowid && logs.options.autoShowlog) { //# autoShowlog
+            clickCollapse({activeTab:1, rowid: msg.rowid})
+          }  
         }
       } else {
         console.log(msg)

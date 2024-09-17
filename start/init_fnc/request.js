@@ -8,6 +8,9 @@ const req = function(request, opt={}) {
     } else if (typeof request.body!=='string') {
       request.body = JSON.stringify(request.body)
     }
+    if (opt?.api?.proxy) {
+      request.proxy = opt.api.proxy
+    }
     const startTime = Date.now()
     _request(request, async (error, response) => {
       if (error) {

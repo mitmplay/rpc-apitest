@@ -9,20 +9,24 @@
 
   async function copyClipboard(e) {
     const {copy} = e.target.dataset
+    const _method = json?.method || 'get'
     let str = ''
     if (['curl', 'curl_pp'].includes(copy)) {
-      if (json.method==='get') {
+      if (_method==='get') {
         str += `curl '${json.url}' \\\n`
       } else {
-        str += `curl -X ${json.method.toUpperCase()} '${json.url}' \\\n`
+        str += `curl -X ${_method.toUpperCase()} '${json.url}' \\\n`
       }
       for (const key in json.headers) {
         str += `  -H '${key}: ${json.headers[key]}' \\\n`
       }
-      if (['put', 'post'].includes(json.method)) {
+      if (['put', 'post'].includes(_method)) {
         str += `  -d '${JSON.stringify(json.body)}' \\\n`
       }
       str += `  --compressed`
+      if (json?.api?.proxy) {
+        str+= ` -x ${json.api.proxy}`
+      }
       if (json?.api?.insecure) {
         str+= ` -k`
       }
@@ -31,16 +35,19 @@
       }
     } else if (['wget', 'wget_pp'].includes(copy)) {
       str = `wget --no-check-certificate \\
-  --method ${json.method.toUpperCase()} \\
+  --method ${_method.toUpperCase()} \\
   --timeout=0 \\
 `
       for (const key in json.headers) {
         str += `  --header '${key}: ${json.headers[key]}' \\\n`
       }
-      if (['put', 'post'].includes(json.method)) {
+      if (['put', 'post'].includes(_method)) {
         str += `  --body-data '${JSON.stringify(json.body)}' \\\n`
       }
       str += `-qO- '${json.url}'`
+      if (json?.api?.proxy) {
+        str+= ` -proxy=${json.api.proxy}`
+      }
       if (json?.api?.insecure) {
         str += ` --no-check-certificate`
       }
