@@ -396,7 +396,6 @@ function clickTogle(el, key) {
         json.options.autoParsed = false
         json.options.showHidden = false
         json.options.showHeader = false
-        json.options.showTemplate = true
       }
       if (key!=='showSource' && !el.checked) {
         json.options.showSource = false
