@@ -1,8 +1,7 @@
+const c = require('ansi-colors')
+
 module.exports = _rpc_ => {
-  const {
-    _version_,
-    _lib_: {c},
-  } = _rpc_
+  const {_version_} = _rpc_
   console.log(c.greenBright(
   `
   Usage: rpc-apitest [options]
