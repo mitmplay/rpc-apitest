@@ -16,6 +16,9 @@
   import Runs from './Runs.svelte';
   import Slcs from './Slcs.svelte';
   import Copy from './Copy.svelte';
+  import Arrow   from '../svg/arrow.svelte';
+  import Circle  from '../svg/circle.svelte';
+  import Actions from './Actions.svelte';
 
   function expandChildren(e) {
     e.preventDefault()
@@ -63,17 +66,17 @@
 
 {#each toArray(json) as nspace, index}
   {#if !$reqs.options.showTemplate && templateMenu(json[nspace])}
-    <div class="normal"><b class="dot">[~]</b>&nbsp;<i>#</i></div>
+    <div class="normal"><b class="dot"><Circle/></b>&nbsp;<i>#</i></div>
   {/if}
   {#if !/_template_/.test(json[nspace].run) || (json[nspace]?._template_?._envs || $reqs.options.showTemplate)}
   <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
     <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} 
       data-path={`${_path}/${nspace}`} data-x={json[nspace]?.run}>
       {#if /_template_/.test(json[nspace].run)}
-        <b class="dot">[~]</b>
+        <b class="dot"><Circle/></b>
         <i>#</i>
       {:else if json[nspace].run}
-        <b class="dot">[~]</b>
+        <b class="dot"><Circle/></b>
         {#if $reqs.options.showRpc}
           <i class="await">await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
         {:else}          
@@ -104,7 +107,7 @@
           </a>
         {/if}
       {:else}
-        <b class="expand" on:click={expandChildren} data-path={json[nspace]._path_}>[*]</b>
+        <b class="expand" on:click={expandChildren} data-path={json[nspace]._path_}><Arrow/></b>
         <i class="ns_{_path.split('/').length}">
           {nspace}
         </i>
@@ -148,6 +151,9 @@
       text-decoration: underline;
       font-style: italic;
     }
+    &.ns_2 {
+      margin-left: -5px;
+    }
     &.ns_1,&.ns_2,&.ns_3,&.ns_4 {
       font-style: normal;
       font-weight: 100;
@@ -166,6 +172,9 @@
       color: teal;
     }
   }
+  .ttp>pre {
+    padding-left: 5px;
+  }
   b {
     color:darkblue;
     &.run {
@@ -179,6 +188,6 @@
     padding-left: 13px;
   }
   b.dot {
-    color: rgb(228, 201, 201);
+    color: #e4c9c9;
   }
 </style>
