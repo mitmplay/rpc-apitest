@@ -63,17 +63,17 @@
 
 {#each toArray(json) as nspace, index}
   {#if !$reqs.options.showTemplate && templateMenu(json[nspace])}
-    <div class="normal">[&nbsp;]&nbsp;<i>#</i></div>
+    <div class="normal"><b class="dot">[~]</b>&nbsp;<i>#</i></div>
   {/if}
   {#if !/_template_/.test(json[nspace].run) || (json[nspace]?._template_?._envs || $reqs.options.showTemplate)}
   <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
     <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} 
       data-path={`${_path}/${nspace}`} data-x={json[nspace]?.run}>
       {#if /_template_/.test(json[nspace].run)}
-        [&nbsp;]
+        <b class="dot">[~]</b>
         <i>#</i>
       {:else if json[nspace].run}
-        [&nbsp;]
+        <b class="dot">[~]</b>
         {#if $reqs.options.showRpc}
           <i class="await">await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
         {:else}          
@@ -176,6 +176,9 @@
     font-size: 12px;
     font-weight: bold;
     font-family: monospace;
-    padding-left: 10px;
+    padding-left: 13px;
+  }
+  b.dot {
+    color: rgb(228, 201, 201);
   }
 </style>
