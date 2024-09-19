@@ -17,6 +17,31 @@
   import Slcs from './Slcs.svelte';
   import Copy from './Copy.svelte';
 
+  function expandChildren(e) {
+    e.preventDefault()
+    // e.stopPropagation()
+    const targetEl = e.currentTarget
+    const parentEl = targetEl.parentElement
+    const detailEl = parentEl.parentElement
+    const _path_ = targetEl.dataset.path.split('/')
+    let req = $reqs.req
+    for (const p of _path_) {
+      req = req[p]
+    }
+    if (!req._openName) {
+      parentEl.click()
+    }
+    setTimeout(()=> {
+      const els = detailEl.querySelectorAll('details')
+      els.forEach(el2=>{
+        const el3 = el2.querySelector('summary')
+        const xpath = el3.dataset.x
+        if (xpath && (_path_.length+1)===xpath.split('/').length) {
+          el3.click()
+        }
+      })
+    }, 100)
+  }
   function arrLength(arr) {
     return (Array.isArray(arr)? arr.length : 0)
   }
@@ -38,14 +63,17 @@
 
 {#each toArray(json) as nspace, index}
   {#if !$reqs.options.showTemplate && templateMenu(json[nspace])}
-    <div class="normal"><i>#</i></div>
+    <div class="normal">[&nbsp;]&nbsp;<i>#</i></div>
   {/if}
   {#if !/_template_/.test(json[nspace].run) || (json[nspace]?._template_?._envs || $reqs.options.showTemplate)}
   <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
-    <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} data-path={`${_path}/${nspace}`}>
+    <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} 
+      data-path={`${_path}/${nspace}`} data-x={json[nspace]?.run}>
       {#if /_template_/.test(json[nspace].run)}
-        <i>#</i>          
+        [&nbsp;]
+        <i>#</i>
       {:else if json[nspace].run}
+        [&nbsp;]
         {#if $reqs.options.showRpc}
           <i class="await">await</i> RPC.api.fetch('<b>{`${json[nspace].run}`}{enf($reqs.req, _ns, json[nspace].run)}</b>)
         {:else}          
@@ -76,7 +104,10 @@
           </a>
         {/if}
       {:else}
-        <i class="ns_{_path.split('/').length}">{nspace}</i>
+        <b class="expand" on:click={expandChildren} data-path={json[nspace]._path_}>[*]</b>
+        <i class="ns_{_path.split('/').length}">
+          {nspace}
+        </i>
       {/if}
     </summary>
     <div slot=body>

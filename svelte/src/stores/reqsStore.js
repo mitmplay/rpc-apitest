@@ -20,8 +20,22 @@ export async function init() {
   const req2 = {}
   reqs.update(json => {
     window.stores.req = json
+    function recursive(req, path1='') {
+      for (const path2 in req) {
+        const obj = req[path2]
+        if (typeof obj!=='string') {
+          const xpath = `${path1}/${path2}`
+          obj._path_ = xpath
+          if (obj.run===undefined) {
+            recursive(obj, xpath)
+          }
+        }
+      }
+    }
     for (const nspace in req1) {
       req2[nspace] = json.req[nspace] || req1[nspace]
+      req2[nspace]._path_ = nspace
+      recursive(req2[nspace], nspace)
     }
     json.req = req2
     return json
