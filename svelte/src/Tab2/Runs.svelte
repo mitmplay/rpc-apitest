@@ -6,6 +6,8 @@
   import {onMount} from 'svelte';
   import {changeRun} from '../stores/reqsStore';
 
+  let runs = [];
+
   async function chgRun(e) {
     e.stopPropagation()
     const {checked, value} = e.target
@@ -15,6 +17,8 @@
         runs = runs.filter(v=>!v.match(`${arrV[0]}~`))
         runs.push(value)
       }
+      //# natural order of multi select
+      runs = json._runs.filter(x=>runs.includes(x))
       changeRun(_req, _ns, json, runs)
     })
   }
@@ -33,7 +37,6 @@
     }, 500)
   }
 
-  let runs = [];
   onMount(() => {
     runs = json?._run || []
   })

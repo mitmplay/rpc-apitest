@@ -32,7 +32,7 @@
     color: darkmagenta;
     position: absolute;
     font-size: smaller;
-    left: 50px;
+    left: 40px;
     top: -2px;
   }
 }

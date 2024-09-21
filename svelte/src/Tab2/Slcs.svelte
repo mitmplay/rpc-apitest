@@ -5,6 +5,8 @@
   import {onMount} from 'svelte';
   import {changeSlc} from '../stores/reqsStore';
 
+  let selection = [];
+
   async function chgSlc(e) {
     e.stopPropagation()
     const {checked, value} = e.target
@@ -14,10 +16,12 @@
         selection = selection.filter(v=>!v.match(`${arrV[0]}~`))
         selection.push(value)
       }
+      //# natural order of multi select
+      selection = json._slcs.filter(x=>selection.includes(x))
       changeSlc(_req, _ns, json, selection)
     })
   }
-  let selection = [];
+
   onMount(() => {
     selection = json?._slc || []
   })
@@ -48,7 +52,7 @@
     position: absolute;
     white-space: nowrap;
     margin: 0;
-    left: 50px;
+    left: 40px;
     top: -2px;
     span.msg {
       position: absolute;
