@@ -12,7 +12,7 @@ const _win32 = platform === 'win32'
 
 function tilde (path) {
   if (Array.isArray(path)) {
-    return path.forEach(v=>v.replace(new RegExp(_home, 'g'), '~'))
+    return path.map(v=>v.replace(new RegExp(_home, 'g'), '~'))
   } else {
     return path.replace(new RegExp(_home, 'g'), '~')
   }
@@ -20,7 +20,7 @@ function tilde (path) {
 
 function home (path) {
   if (Array.isArray(path)) {
-    return path.forEach(v=>v.replace(/^[ \t]*~/, _home))
+    return path.map(v=>v.replace(/^[ \t]*~/, _home))
   } else {
     return path.replace(/^[ \t]*~/, _home)
   }

@@ -24,17 +24,28 @@ function yml(_rpc_) {
 
   // Initialize watcher.
   const path = _path(_rpc_)
+  const apth = Array.isArray(path) ? path : [path]
+
+  const ignored = /(\/_.*\.js|\.DS_Store)$/
+  let ns
+  if (argv.test) {
+    ns = argv.test.split('@')[1]
+  }
 
   if (argv.test) {
     console.log(c.magentaBright(`>>> YAML loader:`), [tilde(path)])
-    const arr = fg.sync([path], { dot: false })
+    const arr = fg.sync(apth, { dot: false })
     arr.forEach(fullpath =>{
-      !/\/_.*\.yaml$/.test(fullpath) && loadYAML(fullpath, 'load')
+      const fp = fullpath.split('/')
+      const yaml = fp.includes(ns)
+      if (yaml && !ignored.test(fullpath)) {
+        loadYAML(fullpath, 'load')
+      }
     })  
   } else {
     console.log(c.magentaBright(`>>> YAML watcher:`), [tilde(path)])
-    const userYMLWatcher = chokidar.watch([path], {
-      ignored: /(\/_.*\.js|\.DS_Store)$/, // ignore files
+    const userYMLWatcher = chokidar.watch(apth, {
+      ignored, // ignore files
       persistent: true
     })
 

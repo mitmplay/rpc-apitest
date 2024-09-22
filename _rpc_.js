@@ -25,7 +25,7 @@ let _rpc_ = {
 
 const rpc = o => {
   if (o===undefined) {
-    return _rpc_
+    return _rpc_._obj_?.argv?.test ? global.RPC : _rpc_
   } else {
     _rpc_ = {
       ..._rpc_,

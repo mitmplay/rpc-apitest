@@ -8,7 +8,9 @@ def_req = {
   }
 }
 
-async function fetch(xhr=def_req, opt) {
+// modify request body & url
+// opt.body = {...}, opt.url = '...'
+async function fetch(xhr=def_req, opt={}) {
   opt = {api:'fetch',act:'act',...opt}
   const {api, _fn_: {request}} = rpc()
   if (typeof xhr==='string') {
@@ -22,6 +24,12 @@ async function fetch(xhr=def_req, opt) {
     }
   }
   opt.senderIp = this.senderIp
+  if (xhr.body) {
+    opt.url && (xhr.url = opt.url)
+    opt.body && (xhr.body = opt.body)
+  }
+  delete opt.url
+  delete opt.body
   const result = await request(xhr, opt)
   return result
 }

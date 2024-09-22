@@ -20,9 +20,10 @@ function md(_rpc_) {
 
   // Initialize watcher.
   const path = _path(_rpc_)
+  const apth = Array.isArray(path) ? path : [path]
 
   console.log(c.magentaBright(`>>> Markdown watcher:`), [tilde(path)])
-  const userMDWatcher = chokidar.watch([path], {
+  const userMDWatcher = chokidar.watch(apth, {
     persistent: true
   })
 
