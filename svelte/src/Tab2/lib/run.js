@@ -65,14 +65,19 @@ export async function run(evn, ns, req, logs) {
       alert(`WARNING: Request having Incorrect:\n{ url: "/${match[1]}" }`)
     } else {
       let msg
+      if (get(reqs).options.showClr) {
+        console.clear()
+      }
+      let fetchCall;
       if (is_opt) {
         const opt2 = JSON.stringify(opt).replace(/"(\w+)":/g,(v1,v2)=>`${v2}:`)
         console.log(`await RPC.api.fetch('${run}', ${opt2})`)
-        msg = await RPC.api.fetch(run, opt)
+        fetchCall = RPC.api.fetch(run, opt)
       } else {
         console.log(`await RPC.api.fetch('${run}')`)
-        msg = await RPC.api.fetch(run)
+        fetchCall = RPC.api.fetch(run)
       }
+      msg = await fetchCall
       if (typeof msg==='object' && msg!==null) {
         if (logs.options.limithdr) {
           wraplongheaders(msg.request)

@@ -8,6 +8,7 @@
     showHidden,
     showHeader,
     showSource,
+    showClr,
     showRpc,
   } from '../stores/reqsStore';
 
@@ -17,12 +18,16 @@
   $: ssrc = $reqs.options.showSource;
   $: scmd = $reqs.options.showCommand;
   $: stpl = $reqs.options.showTemplate;
+  $: sclr = $reqs.options.showClr;
   $: srpc = $reqs.options.showRpc;
 </script>
 
 <div class=action>
   <button on:click={clickCollapse}>[-]</button>
   |
+  <label for="checkbkClr">
+    <input type="checkbox" id="checkbkClr"     on:click={showClr}       bind:checked={sclr}>Clr
+  </label>
   <label for="checkbkCommand">
     <input type="checkbox" id="checkbkCommand" on:click={showCommand}   bind:checked={scmd}>Cmd
   </label>

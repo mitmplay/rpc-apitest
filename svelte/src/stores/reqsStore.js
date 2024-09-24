@@ -10,6 +10,7 @@ const json = {
     showSource: false,
     showCommand: false,
     showTemplate: false,
+    showClr: false,
     showRpc: false,
   }
 }
@@ -397,6 +398,10 @@ export function showCommand({currentTarget}) {
 
 export function showTemplate({currentTarget}) {
   clickTogle(currentTarget, 'showTemplate')
+}
+
+export function showClr({currentTarget}) {
+  clickTogle(currentTarget, 'showClr')
 }
 
 export function showRpc({currentTarget}) {

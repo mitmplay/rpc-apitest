@@ -1,7 +1,7 @@
 const _request = require('request')
-const fn  = require('../../_rpc_')
 
 const req = function(request, opt={}) {
+  const {api, _fn_} = rpc()
   return new Promise(resolve => {
     if (request.body && ['delete','get'].includes(request.method)) {
       delete request.body
@@ -40,7 +40,7 @@ const req = function(request, opt={}) {
           resp[`[${statusCode}]`] = 'No response payload!'
         }
         console.log(JSON.stringify(resp, null, 2))
-        const {apilog, hostlookup} = fn()._fn_
+        const {apilog, hostlookup} = _fn_
         let ipAddress = opt?.senderIp || 'no-ip'
         try {
           ipAddress = ipAddress.replace(/^[:f]+/, '')
@@ -52,7 +52,7 @@ const req = function(request, opt={}) {
         console.log(rowid)
         const endTime = Date.now();
         const elapsedTime = endTime - startTime;
-        resolve({
+        const result = {
           request,
           response:{
             statusCode,
@@ -61,8 +61,11 @@ const req = function(request, opt={}) {
           },
           elapsedTime,
           rowid,
-          error,
-        })
+        }
+        if (error) {
+          result.error = error
+        }
+        resolve(result)
       }
     })    
   })
