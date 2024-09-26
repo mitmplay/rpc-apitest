@@ -1,3 +1,5 @@
+const peek = require('./peek')
+
 function _env(ob, key, env='') {
   let tp3 = undefined
   if (ob===undefined) {
@@ -400,7 +402,12 @@ async function request(req='apidemo/u_agent_post', opt={}) {
           }  
         }
       }
-      return [xhr2, ori, src]  
+      if (opt.noLogs) {
+        return [xhr2, ori, src]
+      } else {
+        const logs = await peek(10, req)
+        return [xhr2, ori, src, logs]
+      }
     }
   }
 }

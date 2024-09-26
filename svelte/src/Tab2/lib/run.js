@@ -1,5 +1,9 @@
 import {clickCollapse}  from '../../stores/logsStore';
-import {reqs, _request} from '../../stores/reqsStore';
+import {
+  reqs,
+  _request,
+  updateSection,
+} from '../../stores/reqsStore';
 import prettify from 'html-prettify';
 import {get} from 'svelte/store';
 
@@ -64,20 +68,22 @@ export async function run(evn, ns, req, logs) {
     if (match) {
       alert(`WARNING: Request having Incorrect:\n{ url: "/${match[1]}" }`)
     } else {
-      let msg
-      if (get(reqs).options.showClr) {
+      const {options} = get(reqs)
+      if (options.showClr) {
         console.clear()
       }
       let fetchCall;
       if (is_opt) {
         const opt2 = JSON.stringify(opt).replace(/"(\w+)":/g,(v1,v2)=>`${v2}:`)
         console.log(`await RPC.api.fetch('${run}', ${opt2})`)
-        fetchCall = RPC.api.fetch(run, opt)
+        fetchCall = RPC.api.fetch(run, opt, true)
       } else {
         console.log(`await RPC.api.fetch('${run}')`)
-        fetchCall = RPC.api.fetch(run)
+        fetchCall = RPC.api.fetch(run, null, true)
       }
-      msg = await fetchCall
+      const result = await fetchCall
+      let [msg, fetchLogs] = result
+      updateSection(run, {logs: fetchLogs})
       if (typeof msg==='object' && msg!==null) {
         if (logs.options.limithdr) {
           wraplongheaders(msg.request)
@@ -91,7 +97,7 @@ export async function run(evn, ns, req, logs) {
           console.warn(msg)
         } else {
           const {headers, body} = response
-          if (!get(reqs).options.showHeader) {
+          if (!options.showHeader) {
             const {request: req, response: res} = msg
             req?.headers && (delete req.headers)
             res?.headers && (delete res.headers)

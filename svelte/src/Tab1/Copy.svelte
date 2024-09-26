@@ -6,10 +6,13 @@
 
   async function copyClipboard(e) {
     let {request, resp_hdr, response} = logs[_id]
+    const json = JSON.parse(request)
     const {copy} = e.target.dataset
     let str = ''
+    if (json.method===undefined) {
+      json.method = 'get'
+    }
     if (copy==='curl') {
-      const json = JSON.parse(request)
       if (json.method==='get') {
         str += `curl '${json.url}' \\\n`
       } else {
@@ -23,7 +26,6 @@
       }
       str += `  --compressed`
     } else if (['wget', 'wget_pp'].includes(copy)) {
-      const json = JSON.parse(request)
       str = `wget --no-check-certificate \\
   --method ${json.method.toUpperCase()} \\
   --timeout=0 \\

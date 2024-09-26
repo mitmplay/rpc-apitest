@@ -18,8 +18,8 @@
   import Copy from './Copy.svelte';
   import Arrow   from '../svg/arrow.svelte';
   import Circle  from '../svg/circle.svelte';
-  import Actions from './Actions.svelte';
-
+  import Logs from './Logs.svelte';
+  
   function expandChildren(e) {
     e.preventDefault()
     // e.stopPropagation()
@@ -61,6 +61,11 @@
   function runIds(_run) {
     const result = _run ? _run.map(x=>x.replace(/[~:]+/g, '_')) : []
     return result.join('-')
+  }
+  function showLogs(reqs, json) {
+    const opt = reqs.options.showLog
+    const log = Object.keys(json.logs).length>0 
+    return opt && log
   }
 </script>
 
@@ -130,6 +135,9 @@
               <pre class="aliceblue"><code class="language-json">{@html showRequest($logs.options, $reqs, nspace, json) || '...'}</code></pre>
             {:else}
               <pre class="aliceblue"><code class="language-yaml">{@html showRequest($logs.options, $reqs, nspace, json) || '...'}</code></pre>
+            {/if}
+            {#if showLogs($reqs, json[nspace])}
+              <Logs {_req} logs={json[nspace].logs} _grp={'logs'} options={$logs.options} yaml={$logs.options.yaml}/>
             {/if}
           </div>
         {:else}

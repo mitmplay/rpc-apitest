@@ -10,14 +10,17 @@ def_req = {
 
 // modify request body & url
 // opt.body = {...}, opt.url = '...'
-async function fetch(xhr=def_req, opt={}) {
-  opt = {api:'fetch',act:'act',...opt}
+async function fetch(path=def_req, opt={}, withLogs=false) {
+  opt = {api:'fetch',act:'act',noLogs:true, ...opt}
   const {api, _fn_: {request}} = rpc()
-  if (typeof xhr==='string') {
-    if (is_openapi.test(xhr)) {
-      xhr = await api.openapi(xhr, opt)
+  let xhr
+  if (typeof path==='string') {
+    if (is_openapi.test(path)) {
+      xhr = await api.openapi(path, opt)
     } else {
-      const [parsed] = await api.request(xhr, opt)
+      opt.path = path
+      opt.withLogs = false
+      const [parsed] = await api.request(path, opt)
       const {url, method, headers, body} = parsed
       xhr = {url, method, headers, body}
       opt.validate = parsed.validate
@@ -31,6 +34,11 @@ async function fetch(xhr=def_req, opt={}) {
   delete opt.url
   delete opt.body
   const result = await request(xhr, opt)
-  return result
+  if (withLogs) {
+    const logs = await api.peek(10, path)
+    return [result, logs]
+  } else {
+    return result
+  }
 }
 module.exports = fetch

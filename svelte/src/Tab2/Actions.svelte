@@ -1,6 +1,6 @@
 <script>
-  import {
-    reqs,
+  import {reqs, actionEvents} from '../stores/reqsStore';
+  const {
     autoParsed,
     clickCollapse,
     showTemplate,
@@ -10,8 +10,9 @@
     showSource,
     showClr,
     showRpc,
-  } from '../stores/reqsStore';
-
+    showLog,
+  } = actionEvents()
+  
   $: prsd = $reqs.options.autoParsed;
   $: hdrs = $reqs.options.showHeader;
   $: hidn = $reqs.options.showHidden;
@@ -20,6 +21,7 @@
   $: stpl = $reqs.options.showTemplate;
   $: sclr = $reqs.options.showClr;
   $: srpc = $reqs.options.showRpc;
+  $: logs = $reqs.options.showLog;
 </script>
 
 <div class=action>
@@ -47,6 +49,9 @@
   </label>
   <label for="checkbkRuns">
     <input type="checkbox" id="checkbkRuns"    on:click={showHidden}    bind:checked={hidn}>Vars
+  </label>
+  <label for="checkbkLogs">
+    <input type="checkbox" id="checkbkLogs"    on:click={showLog}       bind:checked={logs}>Logs
   </label>
   |
   <label for="checkbkSrcs">

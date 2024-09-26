@@ -1,4 +1,4 @@
-async function peek(limit=25) {
+async function peek(limit=25, path='') {
   // const _rpc_ = rpc()
   // const language = 'json'
   // const {_lib_: {hj}} = _rpc_
@@ -6,10 +6,12 @@ async function peek(limit=25) {
   if (lparams==='h') {
     return info()
   }
-  let rows = await rpc()._db_.logs('api_log').
-    select ('*').
-    orderBy('id', 'desc').
-    limit  (limit)
+
+  const chain = rpc()._db_.logs('api_log').select ('*')
+  path && chain.where('path', path)
+  chain.orderBy('id', 'desc')
+  
+  let rows = await chain.limit(limit)
     
   const l = {}
   for(const row of rows) {
