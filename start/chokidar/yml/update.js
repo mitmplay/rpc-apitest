@@ -17,8 +17,8 @@ function _update(_rpc_, initToggle, initEnd, chg, loadYAML) {
         if (tpl2) { // for merging template
           if (_obj_._tplcombine_===undefined) {
               _obj_._tplcombine_ = []
-              _obj_._tplcombine_.push(`${app}/${name}`)
           }
+          _obj_._tplcombine_.push(`${app}/${name}`)
         }
         initToggle.timeout = setTimeout(initEnd, 1000)
         return

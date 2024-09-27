@@ -22,9 +22,9 @@ function _initEnd(_rpc_, initToggle) {
             prepMerge[ns] = sec
           }
         }
-        let result = {}
         for (const key in prepMerge) {
           const sec = prepMerge[key]
+          let result = {}
           // * merge non_template_ each section
           for (const path in sec) {
             if (path.match(/^_[^_]+_$/) && path!=='_template_') {
