@@ -234,6 +234,11 @@ async function updateState(path) {
     const slc = xreq?._template_?._slc
     slc && (opt.slc = slc)
   }
+  // for merging template
+  // re-parser _template_ if non _templete_ is updated
+  if (path.match(/_[^_]+_$/) && path!=='_template_') {
+    path = path.replace(/_[^_]+_$/, '_template_')
+  }
   const [xhr, ori, src, logs] = await RPC.api.request(path, opt) // if it came from broadcast
   if (!xhr) {
     return
@@ -338,7 +343,7 @@ export function clickSummary(evn, req, ns, json) {
     }
     for (const key in json[nspace]) {
       const sec = json[nspace][key]
-      if (!sec._runs && sec.run) {
+      if (sec && !sec._runs && sec.run) {
         if (!sec._runs && !/_template_/.test(sec.run)) {
           const [xhr, ori, src, logs] = await _request(sec.run, false)
           if (!xhr) {

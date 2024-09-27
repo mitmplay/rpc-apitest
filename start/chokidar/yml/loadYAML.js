@@ -49,6 +49,11 @@ function _loadYAML(_rpc_, initToggle, initEnd) {
       }
       _rpc_[app]._request_[name] = obj || {}
       _rpc_[app]._request_src_[name] = str || ''
+      if (name.includes('_template_')) { // for merging template
+        const tpl = `${name}ori_`
+        _rpc_[app]._request_[tpl] = obj || {}
+        _rpc_[app]._request_src_[tpl] = str || ''
+      }
     }
 
     // const typ = obj.openapi ? 'openapi' : 'request'

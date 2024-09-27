@@ -40,6 +40,9 @@
   <label for="checkbkParsed">
     <input type="checkbox" id="checkbkParsed"  on:click={autoParsed}    bind:checked={prsd}>Parsed
   </label>
+  <label for="checkbkLogs">
+    <input type="checkbox" id="checkbkLogs"    on:click={showLog}       bind:checked={logs}>Logs
+  </label>
   <label for="checkbkHdrs">
     <input type="checkbox" id="checkbkHdrs"    on:click={showHeader}    bind:checked={hdrs}>Header
   </label>
@@ -49,9 +52,6 @@
   </label>
   <label for="checkbkRuns">
     <input type="checkbox" id="checkbkRuns"    on:click={showHidden}    bind:checked={hidn}>Vars
-  </label>
-  <label for="checkbkLogs">
-    <input type="checkbox" id="checkbkLogs"    on:click={showLog}       bind:checked={logs}>Logs
   </label>
   |
   <label for="checkbkSrcs">

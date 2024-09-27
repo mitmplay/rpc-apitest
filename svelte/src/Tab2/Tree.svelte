@@ -64,8 +64,12 @@
   }
   function showLogs(reqs, json) {
     const opt = reqs.options.showLog
-    const log = Object.keys(json.logs).length>0 
-    return opt && log
+    if (json.logs) {
+      const log = Object.keys(json.logs).length>0 
+      return opt && log
+    } else {
+      return false
+    }
   }
 </script>
 
