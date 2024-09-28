@@ -41,6 +41,9 @@
         window.logs = result
         ttl++
       } else if (name==='request') {
+        if (RPC._obj_.argv.debug) {
+          console.log('Update request store')
+        }
         updateReq(path, result)
       }
       // return false

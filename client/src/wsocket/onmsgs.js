@@ -25,11 +25,13 @@ function onmsgs(ws) {
     // const show = !(msg.bc && msg.id)
     try {
       if (method) {
-        const func = RPC._broadcast_[method.split(':')[0]]
+        const typ  = method.split(':')[0]
+        const fncs = RPC._broadcast_[typ]
         const fany = RPC._broadcast_._any_
         let exfunc = true
         let run 
-        if (func) {
+        for (const f in fncs) {
+          const func = fncs[f]
           console.log(`${method} RPC:`, payload)
           run = func(payload, method)
           if (run===false) {

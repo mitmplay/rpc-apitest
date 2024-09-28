@@ -46,7 +46,7 @@ export async function init() {
   return req2
 }
 
-function syncStor(req, path, xhr, ori, src, logs) {
+export function syncStor(req, path, xhr, ori, src, logs) {
   if (/_template_/.test(path)) {
     if (typeof xhr.select==='object' && xhr.select!==null) {
       req._slcs = Object.keys(xhr.select)
@@ -139,15 +139,27 @@ export function changeSlc(req, ns, sec, slc) {
     const {_env:env} = sec2._template_
     sec.run.split('/').slice(1,-1).forEach(k=>{
       sec2 = sec2[k]
-      if (sec2?._template_?._slc) {
-        sec2._template_._slc.forEach(x => slc[x]=true)
-      }
     })
+    sec2._template_._slc.forEach(x => slc[x]=true)
     await requestEnv(sec2, {env, slc})
     reqs.update(json => {
       json.req[ns] = req[ns]
       return json
     })
+  })
+}
+
+export async function clickUnchk(req, ns, sec) {
+  let sec2 = req[ns]
+  const {_env:env} = sec2._template_
+  sec.run.split('/').slice(1,-1).forEach(k=>{
+    sec2 = sec2[k]
+  })
+  sec2._template_._slc = []
+  await requestEnv(sec2, {env, slc: []})
+  reqs.update(json => {
+    json.req[ns] = req[ns]
+    return json
   })
 }
 

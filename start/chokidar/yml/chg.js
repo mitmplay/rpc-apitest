@@ -25,6 +25,11 @@ function _chg(_rpc_, initToggle) {
     } else {
       _rpc_[app]._request_[name] = obj || {}
       _rpc_[app]._request_src_[name] = str || ''
+      if (name.includes('_template_')) { // for merging template
+        const tpl = `${name}ori_`
+        _rpc_[app]._request_[tpl] = obj || {}
+        _rpc_[app]._request_src_[tpl] = str || ''
+      }
       const tpl = path.match(/\/_(\w+)_.yaml$/)
       if (tpl) { // for merging template
         let result = {}
@@ -46,6 +51,7 @@ function _chg(_rpc_, initToggle) {
     if (!argv.test) { 
       const method = `${typ}:${app}/${name}`
       console.log(c.magentaBright(`>>> broadcast add/chg file`))
+      //broadcast: change - 'request:ep-admin/_template_'
       _broadcast2(method, {_act: msg})
       initToggle.id = 0
     }

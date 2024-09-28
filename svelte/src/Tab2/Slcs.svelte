@@ -3,7 +3,10 @@
   export let _req
   export let json
   import {onMount} from 'svelte';
-  import {changeSlc} from '../stores/reqsStore';
+  import {
+    changeSlc,
+    clickUnchk,
+  } from '../stores/reqsStore';
 
   let selection = [];
 
@@ -22,6 +25,12 @@
     })
   }
 
+  export function clickUncheck(e) {
+    e.stopPropagation()
+    clickUnchk(_req, _ns, json)
+    selection = []
+  }
+
   onMount(() => {
     selection = json?._slc || []
   })
@@ -29,7 +38,8 @@
 
 <span class="commonlink">
   <div class=slclist>
-    <span>select:</span>
+    <button on:click={clickUncheck}>[-]</button>
+    <span>slc:</span>
     <span class=msg>&nbsp;{json?._slc||''}</span>
     <ul>
       {#each json._slcs as slc}
