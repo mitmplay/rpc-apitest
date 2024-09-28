@@ -3,12 +3,14 @@ function clickTogle(el, key) {
   setTimeout(_ => {
     singleton.reqs.update(json => {
       if (key==='showSource' && !el.checked) {
-        json.options.autoParsed = false
-        json.options.showHidden = false
-        json.options.showHeader = false
+        json.options.autoParsed   = false
+        json.options.showHeader   = false
+        json.options.showHidden   = true
+        json.options.showTemplate = true
       }
-      if (key!=='showSource' && !el.checked) {
+      if (key==='autoParsed' && !el.checked) {
         json.options.showSource = false
+        json.options.showHeader = true
       }
       json.options[key] = !el.checked
       return json

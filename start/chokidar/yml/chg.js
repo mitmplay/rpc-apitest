@@ -28,20 +28,21 @@ function _chg(_rpc_, initToggle) {
       const tpl = path.match(/\/_(\w+)_.yaml$/)
       if (tpl) { // for merging template
         let result = {}
-        for (const key in _rpc_[app]) {
-          const sec = _rpc_[app][key]
-          // * merge non_template_ each section
-          for (const path in sec) {
-            if (path.match(/^_[^_]+_$/) && path!=='_template_') {
-              result = merge(result, sec[path])
-            }
+        const templates = []
+        const {_request_} = _rpc_[app]
+        for (const row in _request_) {
+          if (row.match(/^_[^_]+_$/) && row!=='_template_') {
+            templates.push(row)
+            // * merge non_template_ each section
+            result = merge(result, _request_[row])
           }
-          // * merge result into _template_
-          sec._template_ = merge(sec._template_ori_,result)
         }
+        const tpls = templates.join(', ')
+        console.log(`${msg} merged: ${tpls} >> ${app}/_template_`)
+        // * merge result into _template_
+        _request_._template_ = merge(_request_._template_ori_,result)
       }
     }
-    console.log(msg,  JSON.stringify({app, typ, name}))
     if (!argv.test) { 
       const method = `${typ}:${app}/${name}`
       console.log(c.magentaBright(`>>> broadcast add/chg file`))

@@ -30,32 +30,32 @@
   <label for="checkbkClr">
     <input type="checkbox" id="checkbkClr"     on:click={showClr}       bind:checked={sclr}>Clr
   </label>
+  |
+  <label for="checkbkParsed">
+    <input type="checkbox" id="checkbkParsed"  on:click={autoParsed}    bind:checked={prsd}>Parsed
+  </label>
+  <label for="checkbkHdrs">
+    <input type="checkbox" id="checkbkHdrs"    on:click={showHeader}    bind:checked={hdrs}>Header
+  </label>
+  <label for="checkbkLogs">
+    <input type="checkbox" id="checkbkLogs"    on:click={showLog}       bind:checked={logs}>Logs
+  </label>
+  |
+  <label for="checkbkRuns">
+    <input type="checkbox" id="checkbkRuns"    on:click={showHidden}    bind:checked={hidn}>Vars
+  </label>
+  <label for="checkbkTemplate">
+    <input type="checkbox" id="checkbkTemplate" on:click={showTemplate} bind:checked={stpl}>Template
+  </label>
+  |
+  <label for="checkbkSrcs">
+    <input type="checkbox" id="checkbkSrcs"     on:click={showSource}   bind:checked={ssrc}>Source
+  </label>
   <label for="checkbkCommand">
     <input type="checkbox" id="checkbkCommand" on:click={showCommand}   bind:checked={scmd}>Cmd
   </label>
   <label for="checkbkRpc">
     <input type="checkbox" id="checkbkRpc"     on:click={showRpc}       bind:checked={srpc}>Rpc
-  </label>
-  |
-  <label for="checkbkParsed">
-    <input type="checkbox" id="checkbkParsed"  on:click={autoParsed}    bind:checked={prsd}>Parsed
-  </label>
-  <label for="checkbkLogs">
-    <input type="checkbox" id="checkbkLogs"    on:click={showLog}       bind:checked={logs}>Logs
-  </label>
-  <label for="checkbkHdrs">
-    <input type="checkbox" id="checkbkHdrs"    on:click={showHeader}    bind:checked={hdrs}>Header
-  </label>
-  |
-  <label for="checkbkTemplate">
-    <input type="checkbox" id="checkbkTemplate" on:click={showTemplate} bind:checked={stpl}>Template
-  </label>
-  <label for="checkbkRuns">
-    <input type="checkbox" id="checkbkRuns"    on:click={showHidden}    bind:checked={hidn}>Vars
-  </label>
-  |
-  <label for="checkbkSrcs">
-    <input type="checkbox" id="checkbkSrcs"     on:click={showSource}   bind:checked={ssrc}>Source
   </label>
 </div>
 

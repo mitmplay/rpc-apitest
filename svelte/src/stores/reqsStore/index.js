@@ -5,13 +5,13 @@ const json = {
   req: {},
   path: 'Request',
   options: {
+    showClr: true,
     autoParsed: true,
-    showHeader: false,
+    showHeader: true,
     showHidden: false,
     showSource: false,
     showCommand: false,
     showTemplate: false,
-    showClr: false,
     showRpc: false,
     showLog: false,
   }
