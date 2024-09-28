@@ -18,10 +18,8 @@ function merge(obj1, obj2) {
     }
     
     for (let key in obj2) {
-      if (obj1) {
-        if (!obj1.hasOwnProperty(key)) {
-          result[key] = obj2[key];
-        }  
+      if (!obj1 || !obj1.hasOwnProperty(key)) {
+        result[key] = obj2[key];
       }
     }      
   } catch (error) {

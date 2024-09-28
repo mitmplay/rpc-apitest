@@ -139,6 +139,9 @@ function parser(ori, xhr, ns, tp2, opt={}) {
         const result = parser(ori, value1, ns, tp2, opt)
         if (typeof xhr[key]!=='object' || Array.isArray(result)) {
           xhr[key] = result
+        } else if (typeof xhr[key][0]==='string' && xhr[key][0].includes('{...')) {
+          //#spread array or object
+          xhr[key] = result
         } else {
           xhr[key] = {
             ...xhr[key],
@@ -157,7 +160,6 @@ function parser(ori, xhr, ns, tp2, opt={}) {
     if (value1===undefined) {
       return
     }
-    // const {_spread_, values} = typeof value1!=='string' ? value1 : {}
     const _spread_ = value1?._spread_
     const values   = value1?.values
     if (_spread_ && values!==undefined) { //# undefined - handled on ln:75
@@ -215,8 +217,15 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   }
 
   if (Array.isArray(xhr)) {
-    xhr.forEach((v,i) => set_object(i))
-    arr.forEach((v,i) => (xhr[i] = v))
+    //#spread array or object
+    if (xhr[0] && xhr[0] && xhr[0].includes('{...')) {
+      xhr = parser(ori, {value: xhr[0]}, ns, tp2, opt)
+    } else if (xhr[0] && xhr[0][0] && xhr[0][0].includes('{...')) {
+      xhr = parser(ori, {value: xhr[0][0]}, ns, tp2, opt)
+    } else {
+      xhr.forEach((v,i) => set_object(i))
+      arr.forEach((v,i) => (xhr[i] = v))  
+    }
   } else {
     for (const key in xhr) {
       set_object(key)
@@ -265,14 +274,35 @@ function template(ns, name, opt) {
           const tp_slc = tpl.select[name]
           if (typeof tp_slc==='object' && tp_slc!==null) {
             for (const key in tp_slc) {
-              if (Array.isArray(tp_slc[key])) {
+              let selected = tp_slc[key]
+              if (Array.isArray(selected)) {
+                let src1
                 if (xhr2[key]===undefined) {
-                  xhr2[key] = [...tpl[key], ...tp_slc[key]]
+                  src1 = tpl[key]
+                  //#spread array or object
+                  if (Array.isArray(src1) && src1[0].includes('{...')) {
+                    src1 = parser(tpl, src1, ns, tpl)
+                    if (Array.isArray(src1)) {
+                      src1 = src1[0].values
+                    }
+                  }
                 } else {
-                  xhr2[key] = [...xhr2[key], ...tp_slc[key]]
+                  src1 = xhr2[key]
+                }
+                //#spread array or object
+                if (Array.isArray(selected) && selected[0].includes('{...')) {
+                  selected = parser(tpl, selected, ns, tpl)
+                  if (Array.isArray(selected)) {
+                    src1 = selected[0].values
+                  }
+                }
+                if (Array.isArray(src1) && Array.isArray(selected)) {
+                  xhr2[key] = [...src1, ...selected]
+                } else {
+                  xhr2[key] = {...src1, ...selected}
                 }
               } else {
-                xhr2[key] = tp_slc[key]
+                xhr2[key] = selected
               }
             }
           }
