@@ -97,25 +97,27 @@ export async function autoExpand() {
   if (path!==json.path) {
     let xpath = 'Logs'
     const arr = path.split('/').slice(1);
-    const [grp] = arr[0].split('@');
-    const id = ['#', 'all', 'api', 'date', 'host'].indexOf(grp);
-    if (id>0) {
-      logs.update(json => {
-        json.options.grouping = id+''
-        return json;
-      })
-    }
-    for (const item of arr) {
-      xpath += `/${item}`
-      await new Promise(resolve => setTimeout(resolve, 120));
-      const node = document.querySelector(`summary[data-path="${xpath}"]`)
-      if (node) {
-        const text = node.parentElement.getAttribute('open')
-        if (text===null) {
-          await new Promise(resolve => setTimeout(resolve, 10));
-          node.click()
-        }
-      }  
+    if (arr.length) {
+      const [grp] = arr[0].split('@');
+      const id = ['#', 'all', 'api', 'date', 'host'].indexOf(grp);
+      if (id>0) {
+        logs.update(json => {
+          json.options.grouping = id+''
+          return json;
+        })
+      }
+      for (const item of arr) {
+        xpath += `/${item}`
+        await new Promise(resolve => setTimeout(resolve, 120));
+        const node = document.querySelector(`summary[data-path="${xpath}"]`)
+        if (node) {
+          const text = node.parentElement.getAttribute('open')
+          if (text===null) {
+            await new Promise(resolve => setTimeout(resolve, 10));
+            node.click()
+          }
+        }  
+      }
     }
   }
 }

@@ -75,7 +75,7 @@
 
 {#each toArray(json) as nspace, index}
   {#if !$reqs.options.showTemplate && templateMenu(json[nspace])}
-    <div class="normal"><b class="dot"><Circle/></b>&nbsp;<i>#</i></div>
+    <div class="normal"><b class="dot"><Circle/></b></div>
   {/if}
   {#if !/_template_/.test(json[nspace].run) || (json[nspace]?._template_?._envs || $reqs.options.showTemplate)}
   <Collapsible klas={`folder ${!json[nspace]?.run}`} {nspace} name=_openName open={json[nspace]._openName}>

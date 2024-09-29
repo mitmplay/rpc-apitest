@@ -26,7 +26,7 @@ export async function init() {
     function recursive(req, path1='') {
       for (const path2 in req) {
         const obj = req[path2]
-        if (typeof obj!=='string') {
+        if (!['string', 'boolean'].includes(typeof obj)) {
           const xpath = `${path1}/${path2}`
           obj._path_ = xpath
           if (obj.run===undefined) {

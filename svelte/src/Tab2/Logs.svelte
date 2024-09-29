@@ -55,7 +55,6 @@
         return _
       });
       const open = (typeof el.getAttribute('open')==='string')
-      console.log({path, open, id, name})
     },10)
   }
 </script>
