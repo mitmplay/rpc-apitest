@@ -266,9 +266,8 @@ function template(ns, name, opt) {
     if (tpl) {
       let parsed;
       const {env='', slc={}} = opt
-      tpl = structuredClone(tpl)
+      tpl = merge(template, tpl) //parent to current
       if (tpl.select && Array.isArray(slc)) {
-        // parse tp_slc & merge to template
         let xhr2 = {}
         for (const name of slc) {
           const tp_slc = tpl.select[name]
@@ -278,18 +277,20 @@ function template(ns, name, opt) {
               if (Array.isArray(selected)) {
                 let src1
                 if (xhr2[key]===undefined) {
-                  src1 = tpl[key]
-                  //#spread array or object
+                  src1 = tpl[key] //#spread array or object
                   if (Array.isArray(src1) && src1[0].includes('{...')) {
-                    src1 = parser(tpl, src1, ns, tpl)
-                    if (Array.isArray(src1)) {
-                      src1 = src1[0].values
-                    }
+                    let obj = {}
+                    src1.forEach((item)=> {
+                      obj = {
+                        ...obj,
+                        ...parser(tpl, {0: item}, ns, tpl)
+                      }
+                    })
+                    src1 = obj;
                   }
                 } else {
                   src1 = xhr2[key]
-                }
-                //#spread array or object
+                } //#spread array or object
                 if (Array.isArray(selected) && selected[0].includes('{...')) {
                   selected = parser(tpl, selected, ns, tpl)
                   if (Array.isArray(selected)) {
@@ -318,7 +319,7 @@ function template(ns, name, opt) {
         template = merge(template, parsed)
       } else {
         // merged & parse to it-self
-        template = merge(tpl, template) // (template, tpl)
+        template = merge(template, tpl)
         template = startParsing(template, ns, template, {env})
       }
     }
