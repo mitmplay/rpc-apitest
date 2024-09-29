@@ -61,7 +61,7 @@
 </script>
 
 {#each toArray(logs) as row}
-  <Collapsible id={row._id} name=openLog open={openLog(row)}>
+  <Collapsible klas="logs-details_b" id={row._id} name=openLog open={openLog(row)}>
     <summary slot=head class="logs" on:click={e=>clickSummary(e, _grp)} data-path={`${_path}${row._id}`}>
       {no1(row)}.
       <span class="dtel">{@html showDate(row)}</span>[{req(row,'],method,url',options)}~>{row.rspcode}
@@ -131,7 +131,19 @@
   .copylink {
     font-family: monospace;
   }
+  :global(details.logs-details_b) {
+    margin-left: 7px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    summary {
+      font-size: 11px;
+    }
+    pre {
+      font-size: 10px;
+    }
+  }
   summary.logs {
+    color: rgb(132, 149, 199);
+    font-weight: 100;
     white-space: nowrap;
     input {
       vertical-align: sub;

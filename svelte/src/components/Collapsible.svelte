@@ -1,4 +1,5 @@
 <script>
+  export let klas='';
   export let id=null;
   export let fn=null;
   export let name='';
@@ -8,7 +9,7 @@
 </script>
 
 {#if show}
-  <details data-id={id} data-fn={fn} data-nspace={nspace} data-name={name} {open}>
+  <details class={klas} data-id={id} data-fn={fn} data-nspace={nspace} data-name={name} {open}>
     <slot name="head">
     </slot>
     {#if open}

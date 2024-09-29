@@ -134,7 +134,7 @@
             <Copy json={json[nspace].request} _ns={_ns} _run={json[nspace].run} _idx={index}/>
           {/if}
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-          <div class="ttp" data-typ="reqs-content" on:mouseover={mouseOver}>
+          <div class="ttp req-content {showLogs($reqs, json[nspace])} " data-typ="reqs-content" on:mouseover={mouseOver}>
             {#if RPC._obj_?.argv?.json}
               <pre class="aliceblue"><code class="language-json">{@html showRequest($logs.options, $reqs, nspace, json) || '...'}</code></pre>
             {:else}
@@ -197,9 +197,14 @@
     font-size: 12px;
     font-weight: bold;
     font-family: monospace;
-    padding-left: 13px;
+    padding-left: 10px;
   }
   b.dot {
     color: #e4c9c9;
+  }
+  .req-content.true {
+    pre {
+      margin-bottom: 0;
+    }
   }
 </style>

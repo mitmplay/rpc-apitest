@@ -219,9 +219,9 @@ function parser(ori, xhr, ns, tp2, opt={}) {
   if (Array.isArray(xhr)) {
     //#spread array or object
     if (xhr[0] && xhr[0] && xhr[0].includes('{...')) {
-      xhr = parser(ori, {value: xhr[0]}, ns, tp2, opt)
+      xhr = parser(ori, {'0': xhr[0]}, ns, tp2, opt)
     } else if (xhr[0] && xhr[0][0] && xhr[0][0].includes('{...')) {
-      xhr = parser(ori, {value: xhr[0][0]}, ns, tp2, opt)
+      xhr = parser(ori, {'0': xhr[0][0]}, ns, tp2, opt)
     } else {
       xhr.forEach((v,i) => set_object(i))
       arr.forEach((v,i) => (xhr[i] = v))  
@@ -308,6 +308,9 @@ function template(ns, name, opt) {
           }
         }
         tpl = merge(tpl, xhr2)
+        if (RPC._obj_.argv.debug) {
+          console.log('>>>', tpl)
+        }
       }
       if (i===0) {
         // parse to it-self
@@ -315,7 +318,7 @@ function template(ns, name, opt) {
         template = merge(template, parsed)
       } else {
         // merged & parse to it-self
-        template = merge(template, tpl)
+        template = merge(tpl, template) // (template, tpl)
         template = startParsing(template, ns, template, {env})
       }
     }
