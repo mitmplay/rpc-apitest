@@ -78,12 +78,11 @@
     <div class="normal"><b class="dot"><Circle/></b>&nbsp;<i>#</i></div>
   {/if}
   {#if !/_template_/.test(json[nspace].run) || (json[nspace]?._template_?._envs || $reqs.options.showTemplate)}
-  <Collapsible {nspace} name=_openName open={json[nspace]._openName}>
+  <Collapsible klas={`folder ${!json[nspace]?.run}`} {nspace} name=_openName open={json[nspace]._openName}>
     <summary slot=head on:click={evn => clickSummary(evn, _req, _ns, json)} 
       data-path={`${_path}/${nspace}`} data-x={json[nspace]?.run}>
       {#if /_template_/.test(json[nspace].run)}
         <b class="dot"><Circle/></b>
-        <i>#</i>
       {:else if json[nspace].run}
         <b class="dot"><Circle/></b>
         {#if $reqs.options.showRpc}
@@ -154,7 +153,13 @@
 {/each}
 
 <style lang="scss">
-  summary{
+:global(details.folder.true) {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+:global(details.folder.false) {
+  border-top: solid 1px red;
+}
+summary{
     white-space: inherit;
   }
   i {

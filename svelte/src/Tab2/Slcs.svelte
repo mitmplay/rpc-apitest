@@ -62,7 +62,7 @@
     position: absolute;
     white-space: nowrap;
     margin: 0;
-    left: 40px;
+    left: 22px;
     top: -2px;
     span.msg {
       position: absolute;
